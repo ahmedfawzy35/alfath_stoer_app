@@ -1,3 +1,5 @@
+import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
+import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/data/repositories/login_repository.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
@@ -9,19 +11,16 @@ import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/s
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   final customerSupplierListRepository =
-      CustomerSupplierListRepository('http://alfathstore.runasp.net/api');
-  final sellerListRepository =
-      SellerListRepository('http://alfathstore.runasp.net/api');
+      CustomerSupplierListRepository(MyStrings.baseurl);
+  final sellerListRepository = SellerListRepository(MyStrings.baseurl);
 
-  final customerSupplierDetailRepository = CustomerSupplierDetailRepository(
-      baseUrl: 'http://alfathstore.runasp.net/api');
-  final loginRepository =
-      LoginRepository(baseUrl: 'http://alfathstore.runasp.net/api');
+  final customerSupplierDetailRepository =
+      CustomerSupplierDetailRepository(baseUrl: MyStrings.baseurl);
+  final loginRepository = LoginRepository(baseUrl: MyStrings.baseurl);
 
   runApp(MyApp(
     customerRepository: customerSupplierListRepository,
@@ -57,7 +56,24 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.teal,
         ),
-        home: LoginPage(),
+        home: FutureBuilder<Map<String, dynamic>?>(
+            future: SharedPrefsService().getUserData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (snapshot.hasData && snapshot.data != null) {
+                return HomePage(
+                  customeRepository: customerRepository,
+                  sellerRepository: sellerRepository,
+                  customeDetailsRepository: customerSupplierDetailRepository,
+                );
+              } else {
+                return LoginPage();
+              }
+            }),
         routes: {
           '/home': (context) => HomePage(
                 customeRepository: customerRepository,

@@ -6,7 +6,7 @@ import 'package:alfath_stoer_app/features/auth/data/models/user_branches.dart';
 class LoginResponse {
   User? user;
   List<clime>? climes;
-  List<UserBranche>? userBranches;
+  List<Branche>? userBranches;
   List<Branche>? allBranches;
   bool? login;
   String? errorMessage;
@@ -28,9 +28,9 @@ class LoginResponse {
       });
     }
     if (json['userBranches'] != null) {
-      userBranches = <UserBranche>[];
+      userBranches = <Branche>[];
       json['userBranches'].forEach((v) {
-        userBranches!.add(UserBranche.fromJson(v));
+        userBranches!.add(Branche.fromJson(v));
       });
     }
     if (json['allBranches'] != null) {

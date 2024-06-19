@@ -1,3 +1,4 @@
+import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,13 +19,20 @@ class LoginPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocConsumer<LoginCubit, LoginState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is LoginLoaded) {
               if (state.loginResponse.login == true) {
                 var user = state.loginResponse.user;
                 if (user != null &&
                     user.enabled == true &&
                     user.isDeleted == false) {
+                  final prefsService = SharedPrefsService();
+                  await prefsService.saveUserData(
+                    user.fullName!,
+                    state.loginResponse.allBranches!,
+                    state.loginResponse.userBranches!,
+                    state.loginResponse.climes!,
+                  );
                   Navigator.pushReplacementNamed(context, '/home');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

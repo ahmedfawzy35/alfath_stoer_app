@@ -9,17 +9,20 @@ class CustomerSupplierPage extends StatelessWidget {
   final String type;
   final CustomerSupplierListRepository repository;
   final CustomerSupplierDetailRepository customeDetailsRepository;
-
+  final String? branche;
   CustomerSupplierPage(
       {required this.type,
       required this.repository,
-      required this.customeDetailsRepository});
+      required this.customeDetailsRepository,
+      this.branche});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(type == 'Customer' ? 'العملاء' : 'الموردين'),
+        title: Text(type == 'Customer'
+            ? ' ${branche == null ? " " : branche!}العملاء'
+            : 'الموردين'),
       ),
       body: BlocProvider(
         create: (_) => CustomerSupplierListCubit(repository)..fetchData(type),
