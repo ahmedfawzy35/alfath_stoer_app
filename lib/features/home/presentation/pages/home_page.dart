@@ -28,7 +28,8 @@ class _HomePageState extends State<HomePage> {
   List<String>? allBranches;
   List<String>? userBranches;
   List<String>? climes;
-
+  SharedPrefsService sharedPrefsService = SharedPrefsService();
+  String selectedBranche = " ";
   @override
   void initState() {
     super.initState();
@@ -38,13 +39,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadUserData() async {
     final prefsService = SharedPrefsService();
     final userData = await prefsService.getUserData();
-
+    final selectedBranche1 = await sharedPrefsService.getSelectedBrancheName();
     if (userData != null) {
       setState(() {
         userName = userData['userName'];
         allBranches = List<String>.from(userData['allBranches']);
         userBranches = List<String>.from(userData['userBranches']);
         climes = List<String>.from(userData['climes']);
+        selectedBranche = selectedBranche1;
       });
     }
   }
@@ -63,7 +65,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('الرئيسية'),
+        title: Text(
+          'الرئيسية -  $selectedBranche',
+          style: const TextStyle(
+            fontFamily: 'Cairo',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -73,12 +82,23 @@ class _HomePageState extends State<HomePage> {
               decoration: const BoxDecoration(
                 color: Colors.teal,
               ),
-              child: Text(
-                userName == null ? " " : userName!,
-                style: const TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+              child: Column(
+                children: [
+                  Text(
+                    userName == null ? " " : userName!,
+                    style: const TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    selectedBranche,
+                    style: const TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ),
             ListTile(
@@ -91,7 +111,23 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                _showBranchesDialog(context, 'Customer');
+                final customerSupplierListRepository =
+                    CustomerSupplierListRepository(MyStrings.baseurl);
+                final customerSupplierDetailRepository =
+                    CustomerSupplierDetailRepository(
+                        baseUrl: MyStrings.baseurl);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CustomerSupplierPage(
+                      repository: customerSupplierListRepository,
+                      customeDetailsRepository:
+                          customerSupplierDetailRepository,
+                      type: 'Customer',
+                      branche: selectedBranche,
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -104,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                _showBranchesDialog(context, 'Supplier');
+                Navigator.of(context).pushNamed('/sellerListPage');
               },
             ),
             ListTile(
@@ -141,103 +177,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  void _showBranchesDialog(BuildContext context, String type) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'اختار الفرع',
-            style: TextStyle(
-                fontFamily: 'Cairo', fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          content: SizedBox(
-            width: double.minPositive,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: allBranches!.length,
-              itemBuilder: (BuildContext context, int index) {
-                final branch = allBranches![index];
-                return ListTile(
-                  title: Text(
-                    branch,
-                    style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _handleBranchSelection(context, type, branch);
-                  },
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _handleBranchSelection(
-      BuildContext context, String type, String branch) {
-    if (userBranches!.contains(branch)) {
-      if (type == 'Customer') {
-        final customerSupplierListRepository =
-            CustomerSupplierListRepository(MyStrings.baseurl);
-        final customerSupplierDetailRepository =
-            CustomerSupplierDetailRepository(baseUrl: MyStrings.baseurl);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CustomerSupplierPage(
-              repository: customerSupplierListRepository,
-              customeDetailsRepository: customerSupplierDetailRepository,
-              type: 'Customer',
-              branche: branch,
-            ),
-          ),
-        );
-      } else {
-        Navigator.of(context).pushNamed('/sellerListPage');
-      }
-    } else {
-      showAlertDialog(context, branch);
-    }
-  }
-
-  void showAlertDialog(BuildContext context, String branche) {
-    // إعداد زر الموافقة
-    Widget okButton = Builder(
-      builder: (BuildContext dialogContext) {
-        return TextButton(
-          child: const Text("OK"),
-          onPressed: () {
-            Navigator.of(dialogContext)
-                .pop(); // استخدام context الخاص بـ AlertDialog لإغلاقه
-          },
-        );
-      },
-    );
-
-    // إعداد AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("غير مصرح بالوصول"),
-      content: Text("غير مصرح لك بالوصول الى بيانات  ${branche} !"),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // عرض الحوار
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }

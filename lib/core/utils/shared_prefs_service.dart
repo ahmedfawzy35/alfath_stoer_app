@@ -35,11 +35,27 @@ class SharedPrefsService {
     await prefs.clear();
   }
 
+  Future<void> saveSelectedBranche(int brancheId, String brancheName) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('brancheId', brancheId);
+    prefs.setString('brancheName', brancheName);
+  }
+
+  Future<int> getSelectedBrancheId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('brancheId') ?? 0;
+  }
+
+  Future<String> getSelectedBrancheName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('brancheName') ?? "0";
+  }
+
   List<String> brancheTostring(List<Branche> source) {
     List<String> data = [];
-    source.forEach((element) {
+    for (var element in source) {
       data.add(element.name!);
-    });
+    }
 
     return data;
   }
