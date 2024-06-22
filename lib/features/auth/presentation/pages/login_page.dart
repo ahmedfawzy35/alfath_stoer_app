@@ -12,10 +12,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.teal,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocConsumer<LoginCubit, LoginState>(
@@ -35,55 +31,133 @@ class LoginPage extends StatelessWidget {
                   );
                   Navigator.pushReplacementNamed(context, '/home');
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('User is either disabled or deleted.')),
-                  );
+                  showAlertDialog(
+                      context, 'User is either disabled or deleted.');
                 }
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          state.loginResponse.errorMessage ?? 'Login failed')),
-                );
+                showAlertDialog(context,
+                    state.loginResponse.errorMessage ?? 'Login failed');
               }
             } else if (state is LoginError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              showAlertDialog(context, state.message);
             }
           },
           builder: (context, state) {
             if (state is LoginLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-            return Column(
-              children: [
-                TextField(
-                  controller: _userNameController,
-                  decoration: const InputDecoration(labelText: 'Username'),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    final userName = _userNameController.text;
-                    final password = _passwordController.text;
-                    context.read<LoginCubit>().fetchData(userName, password);
-                  },
-                  style: ElevatedButton.styleFrom(primary: Colors.teal),
-                  child: const Text('Login'),
-                ),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadiusDirectional.only(
+                            bottomEnd: Radius.circular(45),
+                            bottomStart: Radius.circular(45))),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Image(
+                      image: AssetImage('assets/logo.png'),
+                      height: 150,
+                      width: 150,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    child: TextFormField(
+                      controller: _userNameController,
+                      style: TextStyle(color: Colors.deepPurpleAccent),
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.brown[200],
+                        ),
+                        labelText: "ادخل اسم المستخدم",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding:
+                        EdgeInsets.only(right: 15, left: 15, top: 8, bottom: 8),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        suffixIcon: Icon(Icons.remove_red_eye),
+                        labelText: "ادخل كلمة المرور",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "___________________________________",
+                    style: TextStyle(fontWeight: FontWeight.w200),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 28),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final userName = _userNameController.text;
+                        final password = _passwordController.text;
+                        context
+                            .read<LoginCubit>()
+                            .fetchData(userName, password);
+                      },
+                      style: ElevatedButton.styleFrom(primary: Colors.teal),
+                      child: const Text('تسجيل الدخول'),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  SizedBox(height: 6),
+                ],
+              ),
             );
           },
         ),
       ),
     );
   }
+}
+
+void showAlertDialog(BuildContext context, String message) {
+  // إعداد زر الموافقة
+  Widget okButton = Builder(
+    builder: (BuildContext dialogContext) {
+      return TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(dialogContext)
+              .pop(); // استخدام context الخاص بـ AlertDialog لإغلاقه
+        },
+      );
+    },
+  );
+
+  // إعداد AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Error"),
+    content: Text(message),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // عرض الحوار
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

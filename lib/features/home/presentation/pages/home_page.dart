@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _logout(BuildContext context) async {
     final prefsService = SharedPrefsService();
     await prefsService.clearUserData();
+    // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: const Text('الرئيسية'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -75,37 +76,56 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 userName == null ? " " : userName!,
                 style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+                    fontFamily: 'Cairo',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
               leading: const Icon(Icons.person),
-              title: const Text('Customers'),
+              title: const Text(
+                'العملاء',
+                style: TextStyle(
+                    fontFamily: 'Cairo',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
               onTap: () {
                 _showBranchesDialog(context, 'Customer');
               },
             ),
             ListTile(
               leading: const Icon(Icons.store),
-              title: const Text('Suppliers'),
+              title: const Text(
+                'الموردين',
+                style: TextStyle(
+                    fontFamily: 'Cairo',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
               onTap: () {
                 _showBranchesDialog(context, 'Supplier');
               },
             ),
             ListTile(
               leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
+              title: const Text(
+                'تسجيل الخروج',
+                style: TextStyle(
+                    fontFamily: 'Cairo',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
               onTap: () => _logout(context),
             ),
           ],
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            /*
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed('/customerSupplierPage');
@@ -117,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).pushNamed('/sellerListPage');
               },
               child: const Text('Suppliers'),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -129,7 +149,11 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select Branch'),
+          title: const Text(
+            'اختار الفرع',
+            style: TextStyle(
+                fontFamily: 'Cairo', fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           content: SizedBox(
             width: double.minPositive,
             child: ListView.builder(
@@ -138,7 +162,13 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (BuildContext context, int index) {
                 final branch = allBranches![index];
                 return ListTile(
-                  title: Text(branch),
+                  title: Text(
+                    branch,
+                    style: const TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
                   onTap: () {
                     Navigator.of(context).pop();
                     _handleBranchSelection(context, type, branch);
@@ -175,9 +205,39 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).pushNamed('/sellerListPage');
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You do not have access to this branch.')),
-      );
+      showAlertDialog(context, branch);
     }
+  }
+
+  void showAlertDialog(BuildContext context, String branche) {
+    // إعداد زر الموافقة
+    Widget okButton = Builder(
+      builder: (BuildContext dialogContext) {
+        return TextButton(
+          child: const Text("OK"),
+          onPressed: () {
+            Navigator.of(dialogContext)
+                .pop(); // استخدام context الخاص بـ AlertDialog لإغلاقه
+          },
+        );
+      },
+    );
+
+    // إعداد AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("غير مصرح بالوصول"),
+      content: Text("غير مصرح لك بالوصول الى بيانات  ${branche} !"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // عرض الحوار
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

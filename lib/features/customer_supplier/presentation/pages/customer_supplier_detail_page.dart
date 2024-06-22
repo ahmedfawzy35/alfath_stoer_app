@@ -4,14 +4,14 @@ import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/c
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_detail_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart' hide TextDirection;
 
 class CustomerSupplierDetailPage extends StatelessWidget {
   final String type;
   final int id;
   final CustomerSupplierDetailRepository repository;
 
-  CustomerSupplierDetailPage({
+  const CustomerSupplierDetailPage({
+    super.key,
     required this.type,
     required this.id,
     required this.repository,
@@ -30,7 +30,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
             CustomerSupplierDetailState>(
           builder: (context, state) {
             if (state is CustomerSupplierDetailLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (state is CustomerSupplierDetailLoaded) {
               final detail = state.detail;
               return Column(
@@ -43,7 +43,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
                       Text(
                         'رقم العميل :        ${detail.customerId}',
                         textDirection: TextDirection.rtl,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
@@ -53,7 +53,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
                   Text(
                     'الاسم:      ${detail.name}',
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 12,
                         fontWeight: FontWeight.bold),
@@ -61,7 +61,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
                   Text(
                     'بداية الحساب :        ${detail.lastAccount}',
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 12,
                         fontWeight: FontWeight.bold),
@@ -69,12 +69,12 @@ class CustomerSupplierDetailPage extends StatelessWidget {
                   Text(
                     'الحساب النهائي:        ${detail.finalCustomerAccount}',
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 12,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   // Add more fields as needed
@@ -94,7 +94,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   )
                 ],
@@ -102,7 +102,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
             } else if (state is CustomerSupplierDetailError) {
               return Center(child: Text(state.message));
             } else {
-              return Center(child: Text('Unknown state'));
+              return const Center(child: Text('Unknown state'));
             }
           },
         ),
@@ -126,7 +126,7 @@ class ItemProcess extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   Text(
@@ -147,13 +147,13 @@ class ItemProcess extends StatelessWidget {
                   Text(
                     (item.date!).substring(0, 10),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   item.number! > 0
                       ? Text(
                           '[رقم الفاتورة ${item.number!.round().toString()}]')
-                      : SizedBox()
+                      : const SizedBox()
                 ],
               )
             ],
@@ -161,14 +161,14 @@ class ItemProcess extends StatelessWidget {
         ),
         Container(
           height: 2,
-          decoration: BoxDecoration(color: Colors.black),
+          decoration: const BoxDecoration(color: Colors.black),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               (item.accountAfterElement!.round()).toString(),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         )
