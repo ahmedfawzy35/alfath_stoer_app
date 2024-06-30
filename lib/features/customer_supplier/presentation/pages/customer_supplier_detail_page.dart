@@ -1,7 +1,8 @@
-import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_supplier_detail_model.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_detail_repository.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_detail_state.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/widgets/item_process.dart';
+import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,9 +20,17 @@ class CustomerSupplierDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CustomerSupplierDetailCubit(repository)
-        ..fetchCustomerSupplierDetail(type, id),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CustomerSupplierDetailCubit>(
+          create: (_) => CustomerSupplierDetailCubit(repository)
+            ..fetchCustomerSupplierDetail(type, id),
+        ),
+        BlocProvider<OrderCubit>(
+          create: (_) => context.read<OrderCubit>(),
+        )
+      ], // Ensure OrderCubit is available
+
       child: Scaffold(
         appBar: AppBar(
           title: Text(type == 'Customer' ? 'كشف حساب عميل' : 'كشف حساب مورد'),
@@ -107,72 +116,6 @@ class CustomerSupplierDetailPage extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class ItemProcess extends StatelessWidget {
-  const ItemProcess({super.key, required this.item});
-  final ProcessElement item;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: item.add! ? Colors.green[300] : Colors.amber[600]),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    item.value.toString(),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    item.notes.toString(),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    (item.date!).substring(0, 10),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  item.number! > 0
-                      ? Text(
-                          '[رقم الفاتورة ${item.number!.round().toString()}]')
-                      : const SizedBox()
-                ],
-              )
-            ],
-          ),
-        ),
-        Container(
-          height: 2,
-          decoration: const BoxDecoration(color: Colors.black),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              (item.accountAfterElement!.round()).toString(),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ],
-        )
-      ],
     );
   }
 }
