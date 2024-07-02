@@ -1,5 +1,4 @@
 import 'package:alfath_stoer_app/features/customer_supplier/domain/customer_supplier_detail.dart';
-import 'package:flutter/material.dart';
 
 class CustomerSupplierDetailModel {
   final int customerId;
@@ -83,16 +82,16 @@ class ProcessElement {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['value'] = this.value;
-    data['notes'] = this.notes;
-    data['date'] = this.date;
-    data['accountBeforElement'] = this.accountBeforElement;
-    data['accountAfterElement'] = this.accountAfterElement;
-    data['type'] = this.type;
-    data['add'] = this.add;
-    data['number'] = this.number;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['value'] = value;
+    data['notes'] = notes;
+    data['date'] = date;
+    data['accountBeforElement'] = accountBeforElement;
+    data['accountAfterElement'] = accountAfterElement;
+    data['type'] = type;
+    data['add'] = add;
+    data['number'] = number;
     return data;
   }
 }

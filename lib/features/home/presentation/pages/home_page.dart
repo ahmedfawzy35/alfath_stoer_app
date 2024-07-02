@@ -5,7 +5,9 @@ import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/cu
 import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_list_repository.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/seller_list_repository.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_supplier_page.dart';
+import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final CustomerSupplierListRepository customeRepository;
@@ -63,118 +65,125 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'الرئيسية -  $selectedBranche',
-          style: const TextStyle(
-            fontFamily: 'Cairo',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<OrderCubit>(
+          create: (_) => context.read<OrderCubit>(),
+        )
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'الرئيسية -  $selectedBranche',
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.teal,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    userName == null ? " " : userName!,
-                    style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    selectedBranche,
-                    style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text(
-                'العملاء',
-                style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                final customerSupplierListRepository =
-                    CustomerSupplierListRepository(MyStrings.baseurl);
-                final customerSupplierDetailRepository =
-                    CustomerSupplierDetailRepository(
-                        baseUrl: MyStrings.baseurl);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CustomerSupplierPage(
-                      repository: customerSupplierListRepository,
-                      customeDetailsRepository:
-                          customerSupplierDetailRepository,
-                      type: 'Customer',
-                      branche: selectedBranche,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.teal,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      userName == null ? " " : userName!,
+                      style: const TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.store),
-              title: const Text(
-                'الموردين',
-                style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                    Text(
+                      selectedBranche,
+                      style: const TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-              onTap: () {
-                Navigator.of(context).pushNamed('/sellerListPage');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                'تسجيل الخروج',
-                style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text(
+                  'العملاء',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  final customerSupplierListRepository =
+                      CustomerSupplierListRepository(MyStrings.baseurl);
+                  final customerSupplierDetailRepository =
+                      CustomerSupplierDetailRepository(
+                          baseUrl: MyStrings.baseurl);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CustomerSupplierPage(
+                        repository: customerSupplierListRepository,
+                        customeDetailsRepository:
+                            customerSupplierDetailRepository,
+                        type: 'Customer',
+                        branche: selectedBranche,
+                      ),
+                    ),
+                  );
+                },
               ),
-              onTap: () => _logout(context),
-            ),
-          ],
+              ListTile(
+                leading: const Icon(Icons.store),
+                title: const Text(
+                  'الموردين',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/sellerListPage');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text(
+                  'تسجيل الخروج',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                onTap: () => _logout(context),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            /*
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/customerSupplierPage');
-              },
-              child: const Text('Customers'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/sellerListPage');
-              },
-              child: const Text('Suppliers'),
-            ),*/
-          ],
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              /*
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/customerSupplierPage');
+                  },
+                  child: const Text('Customers'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/sellerListPage');
+                  },
+                  child: const Text('Suppliers'),
+                ),*/
+            ],
+          ),
         ),
       ),
     );

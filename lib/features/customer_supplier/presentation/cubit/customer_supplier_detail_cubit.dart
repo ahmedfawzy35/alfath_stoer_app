@@ -14,7 +14,7 @@ class CustomerSupplierDetailCubit extends Cubit<CustomerSupplierDetailState> {
       final detail = await repository.fetchCustomerSupplierDetail(type, id);
       emit(CustomerSupplierDetailLoaded(detail));
     } catch (e) {
-      emit(CustomerSupplierDetailError('Failed to load details'));
+      emit(const CustomerSupplierDetailError('Failed to load details'));
     }
   }
 }

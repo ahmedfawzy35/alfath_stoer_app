@@ -8,7 +8,7 @@ class SellerListPage extends StatelessWidget {
   final String type;
   final SellerListRepository repository;
 
-  SellerListPage({required this.type, required this.repository});
+  const SellerListPage({super.key, required this.type, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class SellerListPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => SellerListCubit(repository)..fetchData(type),
-        child: SellerList(),
+        child: const SellerList(),
       ),
     );
   }

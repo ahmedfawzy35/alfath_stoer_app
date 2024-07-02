@@ -27,7 +27,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
             ..fetchCustomerSupplierDetail(type, id),
         ),
         BlocProvider<OrderCubit>(
-          create: (_) => context.read<OrderCubit>(),
+          create: (context) => OrderCubit(),
         )
       ], // Ensure OrderCubit is available
 
@@ -97,6 +97,7 @@ class CustomerSupplierDetailPage extends StatelessWidget {
                           final item = detail.elements[index];
 
                           return ItemProcess(
+                            context: context,
                             item: item,
                           );
                         },

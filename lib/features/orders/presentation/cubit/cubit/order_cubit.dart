@@ -36,10 +36,12 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       emit(OrderLoading());
       bool message = await repository.deleteOrder(id);
+      print('تمام ينجم');
       if (message) {
         emit(OrderDeleted());
       }
     } catch (e) {
+      print(e.toString());
       emit(const OrderError('Failed To Delete '));
     }
   }

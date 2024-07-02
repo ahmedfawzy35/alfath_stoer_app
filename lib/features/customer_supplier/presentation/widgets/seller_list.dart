@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SellerList extends StatelessWidget {
+  const SellerList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -11,7 +13,7 @@ class SellerList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Search',
               border: OutlineInputBorder(),
             ),
@@ -24,7 +26,7 @@ class SellerList extends StatelessWidget {
           child: BlocBuilder<SellerListCubit, SellerListState>(
             builder: (context, state) {
               if (state is SellerListLoading) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (state is SellerListLoaded) {
                 return ListView.builder(
                   itemCount: state.filteredItems.length,
@@ -42,7 +44,7 @@ class SellerList extends StatelessWidget {
               } else if (state is SellerListError) {
                 return Center(child: Text(state.message));
               } else {
-                return Center(child: Text('Unknown state'));
+                return const Center(child: Text('Unknown state'));
               }
             },
           ),

@@ -9,6 +9,7 @@ import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/se
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_supplier_page.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
+import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
   final CustomerSupplierDetailRepository customerSupplierDetailRepository;
   final LoginRepository loginRepository;
 
-  MyApp({
+  const MyApp({
+    super.key,
     required this.customerRepository,
     required this.sellerRepository,
     required this.customerSupplierDetailRepository,
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => LoginCubit(loginRepository),
-        ),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -108,7 +110,8 @@ class SplashScreen extends StatefulWidget {
   final SellerListRepository sellerRepository;
   final CustomerSupplierDetailRepository customerSupplierDetailRepository;
 
-  SplashScreen({
+  const SplashScreen({
+    super.key,
     required this.customerRepository,
     required this.sellerRepository,
     required this.customerSupplierDetailRepository,
@@ -137,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
 
     // الانتقال إلى الشاشة الرئيسية بعد انتهاء الأنيميشن
-    Future.delayed(Duration(seconds: 4), () async {
+    Future.delayed(const Duration(seconds: 4), () async {
       final userData = await SharedPrefsService().getUserData();
       if (userData != null) {
         Navigator.of(context).pushReplacement(_createRoute(
@@ -161,7 +164,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   Route _createRoute(Widget page) {
     return PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 500), // ضبط مدة الأنيميشن هنا
+      transitionDuration:
+          const Duration(milliseconds: 500), // ضبط مدة الأنيميشن هنا
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
@@ -194,8 +198,8 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             FadeTransition(
               opacity: _animation,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 20.0),
                 child: Text(
                   'Store M',
                   style: TextStyle(

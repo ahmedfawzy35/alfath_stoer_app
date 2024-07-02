@@ -129,7 +129,8 @@ class LoginPage extends StatelessWidget {
                             .read<LoginCubit>()
                             .fetchData(userName, password);
                       },
-                      style: ElevatedButton.styleFrom(primary: Colors.teal),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal),
                       child: const Text('تسجيل الدخول'),
                     ),
                   ),

@@ -10,8 +10,8 @@ class LoginRepository {
 
   Future<LoginResponse> login(String userName, String password) async {
     final url = '$baseUrl/User/Login';
-    print(url);
-    final request = await http.Request(
+    // print(url);
+    final request = http.Request(
       'GET',
       Uri.parse(url),
     );

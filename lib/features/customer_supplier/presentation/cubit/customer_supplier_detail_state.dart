@@ -15,7 +15,7 @@ class CustomerSupplierDetailLoading extends CustomerSupplierDetailState {}
 class CustomerSupplierDetailLoaded extends CustomerSupplierDetailState {
   final CustomerSupplierDetail detail;
 
-  CustomerSupplierDetailLoaded(this.detail);
+  const CustomerSupplierDetailLoaded(this.detail);
 
   @override
   List<Object> get props => [detail];
@@ -24,7 +24,7 @@ class CustomerSupplierDetailLoaded extends CustomerSupplierDetailState {
 class CustomerSupplierDetailError extends CustomerSupplierDetailState {
   final String message;
 
-  CustomerSupplierDetailError(this.message);
+  const CustomerSupplierDetailError(this.message);
 
   @override
   List<Object> get props => [message];

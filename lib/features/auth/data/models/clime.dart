@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 class clime {
   String? name;
 
@@ -8,7 +10,7 @@ class clime {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     // ignore: unnecessary_this
     data['name'] = this.name;
     return data;

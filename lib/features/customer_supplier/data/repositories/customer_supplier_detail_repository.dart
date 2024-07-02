@@ -12,7 +12,7 @@ class CustomerSupplierDetailRepository {
       String type, int id) async {
     final url =
         '$baseUrl/${type == 'Customer' ? 'Customer' : 'Seller'}/Account';
-    final request = await http.Request(
+    final request = http.Request(
       'GET',
       Uri.parse(url),
     );

@@ -1,11 +1,13 @@
+// ignore_for_file: constant_identifier_names
+
 enum OrdersTyps { Order, OrderBack, Purchase, PurchaseBack }
 
-enum CustomerAccountElementTyps {
-  Order,
-  OrderBack,
-  CashInFromCustomer,
-  CustomerAddingSettlement,
-  CustomerDiscountSettlement
+class CustomerAccountElementTyps {
+  static const String Order = 'Order';
+  static const String OrderBack = 'OrderBack';
+  static const String CashInFromCustomer = 'CashInFromCustomer';
+  static const String CustomerAddingSettlement = 'CustomerAddingSettlement';
+  static const String CustomerDiscountSettlement = 'CustomerDiscountSettlement';
 }
 
 enum SellerAccountElementTyps {

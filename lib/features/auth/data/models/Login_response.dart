@@ -1,7 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:alfath_stoer_app/features/auth/data/models/branche.dart';
 import 'package:alfath_stoer_app/features/auth/data/models/clime.dart';
 import 'package:alfath_stoer_app/features/auth/data/models/user.dart';
-import 'package:alfath_stoer_app/features/auth/data/models/user_branches.dart';
 
 class LoginResponse {
   User? user;
@@ -44,21 +45,21 @@ class LoginResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
-    if (this.climes != null) {
-      data['climes'] = this.climes!.map((v) => v.toJson()).toList();
+    if (climes != null) {
+      data['climes'] = climes!.map((v) => v.toJson()).toList();
     }
-    if (this.userBranches != null) {
-      data['userBranches'] = this.userBranches!.map((v) => v.toJson()).toList();
+    if (userBranches != null) {
+      data['userBranches'] = userBranches!.map((v) => v.toJson()).toList();
     }
-    if (this.allBranches != null) {
-      data['allBranches'] = this.allBranches!.map((v) => v.toJson()).toList();
+    if (allBranches != null) {
+      data['allBranches'] = allBranches!.map((v) => v.toJson()).toList();
     }
-    data['login'] = this.login;
-    data['errorMessage'] = this.errorMessage;
+    data['login'] = login;
+    data['errorMessage'] = errorMessage;
     return data;
   }
 }

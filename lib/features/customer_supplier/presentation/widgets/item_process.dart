@@ -1,3 +1,4 @@
+import 'package:alfath_stoer_app/core/utils/my_types.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_supplier_detail_model.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
@@ -7,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemProcess extends StatelessWidget {
-  const ItemProcess({super.key, required this.item});
+  const ItemProcess(
+      {required BuildContext context, super.key, required this.item});
   final ProcessElement item;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Column(
       children: [
         Container(
@@ -29,13 +30,14 @@ class ItemProcess extends StatelessWidget {
                     onSelected: (String result) {
                       switch (result) {
                         case 'Edit':
-                          _editItem(context, item.id!);
+                          _editItem(context, item.id!, item.type!);
                           break;
                         case 'Delete':
-                          _deleteItem(context, item.id!);
+                          _deleteItem(context, item.id!, item.type!);
+
                           break;
-                        case 'Add':
-                          _addItem(context);
+                        case 'Show':
+                          _showItem(context, item.id!, item.type!);
                           break;
                       }
                     },
@@ -50,8 +52,8 @@ class ItemProcess extends StatelessWidget {
                         child: Text('حذف'),
                       ),
                       const PopupMenuItem<String>(
-                        value: 'Add',
-                        child: Text('إضافة'),
+                        value: 'Show',
+                        child: Text('عرض'),
                       ),
                     ],
                   ),
@@ -93,7 +95,28 @@ class ItemProcess extends StatelessWidget {
     );
   }
 
-  void _editItem(BuildContext context, int id) async {
+  void _editItem(BuildContext context, int id, String processType) async {
+    switch (processType) {
+      case CustomerAccountElementTyps.Order:
+        _editOrder(context, id);
+    }
+  }
+
+  void _deleteItem(BuildContext context, int id, String processType) async {
+    switch (processType) {
+      case CustomerAccountElementTyps.Order:
+        _deleteOrder(context, id);
+    }
+  }
+
+  void _showItem(BuildContext context, int id, String processType) async {
+    switch (processType) {
+      case CustomerAccountElementTyps.Order:
+        _showOrder(context, id);
+    }
+  }
+
+  void _editOrder(BuildContext context, int id) async {
     final repo = OrderRepository();
     final order = await repo.getById(id);
 
@@ -101,21 +124,21 @@ class ItemProcess extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditOrderPage(order: order),
+        builder: (context) => BlocProvider<OrderCubit>(
+          create: (context) => OrderCubit(),
+          child: EditOrderPage(order: order),
+        ),
       ),
     );
   }
 
-  void _deleteItem(BuildContext context, int id) {
+  void _deleteOrder(BuildContext context, int id) {
     // هنا يمكنك إضافة منطق الحذف باستخدام OrderCubit
     final orderCubit = context.read<OrderCubit>();
     orderCubit.deleteOrder(id);
   }
 
-  void _addItem(BuildContext context) {
-    // هنا يمكنك إضافة منطق الإضافة باستخدام OrderCubit
-    final orderCubit = context.read<OrderCubit>();
-    final order = Order(); // إنشاء كائن Order جديد
-    orderCubit.addOrder(order);
+  void _showOrder(BuildContext context, int id) {
+    // هنا يمكنك إضافة منطق عرض باستخدام OrderCubit
   }
 }
