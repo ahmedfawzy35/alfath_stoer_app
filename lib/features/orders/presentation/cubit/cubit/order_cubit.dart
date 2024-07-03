@@ -79,4 +79,8 @@ class OrderCubit extends Cubit<OrderState> {
       emit(const OrderError('Failed To load orders'));
     }
   }
+
+  void updateOrderField(Order order) {
+    emit(OrderUpdated(order: order));
+  }
 }

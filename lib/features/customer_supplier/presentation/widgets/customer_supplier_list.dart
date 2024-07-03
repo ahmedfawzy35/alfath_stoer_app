@@ -8,8 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerSupplierList extends StatelessWidget {
   final CustomerSupplierDetailRepository customeRepository;
-
-  const CustomerSupplierList({super.key, required this.customeRepository});
+  final bool edit;
+  const CustomerSupplierList(
+      {super.key, required this.customeRepository, required this.edit});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class CustomerSupplierList extends StatelessWidget {
                     return SellerListItem(
                       item: item,
                       customeRepository: customeRepository,
+                      edit: edit,
                     );
                   },
                 );
@@ -60,21 +62,38 @@ class CustomerSupplierList extends StatelessWidget {
 
 class SellerListItem extends StatelessWidget {
   const SellerListItem(
-      {super.key, required this.item, required this.customeRepository});
+      {super.key,
+      required this.item,
+      required this.customeRepository,
+      required this.edit});
   final CustomerSupplierModel item;
   final CustomerSupplierDetailRepository customeRepository;
+  final bool edit;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (_) => CustomerSupplierDetailCubit(customeRepository)
-              ..fetchCustomerSupplierDetail('Customer', item.id),
-            child: CustomerSupplierDetailPage(
-                type: 'Customer', id: item.id, repository: customeRepository),
-          ),
-        ));
+        if (edit == false) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BlocProvider(
+              create: (_) => CustomerSupplierDetailCubit(customeRepository)
+                ..fetchCustomerSupplierDetail('Customer', item.id),
+              child: CustomerSupplierDetailPage(
+                  type: 'Customer', id: item.id, repository: customeRepository),
+            ),
+          ));
+        } else {
+          CustomerSupplierModel customer = CustomerSupplierModel(
+              id: item.id,
+              name: item.name,
+              adress: item.adress,
+              brancheId: item.brancheId,
+              startAccount: item.startAccount,
+              customerAccount: item.customerAccount,
+              customertypeId: item.customertypeId,
+              stopDealing: item.stopDealing);
+          Navigator.pop(context, customer);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

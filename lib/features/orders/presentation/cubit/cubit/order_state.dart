@@ -9,6 +9,15 @@ sealed class OrderState extends Equatable {
 
 final class OrderInitial extends OrderState {}
 
+class OrderUpdated extends OrderState {
+  final Order order;
+
+  const OrderUpdated({required this.order});
+
+  @override
+  List<Object> get props => [order];
+}
+
 class OrderLoading extends OrderState {}
 
 class OrderLoaded extends OrderState {

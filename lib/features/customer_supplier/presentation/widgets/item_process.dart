@@ -1,5 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_supplier_detail_model.dart';
+import 'package:alfath_stoer_app/features/main_widgets/my_dialgs.dart';
+import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_page.dart';
@@ -15,16 +17,15 @@ class ItemProcess extends StatelessWidget {
     return Column(
       children: [
         Container(
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: item.add! ? Colors.green[300] : Colors.amber[600],
-          ),
+              color: item.add! ? Colors.green[300] : Colors.amber[600],
+              borderRadius: BorderRadius.circular(5)),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const SizedBox(width: 15),
-                  Text(item.value.toString()),
                   PopupMenuButton<String>(
                     onSelected: (String result) {
                       switch (result) {
@@ -56,6 +57,8 @@ class ItemProcess extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const Spacer(),
+                  Text(item.value.toString()),
                 ],
               ),
               Row(
@@ -76,6 +79,9 @@ class ItemProcess extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Container(
           height: 2,
@@ -120,8 +126,7 @@ class ItemProcess extends StatelessWidget {
     final order = await repo.getById(id);
 
     // ignore: use_build_context_synchronously
-    Navigator.push(
-      context,
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => BlocProvider<OrderCubit>(
           create: (context) => OrderCubit(),

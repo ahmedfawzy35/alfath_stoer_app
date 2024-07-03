@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerSupplierPage extends StatelessWidget {
   final String type;
+  final bool edit;
   final CustomerSupplierListRepository repository;
   final CustomerSupplierDetailRepository customeDetailsRepository;
   final String? branche;
@@ -15,7 +16,8 @@ class CustomerSupplierPage extends StatelessWidget {
       required this.type,
       required this.repository,
       required this.customeDetailsRepository,
-      this.branche});
+      this.branche,
+      this.edit = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,10 @@ class CustomerSupplierPage extends StatelessWidget {
       body: BlocProvider(
         create: (_) =>
             CustomerSupplierListCubit(repository)..fetchData(type, branche!),
-        child:
-            CustomerSupplierList(customeRepository: customeDetailsRepository),
+        child: CustomerSupplierList(
+          customeRepository: customeDetailsRepository,
+          edit: edit,
+        ),
       ),
     );
   }

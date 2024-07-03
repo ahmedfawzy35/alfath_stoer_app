@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                         customeDetailsRepository:
                             customerSupplierDetailRepository,
                         type: 'Customer',
+                        edit: false,
                         branche: selectedBranche,
                       ),
                     ),
