@@ -1,4 +1,4 @@
-import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_supplier_detail_model.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_detail_model.dart';
 
 class CustomerSupplierDetail {
   final int customerId;

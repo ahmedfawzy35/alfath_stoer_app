@@ -1,4 +1,4 @@
-part of 'customer_supplier_list_cubit.dart';
+part of 'customer_list_cubit.dart';
 
 abstract class CustomerSupplierListState extends Equatable {
   const CustomerSupplierListState();
@@ -12,8 +12,8 @@ class CustomerSupplierListInitial extends CustomerSupplierListState {}
 class CustomerSupplierListLoading extends CustomerSupplierListState {}
 
 class CustomerSupplierListLoaded extends CustomerSupplierListState {
-  final List<CustomerSupplierModel> items;
-  final List<CustomerSupplierModel> filteredItems;
+  final List<CustomerModel> items;
+  final List<CustomerModel> filteredItems;
 
   const CustomerSupplierListLoaded(
       {required this.items, required this.filteredItems});

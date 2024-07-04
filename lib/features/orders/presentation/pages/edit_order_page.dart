@@ -1,8 +1,5 @@
-import 'package:alfath_stoer_app/core/utils/strings.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_detail_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_list_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_list_cubit.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_supplier_page.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +38,6 @@ class EditOrderPage extends StatelessWidget {
 
     final TextEditingController customerNumberController =
         TextEditingController(text: order.customerId?.toString());
-    final repo = CustomerSupplierListRepository(MyStrings.baseurl);
 
     DateTime selectedDate = DateTime.parse(order.date!);
 
@@ -62,9 +58,8 @@ class EditOrderPage extends StatelessWidget {
         BlocProvider<OrderCubit>(
           create: (_) => context.read<OrderCubit>(),
         ),
-        BlocProvider<CustomerSupplierListCubit>(
-          create: (context) =>
-              CustomerSupplierListCubit(repo)..fetchData('Customer', ' '),
+        BlocProvider<CustomerListCubit>(
+          create: (context) => CustomerListCubit()..fetchData(),
         ),
       ],
       child: Directionality(
@@ -97,21 +92,11 @@ class EditOrderPage extends StatelessWidget {
                           const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () async {
-                              final customerSupplierListRepository =
-                                  CustomerSupplierListRepository(
-                                      MyStrings.baseurl);
-                              final customerSupplierDetailRepository =
-                                  CustomerSupplierDetailRepository(
-                                      baseUrl: MyStrings.baseurl);
-
                               final selectedCustomer =
                                   await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => CustomerSupplierPage(
-                                    repository: customerSupplierListRepository,
-                                    customeDetailsRepository:
-                                        customerSupplierDetailRepository,
-                                    type: 'Customer',
+                                  // ignore: prefer_const_constructors
+                                  builder: (context) => CustomerListPage(
                                     edit: true,
                                     branche: 'selectedBranche',
                                   ),

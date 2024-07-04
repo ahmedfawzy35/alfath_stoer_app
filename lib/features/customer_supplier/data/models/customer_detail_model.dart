@@ -1,6 +1,6 @@
-import 'package:alfath_stoer_app/features/customer_supplier/domain/customer_supplier_detail.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/domain/customer_detail.dart';
 
-class CustomerSupplierDetailModel {
+class CustomerDetailModel {
   final int customerId;
   final String name;
   final double lastAccount;
@@ -9,7 +9,7 @@ class CustomerSupplierDetailModel {
   final double finalCustomerAccount;
   final List<ProcessElement> elements;
 
-  CustomerSupplierDetailModel({
+  CustomerDetailModel({
     required this.customerId,
     required this.name,
     required this.lastAccount,
@@ -19,12 +19,12 @@ class CustomerSupplierDetailModel {
     required this.elements,
   });
 
-  factory CustomerSupplierDetailModel.fromJson(Map<String, dynamic> json) {
+  factory CustomerDetailModel.fromJson(Map<String, dynamic> json) {
     var list = json['elements'] as List;
     List<ProcessElement> elementsList =
         list.map((i) => ProcessElement.fromJson(i)).toList();
 
-    return CustomerSupplierDetailModel(
+    return CustomerDetailModel(
       customerId: json['customerId'],
       name: json['name'],
       lastAccount: (json['lastAccount'] as num).toDouble(),

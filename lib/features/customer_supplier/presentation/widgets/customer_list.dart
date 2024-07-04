@@ -1,16 +1,13 @@
-import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_supplier_model.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_detail_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_detail_cubit.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_list_cubit.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_supplier_detail_page.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_model.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_detail_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CustomerSupplierList extends StatelessWidget {
-  final CustomerSupplierDetailRepository customeRepository;
+class CustomerList extends StatelessWidget {
   final bool edit;
-  const CustomerSupplierList(
-      {super.key, required this.customeRepository, required this.edit});
+  const CustomerList({super.key, required this.edit});
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +21,12 @@ class CustomerSupplierList extends StatelessWidget {
               border: OutlineInputBorder(),
             ),
             onChanged: (query) {
-              context.read<CustomerSupplierListCubit>().filterItems(query);
+              context.read<CustomerListCubit>().filterItems(query);
             },
           ),
         ),
         Expanded(
-          child:
-              BlocBuilder<CustomerSupplierListCubit, CustomerSupplierListState>(
+          child: BlocBuilder<CustomerListCubit, CustomerSupplierListState>(
             builder: (context, state) {
               if (state is CustomerSupplierListLoading) {
                 return const Center(child: CircularProgressIndicator());
@@ -40,9 +36,8 @@ class CustomerSupplierList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = state.filteredItems[index];
 
-                    return SellerListItem(
+                    return CustomerListItem(
                       item: item,
-                      customeRepository: customeRepository,
                       edit: edit,
                     );
                   },
@@ -60,14 +55,9 @@ class CustomerSupplierList extends StatelessWidget {
   }
 }
 
-class SellerListItem extends StatelessWidget {
-  const SellerListItem(
-      {super.key,
-      required this.item,
-      required this.customeRepository,
-      required this.edit});
-  final CustomerSupplierModel item;
-  final CustomerSupplierDetailRepository customeRepository;
+class CustomerListItem extends StatelessWidget {
+  const CustomerListItem({super.key, required this.item, required this.edit});
+  final CustomerModel item;
   final bool edit;
   @override
   Widget build(BuildContext context) {
@@ -76,14 +66,13 @@ class SellerListItem extends StatelessWidget {
         if (edit == false) {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => BlocProvider(
-              create: (_) => CustomerSupplierDetailCubit(customeRepository)
-                ..fetchCustomerSupplierDetail('Customer', item.id),
-              child: CustomerSupplierDetailPage(
-                  type: 'Customer', id: item.id, repository: customeRepository),
+              create: (_) =>
+                  CustomerDetailCubit()..fetchCustomerSupplierDetail(item.id),
+              child: CustomerDetailPage(id: item.id),
             ),
           ));
         } else {
-          CustomerSupplierModel customer = CustomerSupplierModel(
+          CustomerModel customer = CustomerModel(
               id: item.id,
               name: item.name,
               adress: item.adress,

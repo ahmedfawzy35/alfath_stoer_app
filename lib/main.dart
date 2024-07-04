@@ -1,12 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
-import 'package:alfath_stoer_app/core/utils/strings.dart';
-import 'package:alfath_stoer_app/features/auth/data/repositories/login_repository.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_detail_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_list_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/seller_list_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_supplier_page.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_list_page.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -14,33 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  final customerSupplierListRepository =
-      CustomerSupplierListRepository(MyStrings.baseurl);
-  final sellerListRepository = SellerListRepository(MyStrings.baseurl);
-  final customerSupplierDetailRepository =
-      CustomerSupplierDetailRepository(baseUrl: MyStrings.baseurl);
-  final loginRepository = LoginRepository(baseUrl: MyStrings.baseurl);
-
-  runApp(MyApp(
-    customerRepository: customerSupplierListRepository,
-    sellerRepository: sellerListRepository,
-    customerSupplierDetailRepository: customerSupplierDetailRepository,
-    loginRepository: loginRepository,
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final CustomerSupplierListRepository customerRepository;
-  final SellerListRepository sellerRepository;
-  final CustomerSupplierDetailRepository customerSupplierDetailRepository;
-  final LoginRepository loginRepository;
-
   const MyApp({
     super.key,
-    required this.customerRepository,
-    required this.sellerRepository,
-    required this.customerSupplierDetailRepository,
-    required this.loginRepository,
   });
 
   @override
@@ -48,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => LoginCubit(loginRepository),
+          create: (context) => LoginCubit(),
         )
       ],
       child: MaterialApp(
@@ -57,26 +31,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.teal,
         ),
-        home: SplashScreen(
-          customerRepository: customerRepository,
-          sellerRepository: sellerRepository,
-          customerSupplierDetailRepository: customerSupplierDetailRepository,
-        ),
+        home: const SplashScreen(),
         routes: {
-          '/home': (context) => HomePage(
-                customeRepository: customerRepository,
-                sellerRepository: sellerRepository,
-                customeDetailsRepository: customerSupplierDetailRepository,
-              ),
-          '/customerSupplierPage': (context) => CustomerSupplierPage(
-                type: 'Customer',
-                repository: customerRepository,
-                customeDetailsRepository: customerSupplierDetailRepository,
-              ),
-          '/sellerListPage': (context) => SellerListPage(
-                type: 'Seller',
-                repository: sellerRepository,
-              ),
+          '/home': (context) => const HomePage(),
+          '/customerSupplierPage': (context) => const CustomerListPage(),
+          '/sellerListPage': (context) => const SellerListPage(),
           // قم بإضافة المسارات الأخرى إذا لزم الأمر
         },
       ),
@@ -105,15 +64,8 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreen extends StatefulWidget {
-  final CustomerSupplierListRepository customerRepository;
-  final SellerListRepository sellerRepository;
-  final CustomerSupplierDetailRepository customerSupplierDetailRepository;
-
   const SplashScreen({
     super.key,
-    required this.customerRepository,
-    required this.sellerRepository,
-    required this.customerSupplierDetailRepository,
   });
 
   @override
@@ -143,11 +95,7 @@ class _SplashScreenState extends State<SplashScreen>
       final userData = await SharedPrefsService().getUserData();
       if (userData != null) {
         Navigator.of(context).pushReplacement(_createRoute(
-          HomePage(
-            customeRepository: widget.customerRepository,
-            sellerRepository: widget.sellerRepository,
-            customeDetailsRepository: widget.customerSupplierDetailRepository,
-          ),
+          const HomePage(),
         ));
       } else {
         Navigator.of(context).pushReplacement(_createRoute(LoginPage()));

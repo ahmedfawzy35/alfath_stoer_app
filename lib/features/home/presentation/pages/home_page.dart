@@ -1,24 +1,14 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
-import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_detail_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_list_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/seller_list_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_supplier_page.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_list_page.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
-  final CustomerSupplierListRepository customeRepository;
-  final SellerListRepository sellerRepository;
-  final CustomerSupplierDetailRepository customeDetailsRepository;
-
   const HomePage({
     super.key,
-    required this.customeRepository,
-    required this.sellerRepository,
-    required this.customeDetailsRepository,
   });
 
   @override
@@ -119,19 +109,10 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
-                  final customerSupplierListRepository =
-                      CustomerSupplierListRepository(MyStrings.baseurl);
-                  final customerSupplierDetailRepository =
-                      CustomerSupplierDetailRepository(
-                          baseUrl: MyStrings.baseurl);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CustomerSupplierPage(
-                        repository: customerSupplierListRepository,
-                        customeDetailsRepository:
-                            customerSupplierDetailRepository,
-                        type: 'Customer',
+                      builder: (context) => CustomerListPage(
                         edit: false,
                         branche: selectedBranche,
                       ),
@@ -149,7 +130,15 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed('/sellerListPage');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SellerListPage(
+                        edit: false,
+                        branche: selectedBranche,
+                      ),
+                    ),
+                  );
                 },
               ),
               ListTile(

@@ -7,7 +7,7 @@ class SellerListRepository {
 
   SellerListRepository(this.baseUrl);
 
-  Future<List<SellerModel>> fetchData(String type) async {
+  Future<List<SellerModel>> fetchData() async {
     final response = await http.get(Uri.parse('$baseUrl/Seller/GetAll'));
 
     if (response.statusCode == 200) {

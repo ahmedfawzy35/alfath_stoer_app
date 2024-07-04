@@ -1,4 +1,4 @@
-import 'package:alfath_stoer_app/features/customer_supplier/domain/customer_supplier_detail.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/domain/customer_detail.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class CustomerSupplierDetailState extends Equatable {

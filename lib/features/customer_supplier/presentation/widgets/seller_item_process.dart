@@ -1,15 +1,15 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_detail_model.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/data/models/seller_detail_model.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ItemProcess extends StatelessWidget {
-  const ItemProcess(
+class SellerItemProcess extends StatelessWidget {
+  const SellerItemProcess(
       {required BuildContext context, super.key, required this.item});
-  final ProcessElement item;
+  final SellerProcessElement item;
   @override
   Widget build(context) {
     return Column(
@@ -100,15 +100,15 @@ class ItemProcess extends StatelessWidget {
 
   void _editItem(BuildContext context, int id, String processType) async {
     switch (processType) {
-      case CustomerAccountElementTyps.Order:
-        _editOrder(context, id);
+      case SellerAccountElementTyps.Purchase:
+        _editPurchase(context, id);
     }
   }
 
   void _deleteItem(BuildContext context, int id, String processType) async {
     switch (processType) {
-      case CustomerAccountElementTyps.Order:
-        _deleteOrder(context, id);
+      case SellerAccountElementTyps.Purchase:
+        _deletePurchase(context, id);
     }
   }
 
@@ -119,7 +119,7 @@ class ItemProcess extends StatelessWidget {
     }
   }
 
-  void _editOrder(BuildContext context, int id) async {
+  void _editPurchase(BuildContext context, int id) async {
     final repo = OrderRepository();
     final order = await repo.getById(id);
 
@@ -134,10 +134,10 @@ class ItemProcess extends StatelessWidget {
     );
   }
 
-  void _deleteOrder(BuildContext context, int id) {
+  void _deletePurchase(BuildContext context, int id) {
     // هنا يمكنك إضافة منطق الحذف باستخدام OrderCubit
-    final orderCubit = context.read<OrderCubit>();
-    orderCubit.deleteOrder(id);
+    // final orderCubit = context.read<OrderCubit>();
+    // orderCubit.deleteOrder(id);
   }
 
   void _showOrder(BuildContext context, int id) {

@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,10 +10,9 @@ import 'package:alfath_stoer_app/features/auth/data/repositories/login_repositor
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final LoginRepository repository;
-
-  LoginCubit(this.repository) : super(LoginInitial());
-
+  LoginCubit() : super(LoginInitial());
+  final LoginRepository repository =
+      LoginRepository(baseUrl: MyStrings.baseurl);
   Future<void> fetchData(String userName, String password) async {
     try {
       emit(LoginLoading());

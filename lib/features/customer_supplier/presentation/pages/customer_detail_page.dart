@@ -1,30 +1,24 @@
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_detail_repository.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_detail_cubit.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_supplier_detail_state.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_detail_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_detail_state.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/widgets/item_process.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CustomerSupplierDetailPage extends StatelessWidget {
-  final String type;
+class CustomerDetailPage extends StatelessWidget {
   final int id;
-  final CustomerSupplierDetailRepository repository;
 
-  const CustomerSupplierDetailPage({
+  const CustomerDetailPage({
     super.key,
-    required this.type,
     required this.id,
-    required this.repository,
   });
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<CustomerSupplierDetailCubit>(
-          create: (_) => CustomerSupplierDetailCubit(repository)
-            ..fetchCustomerSupplierDetail(type, id),
+        BlocProvider<CustomerDetailCubit>(
+          create: (_) => CustomerDetailCubit()..fetchCustomerSupplierDetail(id),
         ),
         BlocProvider<OrderCubit>(
           create: (context) => OrderCubit(),
@@ -33,10 +27,9 @@ class CustomerSupplierDetailPage extends StatelessWidget {
 
       child: Scaffold(
         appBar: AppBar(
-          title: Text(type == 'Customer' ? 'كشف حساب عميل' : 'كشف حساب مورد'),
+          title: const Text('كشف حساب عميل'),
         ),
-        body: BlocBuilder<CustomerSupplierDetailCubit,
-            CustomerSupplierDetailState>(
+        body: BlocBuilder<CustomerDetailCubit, CustomerSupplierDetailState>(
           builder: (context, state) {
             if (state is CustomerSupplierDetailLoading) {
               return const Center(child: CircularProgressIndicator());

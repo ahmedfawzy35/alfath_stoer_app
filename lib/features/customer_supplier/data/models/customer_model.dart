@@ -1,6 +1,6 @@
 import 'package:alfath_stoer_app/features/customer_supplier/domain/customer_supplier.dart';
 
-class CustomerSupplierModel {
+class CustomerModel {
   final int id;
   final String name;
   final String adress;
@@ -10,7 +10,7 @@ class CustomerSupplierModel {
   final bool stopDealing;
   final double customerAccount;
 
-  CustomerSupplierModel({
+  CustomerModel({
     required this.id,
     required this.name,
     required this.adress,
@@ -21,8 +21,8 @@ class CustomerSupplierModel {
     required this.customerAccount,
   });
 
-  factory CustomerSupplierModel.fromJson(Map<String, dynamic> json) {
-    return CustomerSupplierModel(
+  factory CustomerModel.fromJson(Map<String, dynamic> json) {
+    return CustomerModel(
       id: json['id'],
       name: json['name'],
       adress: json['adress'],

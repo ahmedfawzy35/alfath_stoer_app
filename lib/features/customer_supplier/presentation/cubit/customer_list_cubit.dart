@@ -1,23 +1,24 @@
+import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_supplier_model.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_supplier_list_repository.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_model.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/data/repositories/customer_repository.dart';
 
-part 'customer_supplier_list_state.dart';
+part 'customer_list_state.dart';
 
-class CustomerSupplierListCubit extends Cubit<CustomerSupplierListState> {
-  final CustomerSupplierListRepository repository;
+class CustomerListCubit extends Cubit<CustomerSupplierListState> {
+  final CustomerListRepository repository =
+      CustomerListRepository(MyStrings.baseurl);
 
-  CustomerSupplierListCubit(this.repository)
-      : super(CustomerSupplierListInitial());
+  CustomerListCubit() : super(CustomerSupplierListInitial());
 
-  Future<void> fetchData(String type, String branche) async {
+  Future<void> fetchData() async {
     try {
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
       emit(CustomerSupplierListLoading());
-      final items = await repository.fetchData(type);
+      final items = await repository.fetchData();
       var item2 = items.where((x) {
         return x.brancheId == brancheId;
       }).toList();

@@ -10,12 +10,12 @@ class CustomerAccountElementTyps {
   static const String CustomerDiscountSettlement = 'CustomerDiscountSettlement';
 }
 
-enum SellerAccountElementTyps {
-  Purchase,
-  PurchaseBack,
-  CashOutToSeller,
-  SellerAddingSettlement,
-  SellerDiscountSettlement
+class SellerAccountElementTyps {
+  static const String Purchase = 'Purchase';
+  static const String PurchaseBack = 'PurchaseBack';
+  static const String CashOutToSeller = 'CashOutToSeller';
+  static const String SellerAddingSettlement = 'SellerAddingSettlement';
+  static const String SellerDiscountSettlement = 'SellerDiscountSettlement';
 }
 
 enum EmployeeSalaryElemntTypes {
