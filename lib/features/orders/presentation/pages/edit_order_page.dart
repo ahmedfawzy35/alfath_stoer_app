@@ -277,13 +277,13 @@ class EditOrderPage extends StatelessWidget {
                               ),
                               const SizedBox(width: 10),
                               ElevatedButton(
-                                child: const Text('إلغاء'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.red,
+                                  backgroundColor: Colors.red,
                                 ),
+                                child: const Text('إلغاء'),
                               ),
                             ],
                           ),

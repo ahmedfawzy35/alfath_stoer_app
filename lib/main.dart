@@ -1,17 +1,24 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
+import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_detail_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_detail_page.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_list_page.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
+import 'package:alfath_stoer_app/features/orders/presentation/pages/manage_orders.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+var shredPref = SharedPrefsService();
 
 void main() {
   runApp(const MyApp());
 }
 
+//final userData = await SharedPrefsService().getUserData();
 class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
@@ -27,16 +34,32 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Customer Supplier App',
-        theme: ThemeData(
-          primarySwatch: Colors.teal,
-        ),
+        title: 'StoreM',
+        theme: ThemeData(primarySwatch: Colors.teal, fontFamily: 'Cairo'),
         home: const SplashScreen(),
         routes: {
-          '/home': (context) => const HomePage(),
-          '/customerSupplierPage': (context) => const CustomerListPage(),
-          '/sellerListPage': (context) => const SellerListPage(),
-          // قم بإضافة المسارات الأخرى إذا لزم الأمر
+          MyRouts.home: (context) => const HomePage(),
+          MyRouts.orderListPage: (context) => const OrderManage(),
+          MyRouts.customerListPage: (context) {
+            final Map<String, dynamic> args = ModalRoute.of(context)!
+                .settings
+                .arguments as Map<String, dynamic>;
+            return CustomerListPage(
+              branche: args['branche'],
+            );
+          },
+          MyRouts.sellerListPage: (context) => const SellerListPage(),
+
+          MyRouts.customerDetailPage: (context) {
+            final args = ModalRoute.of(context)!.settings.arguments
+                as Map<String, dynamic>;
+            return BlocProvider(
+              create: (_) => CustomerDetailCubit()
+                ..fetchCustomerSupplierDetail(args['id'] as int),
+              child: CustomerDetailPage(id: args['id'] as int),
+            );
+          },
+          // إضافة المسارات الأخر
         },
       ),
     );

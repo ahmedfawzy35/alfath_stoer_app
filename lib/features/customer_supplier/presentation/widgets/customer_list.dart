@@ -1,7 +1,6 @@
+import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/data/models/customer_model.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -64,13 +63,11 @@ class CustomerListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (edit == false) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (_) =>
-                  CustomerDetailCubit()..fetchCustomerSupplierDetail(item.id),
-              child: CustomerDetailPage(id: item.id),
-            ),
-          ));
+          Navigator.pushNamed(
+            context,
+            MyRouts.customerDetailPage,
+            arguments: {'id': item.id},
+          );
         } else {
           CustomerModel customer = CustomerModel(
               id: item.id,

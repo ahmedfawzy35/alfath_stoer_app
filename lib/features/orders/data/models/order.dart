@@ -8,7 +8,7 @@ class Order {
   double? discount;
   double? remainingAmount;
   int? brancheId;
-  double? orderProfit;
+  double? orderProfit = 0;
   int? orderNumber;
   String? notes;
 

@@ -31,8 +31,8 @@ class SellerListCubit extends Cubit<SellerListState> {
       final filteredItems = loadedState.items.where((item) {
         return item.name.toLowerCase().contains(query.toLowerCase());
       }).toList();
-      emit(
-          SellerListLoaded(items: filteredItems, filteredItems: filteredItems));
+      emit(SellerListLoaded(
+          items: loadedState.items, filteredItems: filteredItems));
     }
   }
 }

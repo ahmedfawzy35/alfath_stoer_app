@@ -1,3 +1,4 @@
+import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -12,7 +13,9 @@ class OrderCubit extends Cubit<OrderState> {
 // add order
   Future<void> addOrder(Order order) async {
     try {
+      int brancheId = await SharedPrefsService().getSelectedBrancheId();
       emit(OrderLoading());
+      order.brancheId = brancheId;
       order = await repository.addOrder(order);
       emit(OrderLoaded(order: order));
     } catch (e) {
@@ -58,23 +61,27 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   // get for date
-  Future<void> getForDate(DateTime date, int brancheId) async {
+  Future<void> getForDate(DateTime date) async {
     try {
+      int brancheId = await SharedPrefsService().getSelectedBrancheId();
+
       emit(OrderLoading());
       var orders = await repository.getForDate(date, brancheId);
-      emit(OrdersListLoaded(orders: orders));
+      print(orders);
+      emit(OrdersListLoaded(items: orders, filteredItems: orders));
     } catch (e) {
       emit(const OrderError('Failed To load orders'));
     }
   }
 
   // get for time
-  Future<void> getForTime(
-      DateTime dateFrom, DateTime dateTo, int brancheId) async {
+  Future<void> getForTime(DateTime dateFrom, DateTime dateTo) async {
     try {
+      int brancheId = await SharedPrefsService().getSelectedBrancheId();
+
       emit(OrderLoading());
       var orders = await repository.getForTime(dateFrom, dateTo, brancheId);
-      emit(OrdersListLoaded(orders: orders));
+      emit(OrdersListLoaded(items: orders, filteredItems: orders));
     } catch (e) {
       emit(const OrderError('Failed To load orders'));
     }
@@ -82,5 +89,26 @@ class OrderCubit extends Cubit<OrderState> {
 
   void updateOrderField(Order order) {
     emit(OrderUpdated(order: order));
+  }
+
+  void filterItems(String query) {
+    if (state is OrdersListLoaded) {
+      if (query.isEmpty) {
+        final loadedState = state as OrdersListLoaded;
+
+        emit(OrdersListLoaded(
+            items: loadedState.items, filteredItems: loadedState.items));
+      } else {
+        final loadedState = state as OrdersListLoaded;
+
+        final filteredItems = loadedState.items.where((item) {
+          return item.orderNumber == int.parse(query);
+        }).toList();
+        emit(OrdersListLoaded(
+            items: loadedState.items, filteredItems: filteredItems));
+      }
+    } else {
+      emit(OrderError('فشل تحميل'));
+    }
   }
 }

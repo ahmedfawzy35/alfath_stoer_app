@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart' as dateformate;
 
 class OrderRepository {
   final String baseurl = MyStrings.baseurl;
@@ -26,6 +27,15 @@ class OrderRepository {
       "orderNumber": order.orderNumber,
       "notes": order.notes
     });
+    print(order.date);
+    print(order.customerId);
+    print(order.total);
+    print(order.paid);
+    print(order.discount);
+    print(order.remainingAmount);
+    print(order.brancheId);
+    print(order.orderProfit);
+    print(order.orderNumber);
     request.headers.addAll(headers);
 
     final http.StreamedResponse streamedResponse = await request.send();
@@ -35,6 +45,7 @@ class OrderRepository {
 
       return Order.fromJson(data);
     } else {
+      print(response.body);
       throw Exception('Failed to load details');
     }
   }
@@ -110,17 +121,28 @@ class OrderRepository {
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('GET', Uri.parse(url));
-    request.body = json.encode({"DateFrom": date, "BrancheId": brancheId});
+    request.body = json.encode({
+      "DateFrom": dateformate.DateFormat('yyyy-MM-ddTHH:mm:ss').format(date),
+      "BrancheId": brancheId
+    });
+    print(date);
     request.headers.addAll(headers);
 
     final http.StreamedResponse streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-
-      return data.map((item) => Order.fromJson(item)).toList();
+      try {
+        final List<dynamic> data = json.decode(response.body);
+        print(data);
+        return data.map((item) => Order.fromJson(item)).toList();
+      } catch (e) {
+        print(e.toString());
+        return [];
+      }
     } else {
-      throw Exception('Failed to Delete');
+      throw Exception('faild to load data');
     }
   }
 
@@ -131,8 +153,12 @@ class OrderRepository {
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('GET', Uri.parse(url));
-    request.body = json.encode(
-        {"DateFrom": dateFrom, "DateTo": dateTo, "BrancheId": brancheId});
+    request.body = json.encode({
+      "DateFrom":
+          dateformate.DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateFrom),
+      "DateTo": dateformate.DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTo),
+      "BrancheId": brancheId
+    });
     request.headers.addAll(headers);
 
     final http.StreamedResponse streamedResponse = await request.send();
