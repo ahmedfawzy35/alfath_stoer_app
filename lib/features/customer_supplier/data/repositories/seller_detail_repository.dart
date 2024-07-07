@@ -23,11 +23,6 @@ class SellerDetailRepository {
     if (streamedResponse.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      try {
-        var aa = SellerDetailModel.fromJson(data).toEntity();
-      } catch (e) {
-        print(e.toString());
-      }
       return SellerDetailModel.fromJson(data).toEntity();
     } else {
       throw Exception('Failed to load details');

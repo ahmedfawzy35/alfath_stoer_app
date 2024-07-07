@@ -1,18 +1,18 @@
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
-import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
-import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
-import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_page.dart';
+import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
+import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
+import 'package:alfath_stoer_app/features/orders_back/presentation/pages/edit_order_back_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-class OrderListPage extends StatelessWidget {
+class OrderBackListPage extends StatelessWidget {
   final String? branche;
   final DateTime fromDate;
   final DateTime toDate;
   final bool singleDay;
-  const OrderListPage({
+  const OrderBackListPage({
     super.key,
     this.branche,
     required this.fromDate,
@@ -25,16 +25,16 @@ class OrderListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        ' الفواتير - ${singleDay ? 'لليوم  ${DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-mm-dd').format(fromDate)} الى ${DateFormat('yyyy-mm-dd').format(toDate)}'} ',
+        ' المرتجعات - ${singleDay ? 'لليوم  ${DateFormat('dd-MM-yyyy').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-MM-dd').format(fromDate)} الى ${DateFormat('yyyy-MM-dd').format(toDate)}'} ',
         style: const TextStyle(fontSize: 14),
       )),
       body: singleDay
           ? BlocProvider(
-              create: (_) => OrderCubit()..getForDate(fromDate),
+              create: (_) => OrderBackCubit()..getForDate(fromDate),
               child: const OrderList(),
             )
           : BlocProvider(
-              create: (_) => OrderCubit()..getForTime(fromDate, toDate),
+              create: (_) => OrderBackCubit()..getForTime(fromDate, toDate),
               child: const OrderList(),
             ),
     );
@@ -56,7 +56,7 @@ class OrderList extends StatelessWidget {
               border: OutlineInputBorder(),
             ),
             onChanged: (query) {
-              context.read<OrderCubit>().filterItemsByName(query);
+              context.read<OrderBackCubit>().filterItemsByName(query);
             },
           ),
         ),
@@ -72,12 +72,12 @@ class OrderList extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             onChanged: (query) {
-              context.read<OrderCubit>().filterItems(query);
+              context.read<OrderBackCubit>().filterItems(query);
             },
           ),
         ),
         Expanded(
-          child: BlocBuilder<OrderCubit, OrderState>(
+          child: BlocBuilder<OrderBackCubit, OrderBackState>(
             builder: (context, state) {
               if (state is OrderLoading) {
                 return const Center(child: CircularProgressIndicator());
@@ -87,7 +87,7 @@ class OrderList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = state.filteredItems[index];
 
-                    return OrderListItem(
+                    return OrderBackListItem(
                       item: item,
                     );
                   },
@@ -105,12 +105,12 @@ class OrderList extends StatelessWidget {
   }
 }
 
-class OrderListItem extends StatelessWidget {
-  const OrderListItem({
+class OrderBackListItem extends StatelessWidget {
+  const OrderBackListItem({
     super.key,
     required this.item,
   });
-  final Order item;
+  final OrderBack item;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -185,9 +185,10 @@ class OrderListItem extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => BlocProvider<OrderCubit>(
-                                  create: (context) => OrderCubit(),
-                                  child: EditOrderPage(order: item),
+                                builder: (context) =>
+                                    BlocProvider<OrderBackCubit>(
+                                  create: (context) => OrderBackCubit(),
+                                  child: EditOrderBackPage(orderBack: item),
                                 ),
                               ),
                             );
@@ -195,8 +196,8 @@ class OrderListItem extends StatelessWidget {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
-                          final orderCubit = context.read<OrderCubit>();
-                          orderCubit.deleteOrder(item.id!);
+                          final orderCubit = context.read<OrderBackCubit>();
+                          orderCubit.deleteOrderBack(item.id!);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,

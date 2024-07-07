@@ -1,11 +1,13 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_list_page.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/add_order.dart';
+import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
+import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
+import 'package:alfath_stoer_app/features/orders_back/presentation/pages/add_order_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -165,7 +167,14 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.w500),
                       ),
                       onTap: () {
-                        // هنا الانتقال الى صفحة ادارة المبيعات
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider<OrderBackCubit>(
+                              create: (context) => OrderBackCubit(),
+                              child: AddOrderBackPage(orderBack: OrderBack()),
+                            ),
+                          ),
+                        );
                       }),
                   ListTile(
                       leading: const Icon(Icons.edit),
@@ -177,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.w500),
                       ),
                       onTap: () {
-                        // هنا الانتقال الى صفحة ادارة المبيعات
+                        Navigator.pushNamed(context, MyRouts.orderBackListPage);
                       }),
                 ]),
             ListTile(

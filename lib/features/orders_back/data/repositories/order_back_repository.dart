@@ -2,30 +2,30 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:alfath_stoer_app/core/utils/strings.dart';
-import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
+import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' as dateformate;
 
-class OrderRepository {
+class OrderBackRepository {
   final String baseurl = MyStrings.baseurl;
+  final String controller = 'OrderBack';
   //add order
-  Future<Order> addOrder(Order order) async {
-    final url = '$baseurl/Order/Add';
+  Future<OrderBack> addOrderBack(OrderBack orderback) async {
+    final url = '$baseurl/$controller/Add';
 
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('POST', Uri.parse(url));
     request.body = json.encode({
-      "date": order.date,
-      "customerId": order.customerId,
-      "total": order.total,
-      "paid": order.paid,
-      "discount": order.discount,
-      "remainingAmount": order.remainingAmount,
-      "brancheId": order.brancheId,
-      "orderProfit": order.orderProfit,
-      "orderNumber": order.orderNumber,
-      "notes": order.notes
+      "date": orderback.date,
+      "customerId": orderback.customerId,
+      "total": orderback.total,
+      "paid": orderback.paid,
+      "discount": orderback.discount,
+      "remainingAmount": orderback.remainingAmount,
+      "brancheId": orderback.brancheId,
+      "orderNumber": orderback.orderNumber,
+      "notes": orderback.notes
     });
 
     request.headers.addAll(headers);
@@ -35,31 +35,30 @@ class OrderRepository {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      return Order.fromJson(data);
+      return OrderBack.fromJson(data);
     } else {
       throw Exception('Failed to load details');
     }
   }
 
 // edit order
-  Future<Order> editOrder(Order order) async {
-    final url = '$baseurl/Order/Edit';
+  Future<OrderBack> editOrderBack(OrderBack orderBack) async {
+    final url = '$baseurl/$controller/Edit';
 
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('PUT', Uri.parse(url));
     request.body = json.encode({
-      "Id": order.id,
-      "date": order.date,
-      "customerId": order.customerId,
-      "total": order.total,
-      "paid": order.paid,
-      "discount": order.discount,
-      "remainingAmount": order.remainingAmount,
-      "brancheId": order.brancheId,
-      "orderProfit": order.orderProfit,
-      "orderNumber": order.orderNumber,
-      "notes": order.notes
+      "Id": orderBack.id,
+      "date": orderBack.date,
+      "customerId": orderBack.customerId,
+      "total": orderBack.total,
+      "paid": orderBack.paid,
+      "discount": orderBack.discount,
+      "remainingAmount": orderBack.remainingAmount,
+      "brancheId": orderBack.brancheId,
+      "orderNumber": orderBack.orderNumber,
+      "notes": orderBack.notes
     });
     request.headers.addAll(headers);
 
@@ -68,15 +67,15 @@ class OrderRepository {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      return Order.fromJson(data);
+      return OrderBack.fromJson(data);
     } else {
       throw Exception('Failed to edit order');
     }
   }
 
   //delete
-  Future<bool> deleteOrder(int id) async {
-    final url = '$baseurl/Order/Delete/$id';
+  Future<bool> deleteOrderBack(int id) async {
+    final url = '$baseurl/$controller/Delete/$id';
 
     var request = http.Request('DELETE', Uri.parse(url));
 
@@ -90,8 +89,8 @@ class OrderRepository {
   }
 
   //get by id
-  Future<Order> getById(int id) async {
-    final url = '$baseurl/Order/GetById/$id';
+  Future<OrderBack> getById(int id) async {
+    final url = '$baseurl/$controller/GetById/$id';
 
     var request = http.Request('GET', Uri.parse(url));
 
@@ -100,15 +99,15 @@ class OrderRepository {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      return Order.fromJson(data);
+      return OrderBack.fromJson(data);
     } else {
       throw Exception('Failed to Delete');
     }
   }
 
   //get FOR DATE
-  Future<List<Order>> getForDate(DateTime date, int brancheId) async {
-    final url = '$baseurl/Order/GetAllForDate';
+  Future<List<OrderBack>> getForDate(DateTime date, int brancheId) async {
+    final url = '$baseurl/$controller/GetAllForDate';
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('GET', Uri.parse(url));
@@ -124,7 +123,7 @@ class OrderRepository {
     if (response.statusCode == 200) {
       try {
         final List<dynamic> data = json.decode(response.body);
-        return data.map((item) => Order.fromJson(item)).toList();
+        return data.map((item) => OrderBack.fromJson(item)).toList();
       } catch (e) {
         return [];
       }
@@ -134,9 +133,9 @@ class OrderRepository {
   }
 
   //get FOR Time
-  Future<List<Order>> getForTime(
+  Future<List<OrderBack>> getForTime(
       DateTime dateFrom, DateTime dateTo, int brancheId) async {
-    final url = '$baseurl/Order/GetAllForTime';
+    final url = '$baseurl/$controller/GetAllForTime';
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('GET', Uri.parse(url));
@@ -153,7 +152,7 @@ class OrderRepository {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
 
-      return data.map((item) => Order.fromJson(item)).toList();
+      return data.map((item) => OrderBack.fromJson(item)).toList();
     } else {
       throw Exception('Failed to Delete');
     }

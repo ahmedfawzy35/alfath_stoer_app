@@ -8,4 +8,5 @@ class MyRouts {
   static const String sellerListPage = '/sellerListPage';
   static const String customerDetailPage = '/customerDetailPage';
   static const String orderListPage = '/orderListPage';
+  static const String orderBackListPage = '/orderBackListPage';
 }

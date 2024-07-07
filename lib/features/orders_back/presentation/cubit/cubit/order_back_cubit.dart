@@ -1,44 +1,44 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
-import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
-import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
+import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
+import 'package:alfath_stoer_app/features/orders_back/data/repositories/order_back_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-part 'order_state.dart';
+part 'order_back_state.dart';
 
-class OrderCubit extends Cubit<OrderState> {
-  OrderCubit() : super(OrderInitial());
+class OrderBackCubit extends Cubit<OrderBackState> {
+  OrderBackCubit() : super(OrderInitial());
 
-  final OrderRepository repository = OrderRepository();
+  final OrderBackRepository repository = OrderBackRepository();
 // add order
-  Future<void> addOrder(Order order) async {
+  Future<void> addOrderBack(OrderBack orderBack) async {
     try {
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
       emit(OrderLoading());
-      order.brancheId = brancheId;
-      order = await repository.addOrder(order);
-      emit(OrderLoaded(order: order));
+      orderBack.brancheId = brancheId;
+      orderBack = await repository.addOrderBack(orderBack);
+      emit(OrderLoaded(orderBack: orderBack));
     } catch (e) {
       emit(const OrderError('Failed To Load Data From System'));
     }
   }
 
 // edit order
-  Future<void> editOrder(Order order) async {
+  Future<void> editOrderBack(OrderBack orderBack) async {
     try {
       emit(OrderLoading());
-      order = await repository.editOrder(order);
-      emit(OrderLoaded(order: order));
+      orderBack = await repository.editOrderBack(orderBack);
+      emit(OrderLoaded(orderBack: orderBack));
     } catch (e) {
       emit(const OrderError('Failed To Edit '));
     }
   }
 
   // delete
-  Future<void> deleteOrder(int id) async {
+  Future<void> deleteOrderBack(int id) async {
     try {
       emit(OrderLoading());
-      bool message = await repository.deleteOrder(id);
+      bool message = await repository.deleteOrderBack(id);
       if (message) {
         emit(OrderDeleted());
       }
@@ -51,8 +51,8 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> getById(int id) async {
     try {
       emit(OrderLoading());
-      var order = await repository.getById(id);
-      emit(OrderLoaded(order: order));
+      var orderBack = await repository.getById(id);
+      emit(OrderLoaded(orderBack: orderBack));
     } catch (e) {
       emit(const OrderError('Failed To load order '));
     }
@@ -84,8 +84,8 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
-  void updateOrderField(Order order) {
-    emit(OrderUpdated(order: order));
+  void updateOrderField(OrderBack orderBack) {
+    emit(OrderUpdated(order: orderBack));
   }
 
   void filterItems(String query) {

@@ -1,15 +1,15 @@
-import 'package:alfath_stoer_app/features/orders/presentation/pages/orders_list_page.dart';
+import 'package:alfath_stoer_app/features/orders_back/presentation/pages/orders_back_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as date;
 
-class OrderManage extends StatefulWidget {
-  const OrderManage({super.key});
+class OrderBackManage extends StatefulWidget {
+  const OrderBackManage({super.key});
 
   @override
   _OrderManageState createState() => _OrderManageState();
 }
 
-class _OrderManageState extends State<OrderManage> {
+class _OrderManageState extends State<OrderBackManage> {
   bool showSingleDayInvoices = true;
   DateTime? startDate = DateTime.now();
   DateTime? endDate = DateTime.now();
@@ -110,7 +110,7 @@ class _OrderManageState extends State<OrderManage> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => OrderListPage(
+                      builder: (context) => OrderBackListPage(
                         fromDate: startDate!,
                         toDate: endDate!,
                         singleDay: showSingleDayInvoices,
@@ -118,7 +118,7 @@ class _OrderManageState extends State<OrderManage> {
                     ),
                   );
                 },
-                child: const Text('عرض الفواتير'),
+                child: const Text('عرض المرتجعات'),
               ),
             ],
           ),
