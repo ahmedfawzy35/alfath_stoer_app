@@ -20,7 +20,7 @@ class CustomerListCubit extends Cubit<CustomerSupplierListState> {
       emit(CustomerSupplierListLoading());
       final items = await repository.fetchData();
       var item2 = items.where((x) {
-        return x.brancheId == brancheId && x.name != 'عميل نقدي';
+        return x.brancheId == brancheId;
       }).toList();
 
       emit(CustomerSupplierListLoaded(items: item2, filteredItems: item2));
