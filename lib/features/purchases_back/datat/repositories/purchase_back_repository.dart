@@ -2,31 +2,30 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:alfath_stoer_app/core/utils/strings.dart';
-import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
-import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
+import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' as dateformate;
 
-class PurchaseRepository {
+class PurchaseBackRepository {
   final String baseurl = MyStrings.baseurl;
-  final String model = 'Purchase';
+  final String model = 'PurchaseBack';
   //add order
-  Future<Purchase> addPurchase(Purchase purchase) async {
+  Future<PurchaseBack> addPurchaseBack(PurchaseBack purchaseBack) async {
     final url = '$baseurl/$model/Add';
 
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('POST', Uri.parse(url));
     request.body = json.encode({
-      "date": purchase.date,
-      "sellerrId": purchase.sellerrId,
-      "total": purchase.total,
-      "paid": purchase.paid,
-      "discount": purchase.discount,
-      "remainingAmount": purchase.remainingAmount,
-      "brancheId": purchase.brancheId,
-      "orderNumber": purchase.orderNumber,
-      "notes": purchase.notes
+      "date": purchaseBack.date,
+      "sellerrId": purchaseBack.sellerrId,
+      "total": purchaseBack.total,
+      "paid": purchaseBack.paid,
+      "discount": purchaseBack.discount,
+      "remainingAmount": purchaseBack.remainingAmount,
+      "brancheId": purchaseBack.brancheId,
+      "orderNumber": purchaseBack.orderNumber,
+      "notes": purchaseBack.notes
     });
 
     request.headers.addAll(headers);
@@ -36,30 +35,30 @@ class PurchaseRepository {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      return Purchase.fromJson(data);
+      return PurchaseBack.fromJson(data);
     } else {
       throw Exception('Failed to load details');
     }
   }
 
 // edit order
-  Future<Purchase> editPurchase(Purchase purchase) async {
+  Future<PurchaseBack> editPurchaseBack(PurchaseBack purchaseBack) async {
     final url = '$baseurl/$model/Edit';
 
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('PUT', Uri.parse(url));
     request.body = json.encode({
-      "Id": purchase.id,
-      "date": purchase.date,
-      "sellerrId": purchase.sellerrId,
-      "total": purchase.total,
-      "paid": purchase.paid,
-      "discount": purchase.discount,
-      "remainingAmount": purchase.remainingAmount,
-      "brancheId": purchase.brancheId,
-      "orderNumber": purchase.orderNumber,
-      "notes": purchase.notes
+      "Id": purchaseBack.id,
+      "date": purchaseBack.date,
+      "sellerrId": purchaseBack.sellerrId,
+      "total": purchaseBack.total,
+      "paid": purchaseBack.paid,
+      "discount": purchaseBack.discount,
+      "remainingAmount": purchaseBack.remainingAmount,
+      "brancheId": purchaseBack.brancheId,
+      "orderNumber": purchaseBack.orderNumber,
+      "notes": purchaseBack.notes
     });
     request.headers.addAll(headers);
 
@@ -68,14 +67,14 @@ class PurchaseRepository {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      return Purchase.fromJson(data);
+      return PurchaseBack.fromJson(data);
     } else {
       throw Exception('Failed to edit order');
     }
   }
 
   //delete
-  Future<bool> deletePurchase(int id) async {
+  Future<bool> deletePurchaseBack(int id) async {
     final url = '$baseurl/$model/Delete/$id';
 
     var request = http.Request('DELETE', Uri.parse(url));
@@ -90,7 +89,7 @@ class PurchaseRepository {
   }
 
   //get by id
-  Future<Purchase> getById(int id) async {
+  Future<PurchaseBack> getById(int id) async {
     final url = '$baseurl/$model/GetById/$id';
 
     var request = http.Request('GET', Uri.parse(url));
@@ -100,14 +99,14 @@ class PurchaseRepository {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
 
-      return Purchase.fromJson(data);
+      return PurchaseBack.fromJson(data);
     } else {
       throw Exception('Failed to Delete');
     }
   }
 
   //get FOR DATE
-  Future<List<Purchase>> getForDate(DateTime date, int brancheId) async {
+  Future<List<PurchaseBack>> getForDate(DateTime date, int brancheId) async {
     final url = '$baseurl/$model/GetAllForDate';
     var headers = {'Content-Type': 'application/json'};
 
@@ -124,7 +123,7 @@ class PurchaseRepository {
     if (response.statusCode == 200) {
       try {
         final List<dynamic> data = json.decode(response.body);
-        return data.map((item) => Purchase.fromJson(item)).toList();
+        return data.map((item) => PurchaseBack.fromJson(item)).toList();
       } catch (e) {
         return [];
       }
@@ -134,10 +133,9 @@ class PurchaseRepository {
   }
 
   //get FOR Time
-  Future<List<Purchase>> getForTime(
+  Future<List<PurchaseBack>> getForTime(
       DateTime dateFrom, DateTime dateTo, int brancheId) async {
     final url = '$baseurl/$model/GetAllForTime';
-    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('GET', Uri.parse(url));
@@ -153,7 +151,8 @@ class PurchaseRepository {
     final response = await http.Response.fromStream(streamedResponse);
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-      return data.map((item) => Purchase.fromJson(item)).toList();
+
+      return data.map((item) => PurchaseBack.fromJson(item)).toList();
     } else {
       throw Exception('Failed to Delete');
     }

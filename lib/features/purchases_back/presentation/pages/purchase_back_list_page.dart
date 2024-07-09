@@ -1,17 +1,19 @@
-import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
-import 'package:alfath_stoer_app/features/purchases/presentation/cubit/cubit/purchase_cubit.dart';
-import 'package:alfath_stoer_app/features/purchases/presentation/pages/edit_purchase_page.dart';
+import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
+import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
+import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/edit_purchase_back_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-class PurchaseListPage extends StatelessWidget {
+class PurchaseBackListPage extends StatelessWidget {
   final String? branche;
   final DateTime fromDate;
   final DateTime toDate;
   final bool singleDay;
-  const PurchaseListPage({
+  const PurchaseBackListPage({
     super.key,
     this.branche,
     required this.fromDate,
@@ -24,24 +26,24 @@ class PurchaseListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        ' فواتير الشراء - ${singleDay ? 'لليوم  ${DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-mm-dd').format(fromDate)} الى ${DateFormat('yyyy-mm-dd').format(toDate)}'} ',
+        ' مرتجعات الشراء - ${singleDay ? 'لليوم  ${DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-mm-dd').format(fromDate)} الى ${DateFormat('yyyy-mm-dd').format(toDate)}'} ',
         style: const TextStyle(fontSize: 12),
       )),
       body: singleDay
           ? BlocProvider(
-              create: (_) => PurchaseCubit()..getForDate(fromDate),
-              child: const PurchaseList(),
+              create: (_) => PurchaseBackCubit()..getForDate(fromDate),
+              child: const PurchaseBackList(),
             )
           : BlocProvider(
-              create: (_) => PurchaseCubit()..getForTime(fromDate, toDate),
-              child: const PurchaseList(),
+              create: (_) => PurchaseBackCubit()..getForTime(fromDate, toDate),
+              child: const PurchaseBackList(),
             ),
     );
   }
 }
 
-class PurchaseList extends StatelessWidget {
-  const PurchaseList({super.key});
+class PurchaseBackList extends StatelessWidget {
+  const PurchaseBackList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class PurchaseList extends StatelessWidget {
               border: OutlineInputBorder(),
             ),
             onChanged: (query) {
-              context.read<PurchaseCubit>().filterItemsByName(query);
+              context.read<PurchaseBackCubit>().filterItemsByName(query);
             },
           ),
         ),
@@ -71,27 +73,27 @@ class PurchaseList extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             onChanged: (query) {
-              context.read<PurchaseCubit>().filterItems(query);
+              context.read<PurchaseBackCubit>().filterItems(query);
             },
           ),
         ),
         Expanded(
-          child: BlocBuilder<PurchaseCubit, PurchaseState>(
+          child: BlocBuilder<PurchaseBackCubit, PurchaseBackState>(
             builder: (context, state) {
-              if (state is PurchaseLoading) {
+              if (state is PurchaseBackLoading) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (state is PurchasesListLoaded) {
+              } else if (state is PurchasesBackListLoaded) {
                 return ListView.builder(
                   itemCount: state.filteredItems.length,
                   itemBuilder: (context, index) {
                     final item = state.filteredItems[index];
 
-                    return PurchaseListItem(
+                    return PurchaseBackListItem(
                       item: item,
                     );
                   },
                 );
-              } else if (state is PurchaseError) {
+              } else if (state is PurchaseBackError) {
                 return const Center(child: Text('فشل تحميل البيانات'));
               } else {
                 return const Center(child: Text('Unknown state'));
@@ -104,12 +106,12 @@ class PurchaseList extends StatelessWidget {
   }
 }
 
-class PurchaseListItem extends StatelessWidget {
-  const PurchaseListItem({
+class PurchaseBackListItem extends StatelessWidget {
+  const PurchaseBackListItem({
     super.key,
     required this.item,
   });
-  final Purchase item;
+  final PurchaseBack item;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -122,7 +124,7 @@ class PurchaseListItem extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.amber,
+                    color: Color.fromARGB(255, 226, 80, 43),
                     borderRadius: BorderRadius.circular(5)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -185,9 +187,10 @@ class PurchaseListItem extends StatelessWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    BlocProvider<PurchaseCubit>(
-                                  create: (context) => PurchaseCubit(),
-                                  child: EditPurchasePage(purchase: item),
+                                    BlocProvider<PurchaseBackCubit>(
+                                  create: (context) => PurchaseBackCubit(),
+                                  child:
+                                      EditPurchaseBackPage(purchaseBack: item),
                                 ),
                               ),
                             );
@@ -195,8 +198,9 @@ class PurchaseListItem extends StatelessWidget {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
-                          final purchaseCubit = context.read<PurchaseCubit>();
-                          purchaseCubit.deletePurchase(item.id!);
+                          final purchaseBackCubit =
+                              context.read<PurchaseBackCubit>();
+                          purchaseBackCubit.deletePurchaseBack(item.id!);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -259,7 +263,7 @@ class PurchaseListItem extends StatelessWidget {
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-        color: Color.fromARGB(255, 199, 199, 199),
+        color: Color.fromARGB(255, 201, 70, 70),
         borderRadius: BorderRadius.circular(5));
   }
 

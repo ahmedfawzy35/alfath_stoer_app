@@ -9,4 +9,7 @@ class MyRouts {
   static const String customerDetailPage = '/customerDetailPage';
   static const String orderListPage = '/orderListPage';
   static const String orderBackListPage = '/orderBackListPage';
+
+  static const String purchaseListPage = '/PurchaseListPage';
+  static const String purchaseBackManage = '/purchaseBackManage';
 }

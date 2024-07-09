@@ -1,19 +1,19 @@
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/customer_list_page.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
-import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
-import 'package:alfath_stoer_app/features/purchases/presentation/cubit/cubit/purchase_cubit.dart';
+import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as date;
 
-class AddPurchasePage extends StatelessWidget {
+class AddPurchaseBackPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Purchase purchase;
-  AddPurchasePage({
+  final PurchaseBack purchaseBack;
+  AddPurchaseBackPage({
     Key? key,
-    required this.purchase,
+    required this.purchaseBack,
   }) : super(key: key);
 
   @override
@@ -26,9 +26,9 @@ class AddPurchasePage extends StatelessWidget {
         TextEditingController(text: '0');
     final TextEditingController remainingAmountController =
         TextEditingController(
-            text: ((purchase.total ?? 0) -
-                    (purchase.paid ?? 0) -
-                    (purchase.discount ?? 0))
+            text: ((purchaseBack.total ?? 0) -
+                    (purchaseBack.paid ?? 0) -
+                    (purchaseBack.discount ?? 0))
                 .toString());
     final TextEditingController orderNumberController = TextEditingController();
     final TextEditingController notesController = TextEditingController();
@@ -46,13 +46,13 @@ class AddPurchasePage extends StatelessWidget {
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
 
       remainingAmountController.text = remaining.toString();
-      purchase.date = dateController.text;
-      purchase.sellerrId = int.parse(sellerNumberController.text);
-      purchase.total = total;
-      purchase.paid = paid;
-      purchase.discount = discount;
-      purchase.remainingAmount = remaining;
-      context.read<PurchaseCubit>().updatePurchaseField(purchase);
+      purchaseBack.date = dateController.text;
+      purchaseBack.sellerrId = int.parse(sellerNumberController.text);
+      purchaseBack.total = total;
+      purchaseBack.paid = paid;
+      purchaseBack.discount = discount;
+      purchaseBack.remainingAmount = remaining;
+      context.read<PurchaseBackCubit>().updatePurchaseField(purchaseBack);
     }
 
     void clearText() {
@@ -68,8 +68,8 @@ class AddPurchasePage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PurchaseCubit>(
-          create: (_) => context.read<PurchaseCubit>(),
+        BlocProvider<PurchaseBackCubit>(
+          create: (_) => context.read<PurchaseBackCubit>(),
         ),
         BlocProvider<CustomerListCubit>(
           create: (context) => CustomerListCubit()..fetchData(),
@@ -79,9 +79,9 @@ class AddPurchasePage extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('اضافة فاتورة مشتريات '),
+            title: const Text('اضافة مرتجع مشتريات '),
           ),
-          body: BlocBuilder<PurchaseCubit, PurchaseState>(
+          body: BlocBuilder<PurchaseBackCubit, PurchaseBackState>(
             builder: (context, state) {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
@@ -108,10 +108,11 @@ class AddPurchasePage extends StatelessWidget {
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
                                   onChanged: (value) {
-                                    purchase.orderNumber = int.tryParse(value);
+                                    purchaseBack.orderNumber =
+                                        int.tryParse(value);
                                     context
-                                        .read<PurchaseCubit>()
-                                        .updatePurchaseField(purchase);
+                                        .read<PurchaseBackCubit>()
+                                        .updatePurchaseField(purchaseBack);
                                   },
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -132,7 +133,7 @@ class AddPurchasePage extends StatelessWidget {
                                 child: TextFormField(
                                   controller: sellerNumberController,
                                   decoration: const InputDecoration(
-                                      labelText: 'رقم المورد'),
+                                      labelText: 'رقم العميل'),
                                   readOnly: true,
                                 ),
                               )
@@ -156,11 +157,11 @@ class AddPurchasePage extends StatelessWidget {
                                 sellerNameController.text = selectedSeller.name;
                                 sellerNumberController.text =
                                     selectedSeller.id.toString();
-                                purchase.sellerName = selectedSeller.name;
-                                purchase.sellerrId = selectedSeller.id;
+                                purchaseBack.sellerName = selectedSeller.name;
+                                purchaseBack.sellerrId = selectedSeller.id;
                                 context
-                                    .read<PurchaseCubit>()
-                                    .updatePurchaseField(purchase);
+                                    .read<PurchaseBackCubit>()
+                                    .updatePurchaseField(purchaseBack);
                               }
                             },
                             child: AbsorbPointer(
@@ -294,10 +295,10 @@ class AddPurchasePage extends StatelessWidget {
                             decoration:
                                 const InputDecoration(labelText: 'ملاحظات'),
                             onChanged: (value) {
-                              purchase.notes = value;
+                              purchaseBack.notes = value;
                               context
-                                  .read<PurchaseCubit>()
-                                  .updatePurchaseField(purchase);
+                                  .read<PurchaseBackCubit>()
+                                  .updatePurchaseField(purchaseBack);
                             },
                           ),
                           const SizedBox(height: 20),
@@ -310,8 +311,8 @@ class AddPurchasePage extends StatelessWidget {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
                                     final orderCubit =
-                                        context.read<PurchaseCubit>();
-                                    await orderCubit.addPurchase(purchase);
+                                        context.read<PurchaseBackCubit>();
+                                    await orderCubit.addPurchase(purchaseBack);
                                     clearText();
                                   }
                                 },

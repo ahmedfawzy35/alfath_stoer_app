@@ -8,6 +8,12 @@ import 'package:alfath_stoer_app/features/orders/presentation/pages/add_order.da
 import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/pages/add_order_back.dart';
+import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
+import 'package:alfath_stoer_app/features/purchases/presentation/cubit/cubit/purchase_cubit.dart';
+import 'package:alfath_stoer_app/features/purchases/presentation/pages/add_purchase.dart';
+import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/add_purchase_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -210,6 +216,82 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+            ExpansionTile(
+                leading: const Icon(Icons.attach_money),
+                title: const Text(
+                  'المشتريات',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                children: [
+                  ListTile(
+                      leading: const Icon(Icons.add_card),
+                      title: const Text(
+                        'اضافة فاتورة شراء',
+                        style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider<PurchaseCubit>(
+                              create: (context) => PurchaseCubit(),
+                              child: AddPurchasePage(purchase: Purchase()),
+                            ),
+                          ),
+                        );
+                      }),
+                  ListTile(
+                      leading: const Icon(Icons.edit),
+                      title: const Text(
+                        'ادارة فواتير الشراء',
+                        style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, MyRouts.purchaseListPage);
+                      }),
+                  ListTile(
+                      leading: const Icon(Icons.add_card),
+                      title: const Text(
+                        'اضافة مرتجع شراء',
+                        style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BlocProvider<PurchaseBackCubit>(
+                              create: (context) => PurchaseBackCubit(),
+                              child: AddPurchaseBackPage(
+                                  purchaseBack: PurchaseBack()),
+                            ),
+                          ),
+                        );
+                      }),
+                  ListTile(
+                      leading: const Icon(Icons.edit),
+                      title: const Text(
+                        'ادارة مرتجعات المشتريات',
+                        style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, MyRouts.purchaseBackManage);
+                      }),
+                ]),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text(

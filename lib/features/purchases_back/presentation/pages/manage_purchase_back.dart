@@ -1,15 +1,15 @@
-import 'package:alfath_stoer_app/features/orders_back/presentation/pages/orders_back_list_page.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/purchase_back_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as date;
 
-class OrderBackManage extends StatefulWidget {
-  const OrderBackManage({super.key});
+class PurchaseBackManage extends StatefulWidget {
+  const PurchaseBackManage({super.key});
 
   @override
-  _OrderManageState createState() => _OrderManageState();
+  _PurchaseManageState createState() => _PurchaseManageState();
 }
 
-class _OrderManageState extends State<OrderBackManage> {
+class _PurchaseManageState extends State<PurchaseBackManage> {
   bool showSingleDayInvoices = true;
   DateTime? startDate = DateTime.now();
   DateTime? endDate = DateTime.now();
@@ -18,7 +18,7 @@ class _OrderManageState extends State<OrderBackManage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('قائمة مرتجعات المبيعات'),
+        title: const Text('قائمة مرتجعات الشراء'),
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -37,7 +37,7 @@ class _OrderManageState extends State<OrderBackManage> {
                       });
                     },
                   ),
-                  const Text('عرض فواتير يوم واحد فقط'),
+                  const Text('عرض مرتجعات يوم واحد فقط'),
                 ],
               ),
               if (!showSingleDayInvoices) ...[
@@ -110,7 +110,7 @@ class _OrderManageState extends State<OrderBackManage> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => OrderBackListPage(
+                      builder: (context) => PurchaseBackListPage(
                         fromDate: startDate!,
                         toDate: endDate!,
                         singleDay: showSingleDayInvoices,
@@ -118,7 +118,7 @@ class _OrderManageState extends State<OrderBackManage> {
                     ),
                   );
                 },
-                child: const Text('عرض المرتجعات'),
+                child: const Text('عرض الفواتير'),
               ),
             ],
           ),

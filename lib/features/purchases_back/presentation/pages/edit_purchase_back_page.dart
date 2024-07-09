@@ -1,47 +1,48 @@
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/seller_list_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
-import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
-import 'package:alfath_stoer_app/features/purchases/presentation/cubit/cubit/purchase_cubit.dart';
+import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as date;
 
-class EditPurchasePage extends StatelessWidget {
-  final Purchase purchase;
+class EditPurchaseBackPage extends StatelessWidget {
+  final PurchaseBack purchaseBack;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  EditPurchasePage({Key? key, required this.purchase}) : super(key: key);
+  EditPurchaseBackPage({Key? key, required this.purchaseBack})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController dateController = TextEditingController(
         text: date.DateFormat('yyyy-MM-dd')
-            .format(DateTime.parse(purchase.date!)));
+            .format(DateTime.parse(purchaseBack.date!)));
     final TextEditingController totalController =
-        TextEditingController(text: purchase.total?.toString());
+        TextEditingController(text: purchaseBack.total?.toString());
     final TextEditingController paidController =
-        TextEditingController(text: purchase.paid?.toString());
+        TextEditingController(text: purchaseBack.paid?.toString());
     final TextEditingController discountController =
-        TextEditingController(text: purchase.discount?.toString());
+        TextEditingController(text: purchaseBack.discount?.toString());
     final TextEditingController remainingAmountController =
         TextEditingController(
-            text: (purchase.total! -
-                    (purchase.paid ?? 0) -
-                    (purchase.discount ?? 0))
+            text: (purchaseBack.total! -
+                    (purchaseBack.paid ?? 0) -
+                    (purchaseBack.discount ?? 0))
                 .toString());
     final TextEditingController orderNumberController =
-        TextEditingController(text: purchase.orderNumber?.toString());
+        TextEditingController(text: purchaseBack.orderNumber?.toString());
     final TextEditingController notesController =
-        TextEditingController(text: purchase.notes);
+        TextEditingController(text: purchaseBack.notes);
     final TextEditingController sellerNameController =
-        TextEditingController(text: purchase.sellerName);
+        TextEditingController(text: purchaseBack.sellerName);
 
     final TextEditingController sellerNumberController =
-        TextEditingController(text: purchase.sellerrId?.toString());
+        TextEditingController(text: purchaseBack.sellerrId?.toString());
 
-    DateTime selectedDate = DateTime.parse(purchase.date!);
+    DateTime selectedDate = DateTime.parse(purchaseBack.date!);
 
     void updateRemainingAmount() {
       final double? total = double.tryParse(totalController.text);
@@ -49,28 +50,28 @@ class EditPurchasePage extends StatelessWidget {
       final double? discount = double.tryParse(discountController.text);
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
       remainingAmountController.text = remaining.toString();
-      purchase.total = total;
-      purchase.paid = paid;
-      purchase.discount = discount;
-      context.read<PurchaseCubit>().updatePurchaseField(purchase);
+      purchaseBack.total = total;
+      purchaseBack.paid = paid;
+      purchaseBack.discount = discount;
+      context.read<PurchaseBackCubit>().updatePurchaseField(purchaseBack);
     }
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PurchaseCubit>(
-          create: (_) => context.read<PurchaseCubit>(),
+        BlocProvider<PurchaseBackCubit>(
+          create: (_) => context.read<PurchaseBackCubit>(),
         ),
-        BlocProvider<CustomerListCubit>(
-          create: (context) => CustomerListCubit()..fetchData(),
+        BlocProvider<SellerListCubit>(
+          create: (context) => SellerListCubit()..fetchData(),
         ),
       ],
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('تعديل الفاتورة رقم ${purchase.id}'),
+            title: Text('تعديل الفاتورة رقم ${purchaseBack.id}'),
           ),
-          body: BlocBuilder<PurchaseCubit, PurchaseState>(
+          body: BlocBuilder<PurchaseBackCubit, PurchaseBackState>(
             builder: (context, state) {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
@@ -109,18 +110,18 @@ class EditPurchasePage extends StatelessWidget {
                                 sellerNameController.text = selectedSeller.name;
                                 sellerNumberController.text =
                                     selectedSeller.id.toString();
-                                purchase.sellerName = selectedSeller.name;
-                                purchase.sellerrId = selectedSeller.id;
+                                purchaseBack.sellerName = selectedSeller.name;
+                                purchaseBack.sellerrId = selectedSeller.id;
                                 context
-                                    .read<PurchaseCubit>()
-                                    .updatePurchaseField(purchase);
+                                    .read<PurchaseBackCubit>()
+                                    .updatePurchaseField(purchaseBack);
                               }
                             },
                             child: AbsorbPointer(
                               child: TextFormField(
                                 controller: sellerNameController,
                                 decoration: const InputDecoration(
-                                    labelText: 'اسم العميل'),
+                                    labelText: 'اسم المورد'),
                                 readOnly: true,
                               ),
                             ),
@@ -233,10 +234,10 @@ class EditPurchasePage extends StatelessWidget {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             onChanged: (value) {
-                              purchase.orderNumber = int.tryParse(value);
+                              purchaseBack.orderNumber = int.tryParse(value);
                               context
-                                  .read<PurchaseCubit>()
-                                  .updatePurchaseField(purchase);
+                                  .read<PurchaseBackCubit>()
+                                  .updatePurchaseField(purchaseBack);
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -254,10 +255,10 @@ class EditPurchasePage extends StatelessWidget {
                             decoration:
                                 const InputDecoration(labelText: 'ملاحظات'),
                             onChanged: (value) {
-                              purchase.notes = value;
+                              purchaseBack.notes = value;
                               context
-                                  .read<PurchaseCubit>()
-                                  .updatePurchaseField(purchase);
+                                  .read<PurchaseBackCubit>()
+                                  .updatePurchaseField(purchaseBack);
                             },
                           ),
                           const SizedBox(height: 20),
@@ -270,8 +271,8 @@ class EditPurchasePage extends StatelessWidget {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
                                     final orderCubit =
-                                        context.read<PurchaseCubit>();
-                                    orderCubit.editPurchase(purchase);
+                                        context.read<PurchaseBackCubit>();
+                                    orderCubit.editPurchase(purchaseBack);
 
                                     Navigator.of(context).pop();
                                   }

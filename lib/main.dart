@@ -9,6 +9,8 @@ import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/s
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/manage_orders.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/pages/manage_orders_back.dart';
+import 'package:alfath_stoer_app/features/purchases/presentation/pages/manage_purchase.dart';
+import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/manage_purchase_back.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +43,9 @@ class MyApp extends StatelessWidget {
         routes: {
           MyRouts.home: (context) => const HomePage(),
           MyRouts.orderListPage: (context) => const OrderManage(),
+          MyRouts.purchaseListPage: (context) => const PurchaseManage(),
           MyRouts.orderBackListPage: (context) => const OrderBackManage(),
+          MyRouts.purchaseBackManage: (context) => const PurchaseBackManage(),
           MyRouts.customerListPage: (context) {
             final Map<String, dynamic> args = ModalRoute.of(context)!
                 .settings
