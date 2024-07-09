@@ -20,6 +20,8 @@ class OrderUpdated extends OrderState {
 
 class OrderLoading extends OrderState {}
 
+class OrderUpdatedSuccess extends OrderState {}
+
 class OrderLoaded extends OrderState {
   final Order order;
 
@@ -37,6 +39,15 @@ class OrdersListLoaded extends OrderState {
 
   @override
   List<Object> get props => [items, filteredItems];
+}
+
+class OrderUpdatedError extends OrderState {
+  final String message;
+
+  const OrderUpdatedError(this.message);
+
+  @override
+  List<Object> get props => [message];
 }
 
 class OrderError extends OrderState {

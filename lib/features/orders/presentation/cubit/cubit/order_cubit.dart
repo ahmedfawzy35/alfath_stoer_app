@@ -28,9 +28,9 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       emit(OrderLoading());
       order = await repository.editOrder(order);
-      emit(OrderLoaded(order: order));
+      emit(OrderUpdatedSuccess());
     } catch (e) {
-      emit(const OrderError('Failed To Edit '));
+      emit(OrderUpdatedError('Failed To Edit'));
     }
   }
 

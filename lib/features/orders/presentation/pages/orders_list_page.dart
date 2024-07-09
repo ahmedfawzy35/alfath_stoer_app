@@ -25,7 +25,7 @@ class OrderListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        ' الفواتير - ${singleDay ? 'لليوم  ${DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-mm-dd').format(fromDate)} الى ${DateFormat('yyyy-mm-dd').format(toDate)}'} ',
+        ' الفواتير - ${singleDay ? 'لليوم  ${DateFormat('yyyy-MM-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-MM-dd').format(fromDate)} الى ${DateFormat('yyyy-MM-dd').format(toDate)}'} ',
         style: const TextStyle(fontSize: 14),
       )),
       body: singleDay
