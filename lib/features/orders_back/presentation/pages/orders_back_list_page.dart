@@ -1,4 +1,4 @@
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
 import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/pages/edit_order_back_page.dart';

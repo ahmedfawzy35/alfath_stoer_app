@@ -1,7 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/add_order.dart';

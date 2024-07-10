@@ -1,5 +1,5 @@
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/cubit/seller_list_cubit.dart';
-import 'package:alfath_stoer_app/features/customer_supplier/presentation/pages/seller_list_page.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_list_cubit.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
 import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
 import 'package:flutter/material.dart';
