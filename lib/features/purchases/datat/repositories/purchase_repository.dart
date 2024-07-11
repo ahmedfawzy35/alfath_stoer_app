@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:alfath_stoer_app/core/utils/strings.dart';
-import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' as dateformate;
@@ -137,7 +136,6 @@ class PurchaseRepository {
   Future<List<Purchase>> getForTime(
       DateTime dateFrom, DateTime dateTo, int brancheId) async {
     final url = '$baseurl/$model/GetAllForTime';
-    print(url);
     var headers = {'Content-Type': 'application/json'};
 
     var request = http.Request('GET', Uri.parse(url));

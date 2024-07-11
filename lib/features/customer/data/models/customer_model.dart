@@ -9,17 +9,18 @@ class CustomerModel {
   final int customertypeId;
   final bool stopDealing;
   final double customerAccount;
+  final int customerTypeId;
 
-  CustomerModel({
-    required this.id,
-    required this.name,
-    required this.adress,
-    required this.startAccount,
-    required this.brancheId,
-    required this.customertypeId,
-    required this.stopDealing,
-    required this.customerAccount,
-  });
+  CustomerModel(
+      {required this.id,
+      required this.name,
+      required this.adress,
+      required this.startAccount,
+      required this.brancheId,
+      required this.customertypeId,
+      required this.stopDealing,
+      required this.customerAccount,
+      this.customerTypeId = 1});
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(

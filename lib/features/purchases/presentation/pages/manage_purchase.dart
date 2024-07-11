@@ -1,4 +1,3 @@
-import 'package:alfath_stoer_app/features/orders/presentation/pages/orders_list_page.dart';
 import 'package:alfath_stoer_app/features/purchases/presentation/pages/purchase_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as date;
@@ -7,6 +6,7 @@ class PurchaseManage extends StatefulWidget {
   const PurchaseManage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PurchaseManageState createState() => _PurchaseManageState();
 }
 

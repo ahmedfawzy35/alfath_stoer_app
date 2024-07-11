@@ -2,9 +2,13 @@ import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
+import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page_desktop.dart';
+import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_detail_cubit.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_add_page.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_detail_page.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
+import 'package:alfath_stoer_app/features/main_widgets/rosponsiv_layout.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/manage_orders.dart';
@@ -46,6 +50,7 @@ class MyApp extends StatelessWidget {
           MyRouts.purchaseListPage: (context) => const PurchaseManage(),
           MyRouts.orderBackListPage: (context) => const OrderBackManage(),
           MyRouts.purchaseBackManage: (context) => const PurchaseBackManage(),
+          MyRouts.customerAddPage: (context) => CustomerAddPage(),
           MyRouts.customerListPage: (context) {
             final Map<String, dynamic> args = ModalRoute.of(context)!
                 .settings
@@ -127,7 +132,9 @@ class _SplashScreenState extends State<SplashScreen>
           const HomePage(),
         ));
       } else {
-        Navigator.of(context).pushReplacement(_createRoute(LoginPage()));
+        Navigator.of(context).pushReplacement(_createRoute(LogindView()));
+
+        //Navigator.of(context).pushReplacement(_createRoute(LoginPage()));
       }
     });
   }

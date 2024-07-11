@@ -22,6 +22,15 @@ class CustomerSupplierListLoaded extends CustomerSupplierListState {
   List<Object> get props => [items, filteredItems];
 }
 
+class CustomerSupplierLoaded extends CustomerSupplierListState {
+  final CustomerModel customer;
+
+  const CustomerSupplierLoaded({required this.customer});
+
+  @override
+  List<Object> get props => [customer];
+}
+
 class CustomerSupplierListError extends CustomerSupplierListState {
   final String message;
 

@@ -29,6 +29,23 @@ class CustomerListCubit extends Cubit<CustomerSupplierListState> {
     }
   }
 
+  Future<void> add(CustomerModel customer) async {
+    try {
+      emit(CustomerSupplierListLoading());
+      final CustomerModel mycus = await repository.addCustomer(customer);
+      final currentState = state;
+      if (currentState is CustomerSupplierListLoaded) {
+        final updatedItems = List<CustomerModel>.from(currentState.items)
+          ..add(mycus);
+        emit(CustomerSupplierListLoaded(
+            items: updatedItems, filteredItems: updatedItems));
+      }
+      emit(CustomerSupplierLoaded(customer: mycus));
+    } catch (e) {
+      emit(const CustomerSupplierListError('Failed to add'));
+    }
+  }
+
   void filterItems(String query) {
     if (state is CustomerSupplierListLoaded) {
       final loadedState = state as CustomerSupplierListLoaded;

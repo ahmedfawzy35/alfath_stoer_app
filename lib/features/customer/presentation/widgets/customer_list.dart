@@ -60,54 +60,118 @@ class CustomerListItem extends StatelessWidget {
   final bool edit;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (edit == false) {
-          Navigator.pushNamed(
-            context,
-            MyRouts.customerDetailPage,
-            arguments: {'id': item.id},
-          );
-        } else {
-          CustomerModel customer = CustomerModel(
-              id: item.id,
-              name: item.name,
-              adress: item.adress,
-              brancheId: item.brancheId,
-              startAccount: item.startAccount,
-              customerAccount: item.customerAccount,
-              customertypeId: item.customertypeId,
-              stopDealing: item.stopDealing);
-          Navigator.pop(context, customer);
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    return edit
+        ? GestureDetector(
+            onTap: () {
+              CustomerModel customer = CustomerModel(
+                  id: item.id,
+                  name: item.name,
+                  adress: item.adress,
+                  brancheId: item.brancheId,
+                  startAccount: item.startAccount,
+                  customerAccount: item.customerAccount,
+                  customertypeId: item.customertypeId,
+                  stopDealing: item.stopDealing);
+              Navigator.pop(context, customer);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
+                          child: Text(
+                            item.name,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'Cairo',
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
-                    child: Text(
-                      item.name,
-                      textAlign: TextAlign.end,
-                      style: const TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Cairo',
-                          fontWeight: FontWeight.bold),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
+                        child: Text(
+                          item.name,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Cairo',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.green, // لون النص
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8), // التباعد الداخلي
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(5), // شكل الحواف
+                            ),
+                          ),
+                          child: const Text('تعديل'),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              MyRouts.customerDetailPage,
+                              arguments: {'id': item.id},
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.amber, // لون النص
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8), // التباعد الداخلي
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(5), // شكل الحواف
+                            ),
+                          ),
+                          child: const Text('كشف حساب'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
   }
 }
 /*

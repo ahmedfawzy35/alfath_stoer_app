@@ -1,5 +1,3 @@
-import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
-import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
 import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
 import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
 import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/edit_purchase_back_page.dart';
@@ -124,7 +122,7 @@ class PurchaseBackListItem extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 226, 80, 43),
+                    color: const Color.fromARGB(255, 226, 80, 43),
                     borderRadius: BorderRadius.circular(5)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -263,7 +261,7 @@ class PurchaseBackListItem extends StatelessWidget {
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-        color: Color.fromARGB(255, 201, 70, 70),
+        color: const Color.fromARGB(255, 201, 70, 70),
         borderRadius: BorderRadius.circular(5));
   }
 

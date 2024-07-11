@@ -38,7 +38,7 @@ class SellerList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = state.filteredItems[index];
                     return SellerListItem(
-                      edit: false,
+                      edit: edit,
                       item: item,
                     );
                   },
@@ -72,14 +72,14 @@ class SellerListItem extends StatelessWidget {
             ),
           ));
         } else {
-          SellerModel customer = SellerModel(
+          SellerModel seller = SellerModel(
             id: item.id,
             name: item.name,
             adress: item.adress,
             brancheId: item.brancheId,
             startAccount: item.startAccount,
           );
-          Navigator.pop(context, customer);
+          Navigator.pop(context, seller);
         }
       },
       child: Padding(

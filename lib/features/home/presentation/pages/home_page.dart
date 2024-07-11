@@ -1,6 +1,6 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
-import 'package:alfath_stoer_app/features/auth/presentation/pages/login_page.dart';
+import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
@@ -60,270 +60,305 @@ class _HomePageState extends State<HomePage> {
     // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => const LogindView()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'الرئيسية -  $selectedBranche',
-          style: const TextStyle(
-            fontFamily: 'Cairo',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'الرئيسية -  $selectedBranche',
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.teal,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.teal,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      userName == null ? " " : userName!,
+                      style: const TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      selectedBranche,
+                      style: const TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
+              ExpansionTile(
+                leading: const Icon(Icons.person_4),
+                title: const Text(
+                  'العملاء',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
                 children: [
-                  Text(
-                    userName == null ? " " : userName!,
-                    style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                  ListTile(
+                    leading: const Icon(Icons.add),
+                    title: const Text(
+                      'اضافة عميل',
+                      style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      //selectedBranche
+                      Navigator.pushNamed(
+                        context,
+                        MyRouts.customerAddPage,
+                      );
+                    },
                   ),
-                  Text(
-                    selectedBranche,
-                    style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text(
+                      'ادارة العملاء',
+                      style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      //selectedBranche
+                      Navigator.pushNamed(
+                        context,
+                        MyRouts.customerListPage,
+                        arguments: {'branche': selectedBranche},
+                      );
+                    },
                   ),
                 ],
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text(
-                'العملاء',
-                style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                //selectedBranche
-                Navigator.pushNamed(
-                  context,
-                  MyRouts.customerListPage,
-                  arguments: {'branche': selectedBranche},
-                );
-              },
-            ),
-            ExpansionTile(
-                leading: const Icon(Icons.attach_money),
-                title: const Text(
-                  'المبيعات',
-                  style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-                children: [
-                  ListTile(
-                      leading: const Icon(Icons.add_card),
-                      title: const Text(
-                        'اضافة فاتورة بيع',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider<OrderCubit>(
-                              create: (context) => OrderCubit(),
-                              child: AddOrderPage(order: Order()),
-                            ),
-                          ),
-                        );
-                      }),
-                  ListTile(
-                      leading: const Icon(Icons.edit),
-                      title: const Text(
-                        'ادارة فواتير البيع',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, MyRouts.orderListPage);
-                      }),
-                  ListTile(
-                      leading: const Icon(Icons.add_card),
-                      title: const Text(
-                        'اضافة مرتجع مبيعات',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider<OrderBackCubit>(
-                              create: (context) => OrderBackCubit(),
-                              child: AddOrderBackPage(orderBack: OrderBack()),
-                            ),
-                          ),
-                        );
-                      }),
-                  ListTile(
-                      leading: const Icon(Icons.edit),
-                      title: const Text(
-                        'ادارة مرتجعات المبيعات',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, MyRouts.orderBackListPage);
-                      }),
-                ]),
-            ListTile(
-              leading: const Icon(Icons.store),
-              title: const Text(
-                'الموردين',
-                style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SellerListPage(
-                      edit: false,
-                      branche: selectedBranche,
-                    ),
+              ExpansionTile(
+                  leading: const Icon(Icons.attach_money),
+                  title: const Text(
+                    'المبيعات',
+                    style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
-                );
-              },
-            ),
-            ExpansionTile(
-                leading: const Icon(Icons.attach_money),
+                  children: [
+                    ListTile(
+                        leading: const Icon(Icons.add_card),
+                        title: const Text(
+                          'اضافة فاتورة بيع',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider<OrderCubit>(
+                                create: (context) => OrderCubit(),
+                                child: AddOrderPage(order: Order()),
+                              ),
+                            ),
+                          );
+                        }),
+                    ListTile(
+                        leading: const Icon(Icons.edit),
+                        title: const Text(
+                          'ادارة فواتير البيع',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, MyRouts.orderListPage);
+                        }),
+                    ListTile(
+                        leading: const Icon(Icons.add_card),
+                        title: const Text(
+                          'اضافة مرتجع مبيعات',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlocProvider<OrderBackCubit>(
+                                create: (context) => OrderBackCubit(),
+                                child: AddOrderBackPage(orderBack: OrderBack()),
+                              ),
+                            ),
+                          );
+                        }),
+                    ListTile(
+                        leading: const Icon(Icons.edit),
+                        title: const Text(
+                          'ادارة مرتجعات المبيعات',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, MyRouts.orderBackListPage);
+                        }),
+                  ]),
+              ListTile(
+                leading: const Icon(Icons.store),
                 title: const Text(
-                  'المشتريات',
+                  'الموردين',
                   style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
-                children: [
-                  ListTile(
-                      leading: const Icon(Icons.add_card),
-                      title: const Text(
-                        'اضافة فاتورة شراء',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SellerListPage(
+                        edit: false,
+                        branche: selectedBranche,
                       ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider<PurchaseCubit>(
-                              create: (context) => PurchaseCubit(),
-                              child: AddPurchasePage(purchase: Purchase()),
-                            ),
-                          ),
-                        );
-                      }),
-                  ListTile(
-                      leading: const Icon(Icons.edit),
-                      title: const Text(
-                        'ادارة فواتير الشراء',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, MyRouts.purchaseListPage);
-                      }),
-                  ListTile(
-                      leading: const Icon(Icons.add_card),
-                      title: const Text(
-                        'اضافة مرتجع شراء',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                BlocProvider<PurchaseBackCubit>(
-                              create: (context) => PurchaseBackCubit(),
-                              child: AddPurchaseBackPage(
-                                  purchaseBack: PurchaseBack()),
-                            ),
-                          ),
-                        );
-                      }),
-                  ListTile(
-                      leading: const Icon(Icons.edit),
-                      title: const Text(
-                        'ادارة مرتجعات المشتريات',
-                        style: TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, MyRouts.purchaseBackManage);
-                      }),
-                ]),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                'تسجيل الخروج',
-                style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
               ),
-              onTap: () => _logout(context),
-            ),
-          ],
+              ExpansionTile(
+                  leading: const Icon(Icons.attach_money),
+                  title: const Text(
+                    'المشتريات',
+                    style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  children: [
+                    ListTile(
+                        leading: const Icon(Icons.add_card),
+                        title: const Text(
+                          'اضافة فاتورة شراء',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider<PurchaseCubit>(
+                                create: (context) => PurchaseCubit(),
+                                child: AddPurchasePage(purchase: Purchase()),
+                              ),
+                            ),
+                          );
+                        }),
+                    ListTile(
+                        leading: const Icon(Icons.edit),
+                        title: const Text(
+                          'ادارة فواتير الشراء',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, MyRouts.purchaseListPage);
+                        }),
+                    ListTile(
+                        leading: const Icon(Icons.add_card),
+                        title: const Text(
+                          'اضافة مرتجع شراء',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlocProvider<PurchaseBackCubit>(
+                                create: (context) => PurchaseBackCubit(),
+                                child: AddPurchaseBackPage(
+                                    purchaseBack: PurchaseBack()),
+                              ),
+                            ),
+                          );
+                        }),
+                    ListTile(
+                        leading: const Icon(Icons.edit),
+                        title: const Text(
+                          'ادارة مرتجعات المشتريات',
+                          style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, MyRouts.purchaseBackManage);
+                        }),
+                  ]),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text(
+                  'تسجيل الخروج',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                onTap: () => _logout(context),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            /*
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/customerSupplierPage');
-                },
-                child: const Text('Customers'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/sellerListPage');
-                },
-                child: const Text('Suppliers'),
-              ),*/
-          ],
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              /*
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/customerSupplierPage');
+                  },
+                  child: const Text('Customers'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/sellerListPage');
+                  },
+                  child: const Text('Suppliers'),
+                ),*/
+            ],
+          ),
         ),
       ),
     );
