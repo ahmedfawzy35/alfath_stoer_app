@@ -5,7 +5,7 @@ import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_p
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as date;
 
 class OrderListPage extends StatelessWidget {
   final String? branche;
@@ -22,21 +22,24 @@ class OrderListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        ' الفواتير - ${singleDay ? 'لليوم  ${DateFormat('yyyy-MM-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-MM-dd').format(fromDate)} الى ${DateFormat('yyyy-MM-dd').format(toDate)}'} ',
-        style: const TextStyle(fontSize: 14),
-      )),
-      body: singleDay
-          ? BlocProvider(
-              create: (_) => OrderCubit()..getForDate(fromDate),
-              child: const OrderList(),
-            )
-          : BlocProvider(
-              create: (_) => OrderCubit()..getForTime(fromDate, toDate),
-              child: const OrderList(),
-            ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(
+          ' الفواتير - ${singleDay ? 'لليوم  ${date.DateFormat('yyyy-MM-dd').format(fromDate)}' : 'للفترة من ${date.DateFormat('yyyy-MM-dd').format(fromDate)} الى ${date.DateFormat('yyyy-MM-dd').format(toDate)}'} ',
+          style: const TextStyle(fontSize: 14),
+        )),
+        body: singleDay
+            ? BlocProvider(
+                create: (_) => OrderCubit()..getForDate(fromDate),
+                child: const OrderList(),
+              )
+            : BlocProvider(
+                create: (_) => OrderCubit()..getForTime(fromDate, toDate),
+                child: const OrderList(),
+              ),
+      ),
     );
   }
 }
@@ -129,7 +132,7 @@ class OrderListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                        DateFormat('yyyy-MM-dd')
+                        date.DateFormat('yyyy-MM-dd')
                             .format(DateTime.parse(item.date!)),
                         style: _textStyle()),
                     const Spacer(),

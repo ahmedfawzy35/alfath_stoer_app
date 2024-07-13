@@ -34,7 +34,12 @@ class CustomerListCubit extends Cubit<CustomerSupplierListState> {
       emit(CustomerSupplierListLoading());
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
       customer.brancheId = brancheId;
-      print(customer);
+      print('id ' + customer.id.toString());
+      print('name ' + customer.name!);
+      print('adress  ' + customer.adress!);
+      print('startAccount ' + customer.startAccount.toString());
+      print('customerTypeId  ' + customer.customerTypeId.toString());
+
       final CustomerModel mycus = await repository.addCustomer(customer);
       final currentState = state;
       if (currentState is CustomerSupplierListLoaded) {
@@ -49,11 +54,47 @@ class CustomerListCubit extends Cubit<CustomerSupplierListState> {
     }
   }
 
+  Future<void> edit(CustomerModel customer) async {
+    try {
+      print(customer.name);
+      final CustomerModel mycus = await repository.editCustomer(customer);
+      final currentState = state;
+      if (currentState is CustomerSupplierListLoaded) {
+        var updatedItems = List<CustomerModel>.from(currentState.items)
+          ..remove(customer);
+        updatedItems = List<CustomerModel>.from(currentState.items)..add(mycus);
+
+        emit(CustomerSupplierListLoaded(
+            items: updatedItems, filteredItems: updatedItems));
+      }
+      emit(CustomerSupplierLoaded(customer: mycus));
+    } catch (e) {
+      emit(const CustomerSupplierListError('Failed to add'));
+    }
+  }
+
+  void updateCustomer(CustomerModel updatedCustomer) {
+    if (state is CustomerSupplierListLoaded) {
+      final currentState = state as CustomerSupplierListLoaded;
+      final updatedItems = currentState.items.map((item) {
+        return item.id == updatedCustomer.id ? updatedCustomer : item;
+      }).toList();
+      final filteredItems = updatedItems.where((item) {
+        return item.name!
+            .toLowerCase()
+            .contains(updatedCustomer.name!.toLowerCase());
+      }).toList();
+
+      emit(CustomerSupplierListLoaded(
+          items: updatedItems, filteredItems: filteredItems));
+    }
+  }
+
   void filterItems(String query) {
     if (state is CustomerSupplierListLoaded) {
       final loadedState = state as CustomerSupplierListLoaded;
       final filteredItems = loadedState.items.where((item) {
-        return item.name.toLowerCase().contains(query.toLowerCase());
+        return item.name!.toLowerCase().contains(query.toLowerCase());
       }).toList();
       emit(CustomerSupplierListLoaded(
           items: loadedState.items, filteredItems: filteredItems));

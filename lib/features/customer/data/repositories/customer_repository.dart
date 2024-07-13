@@ -52,4 +52,40 @@ class CustomerListRepository {
       throw Exception('Failed to load details');
     }
   }
+
+  // ===========================================================================
+  // addCustomer
+  // ===========================================================================
+
+  Future<CustomerModel> editCustomer(CustomerModel customer) async {
+    final url = '$baseUrl/$model/Edit';
+
+    var headers = {'Content-Type': 'application/json'};
+
+    var request = http.Request('Put', Uri.parse(url));
+    request.body = json.encode({
+      "id": customer.id,
+      "name": customer.name,
+      "adress": customer.adress,
+      "startAccount": customer.startAccount,
+      "brancheId": customer.brancheId,
+      "customertypeId": customer.customertypeId,
+      "stopDealing": false
+    });
+    print(customer.id);
+    print(customer.stopDealing);
+    print(customer.brancheId);
+    request.headers.addAll(headers);
+
+    final http.StreamedResponse streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+
+      return CustomerModel.fromJson(data);
+    } else {
+      throw Exception('Failed to load details');
+    }
+  }
 }

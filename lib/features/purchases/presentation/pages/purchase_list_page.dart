@@ -4,7 +4,7 @@ import 'package:alfath_stoer_app/features/purchases/presentation/pages/edit_purc
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as date;
 
 class PurchaseListPage extends StatelessWidget {
   final String? branche;
@@ -21,21 +21,24 @@ class PurchaseListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        ' فواتير الشراء - ${singleDay ? 'لليوم  ${DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-mm-dd').format(fromDate)} الى ${DateFormat('yyyy-mm-dd').format(toDate)}'} ',
-        style: const TextStyle(fontSize: 12),
-      )),
-      body: singleDay
-          ? BlocProvider(
-              create: (_) => PurchaseCubit()..getForDate(fromDate),
-              child: const PurchaseList(),
-            )
-          : BlocProvider(
-              create: (_) => PurchaseCubit()..getForTime(fromDate, toDate),
-              child: const PurchaseList(),
-            ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(
+          ' فواتير الشراء - ${singleDay ? 'لليوم  ${date.DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${date.DateFormat('yyyy-mm-dd').format(fromDate)} الى ${date.DateFormat('yyyy-mm-dd').format(toDate)}'} ',
+          style: const TextStyle(fontSize: 12),
+        )),
+        body: singleDay
+            ? BlocProvider(
+                create: (_) => PurchaseCubit()..getForDate(fromDate),
+                child: const PurchaseList(),
+              )
+            : BlocProvider(
+                create: (_) => PurchaseCubit()..getForTime(fromDate, toDate),
+                child: const PurchaseList(),
+              ),
+      ),
     );
   }
 }
@@ -128,7 +131,7 @@ class PurchaseListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                        DateFormat('yyyy-MM-dd')
+                        date.DateFormat('yyyy-MM-dd')
                             .format(DateTime.parse(item.date!)),
                         style: _textStyle()),
                     const Spacer(),

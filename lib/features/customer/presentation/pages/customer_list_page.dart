@@ -10,13 +10,16 @@ class CustomerListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(' العملاء - ${branche == null ? " " : branche!} ')),
-      body: BlocProvider(
-        create: (_) => CustomerListCubit()..fetchData(),
-        child: CustomerList(
-          edit: edit,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(' العملاء - ${branche == null ? " " : branche!} ')),
+        body: BlocProvider(
+          create: (_) => CustomerListCubit()..fetchData(),
+          child: CustomerList(
+            edit: edit,
+          ),
         ),
       ),
     );

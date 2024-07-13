@@ -16,13 +16,13 @@ class _OrderManageState extends State<OrderBackManage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('قائمة مرتجعات المبيعات'),
-      ),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: SingleChildScrollView(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('قائمة مرتجعات المبيعات'),
+        ),
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

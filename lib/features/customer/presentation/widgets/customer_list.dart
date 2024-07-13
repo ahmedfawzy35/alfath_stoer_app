@@ -1,6 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/customer/data/models/customer_model.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_add_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,6 +12,7 @@ class CustomerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -60,118 +62,138 @@ class CustomerListItem extends StatelessWidget {
   final bool edit;
   @override
   Widget build(BuildContext context) {
-    return edit
-        ? GestureDetector(
-            onTap: () {
-              CustomerModel customer = CustomerModel(
-                  id: item.id,
-                  name: item.name,
-                  adress: item.adress,
-                  brancheId: item.brancheId,
-                  startAccount: item.startAccount,
-                  customerAccount: item.customerAccount,
-                  customertypeId: item.customertypeId,
-                  stopDealing: item.stopDealing);
-              Navigator.pop(context, customer);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: edit
+            ? GestureDetector(
+                onTap: () {
+                  CustomerModel customer = CustomerModel(
+                      id: item.id,
+                      name: item.name,
+                      adress: item.adress,
+                      brancheId: item.brancheId,
+                      startAccount: item.startAccount,
+                      customerAccount: item.customerAccount,
+                      customertypeId: item.customertypeId,
+                      stopDealing: item.stopDealing);
+                  Navigator.pop(context, customer);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
-                          child: Text(
-                            item.name,
-                            textAlign: TextAlign.end,
-                            style: const TextStyle(
-                                fontSize: 15,
-                                fontFamily: 'Cairo',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
+                              child: Text(
+                                item.name!,
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'Cairo',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-        : Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
-                        child: Text(
-                          item.name,
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'Cairo',
-                              fontWeight: FontWeight.bold),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
+                            child: Text(
+                              item.name!,
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Cairo',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final editedCustomer =
+                                    await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CustomerAddPage(
+                                      isEdit: true,
+                                      customer: item,
+                                    ),
+                                  ),
+                                );
+
+                                if (editedCustomer != null) {
+                                  context
+                                      .read<CustomerListCubit>()
+                                      .updateCustomer(editedCustomer);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.green, // لون النص
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8), // التباعد الداخلي
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(5), // شكل الحواف
+                                ),
+                              ),
+                              child: const Text('تعديل'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  MyRouts.customerDetailPage,
+                                  arguments: {'id': item.id},
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.amber, // لون النص
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8), // التباعد الداخلي
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(5), // شكل الحواف
+                                ),
+                              ),
+                              child: const Text('كشف حساب'),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.green, // لون النص
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8), // التباعد الداخلي
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(5), // شكل الحواف
-                            ),
-                          ),
-                          child: const Text('تعديل'),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              MyRouts.customerDetailPage,
-                              arguments: {'id': item.id},
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.amber, // لون النص
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8), // التباعد الداخلي
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(5), // شكل الحواف
-                            ),
-                          ),
-                          child: const Text('كشف حساب'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+                ),
+              ));
   }
 }
 /*

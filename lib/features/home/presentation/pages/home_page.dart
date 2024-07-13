@@ -1,6 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
@@ -345,18 +346,18 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               /*
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/customerSupplierPage');
-                  },
-                  child: const Text('Customers'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/sellerListPage');
-                  },
-                  child: const Text('Suppliers'),
-                ),*/
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/customerSupplierPage');
+                    },
+                    child: const Text('Customers'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/sellerListPage');
+                    },
+                    child: const Text('Suppliers'),
+                  ),*/
             ],
           ),
         ),

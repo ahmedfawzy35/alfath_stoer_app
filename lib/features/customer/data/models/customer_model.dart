@@ -1,26 +1,26 @@
 import 'package:alfath_stoer_app/features/customer/domain/customer_supplier.dart';
 
 class CustomerModel {
-  int id;
-  String name;
-  String adress;
-  double startAccount;
-  int brancheId;
-  int customertypeId;
-  bool stopDealing;
-  double customerAccount;
-  int customerTypeId;
+  int? id;
+  String? name;
+  String? adress;
+  double? startAccount;
+  int? brancheId;
+  int? customertypeId;
+  bool? stopDealing;
+  double? customerAccount;
+  int? customerTypeId;
 
   CustomerModel(
-      {required this.id,
-      required this.name,
-      required this.adress,
-      required this.startAccount,
-      required this.brancheId,
-      required this.customertypeId,
-      required this.stopDealing,
-      required this.customerAccount,
-      this.customerTypeId = 1});
+      {this.id,
+      this.name,
+      this.adress,
+      this.startAccount,
+      this.brancheId,
+      this.customertypeId,
+      this.customerAccount,
+      this.customerTypeId = 1,
+      this.stopDealing = false});
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(
@@ -49,10 +49,10 @@ class CustomerModel {
 
   CustomerSupplier toEntity() {
     return CustomerSupplier(
-      id: id,
-      name: name,
-      adress: adress,
-      startAccount: startAccount,
+      id: id!,
+      name: name!,
+      adress: adress!,
+      startAccount: startAccount!,
     );
   }
 }

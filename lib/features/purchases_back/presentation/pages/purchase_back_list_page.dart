@@ -4,7 +4,7 @@ import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/edit
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as date;
 
 class PurchaseBackListPage extends StatelessWidget {
   final String? branche;
@@ -21,21 +21,25 @@ class PurchaseBackListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        ' مرتجعات الشراء - ${singleDay ? 'لليوم  ${DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${DateFormat('yyyy-mm-dd').format(fromDate)} الى ${DateFormat('yyyy-mm-dd').format(toDate)}'} ',
-        style: const TextStyle(fontSize: 12),
-      )),
-      body: singleDay
-          ? BlocProvider(
-              create: (_) => PurchaseBackCubit()..getForDate(fromDate),
-              child: const PurchaseBackList(),
-            )
-          : BlocProvider(
-              create: (_) => PurchaseBackCubit()..getForTime(fromDate, toDate),
-              child: const PurchaseBackList(),
-            ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(
+          ' مرتجعات الشراء - ${singleDay ? 'لليوم  ${date.DateFormat('yyyy-mm-dd').format(fromDate)}' : 'للفترة من ${date.DateFormat('yyyy-mm-dd').format(fromDate)} الى ${date.DateFormat('yyyy-mm-dd').format(toDate)}'} ',
+          style: const TextStyle(fontSize: 12),
+        )),
+        body: singleDay
+            ? BlocProvider(
+                create: (_) => PurchaseBackCubit()..getForDate(fromDate),
+                child: const PurchaseBackList(),
+              )
+            : BlocProvider(
+                create: (_) =>
+                    PurchaseBackCubit()..getForTime(fromDate, toDate),
+                child: const PurchaseBackList(),
+              ),
+      ),
     );
   }
 }
@@ -128,7 +132,7 @@ class PurchaseBackListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                        DateFormat('yyyy-MM-dd')
+                        date.DateFormat('yyyy-MM-dd')
                             .format(DateTime.parse(item.date!)),
                         style: _textStyle()),
                     const Spacer(),

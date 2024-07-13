@@ -6,6 +6,12 @@ import 'package:alfath_stoer_app/features/customer/data/models/customer_model.da
 import 'package:alfath_stoer_app/features/customer/customer_type/repositories/customer_type_repository.dart';
 
 class CustomerAddPage extends StatefulWidget {
+  final CustomerModel customer;
+  final bool isEdit;
+
+  const CustomerAddPage(
+      {super.key, this.isEdit = false, required this.customer});
+
   @override
   _CustomerAddPageState createState() => _CustomerAddPageState();
 }
@@ -23,6 +29,9 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
   void initState() {
     super.initState();
     _fetchCustomerTypes();
+    if (widget.isEdit) {
+      _loadCustomerData();
+    }
   }
 
   Future<void> _fetchCustomerTypes() async {
@@ -42,7 +51,14 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
     }
   }
 
-  Future<void> _addCustomer() async {
+  void _loadCustomerData() {
+    _nameController.text = widget.customer.name!;
+    _addressController.text = widget.customer.adress!;
+    _startAccountController.text = widget.customer.startAccount.toString();
+    _selectedCustomerTypeId = widget.customer.customertypeId;
+  }
+
+  Future<void> _saveCustomer() async {
     if (_nameController.text.isEmpty ||
         _addressController.text.isEmpty ||
         _startAccountController.text.isEmpty ||
@@ -56,34 +72,43 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
     }
 
     final customer = CustomerModel(
-      id: 0, // assuming the ID is auto-generated on the server
+      id: widget.isEdit ? widget.customer.id : 0, // use existing ID if editing
       name: _nameController.text,
       adress: _addressController.text,
       startAccount: double.parse(_startAccountController.text),
-      brancheId: 1, // Assuming a default branch ID for now
+      brancheId: widget.isEdit
+          ? widget.customer.brancheId
+          : 1, // Assuming a default branch ID for now
       customertypeId: _selectedCustomerTypeId!,
       stopDealing: false,
       customerAccount: 0.0,
     );
-    print('id ' + customer.id.toString());
-    print('name ' + customer.name);
-    print('adress  ' + customer.adress);
-    print('startAccount ' + customer.startAccount.toString());
-    print('customerTypeId  ' + customer.customerTypeId.toString());
 
     try {
       setState(() {
         _isLoading = true;
       });
-      await context.read<CustomerListCubit>().add(customer);
+
+      if (widget.isEdit) {
+        await context.read<CustomerListCubit>().edit(customer);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text('تم تعديل العميل بنجاح')),
+        );
+        Navigator.of(context).pop(customer);
+      } else {
+        await context.read<CustomerListCubit>().add(customer);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text('تم اضافة العميل بنجاح')),
+        );
+      }
+
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text('تم اضافة العميل بنجاح')),
-      );
       _clearFields();
     } catch (e) {
       setState(() {
@@ -91,7 +116,7 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            backgroundColor: Colors.red, content: Text('فشل في اشافة العميل')),
+            backgroundColor: Colors.red, content: Text('فشل في العملية')),
       );
     }
   }
@@ -110,7 +135,8 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(title: const Text('اضافة عميل')),
+        appBar:
+            AppBar(title: Text(widget.isEdit ? 'تعديل عميل' : 'اضافة عميل')),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : Padding(
@@ -148,8 +174,8 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: _addCustomer,
-                      child: const Text('اضافة'),
+                      onPressed: _saveCustomer,
+                      child: Text(widget.isEdit ? 'تعديل' : 'اضافة'),
                     ),
                   ],
                 ),
