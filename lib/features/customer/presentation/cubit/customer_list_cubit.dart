@@ -32,6 +32,9 @@ class CustomerListCubit extends Cubit<CustomerSupplierListState> {
   Future<void> add(CustomerModel customer) async {
     try {
       emit(CustomerSupplierListLoading());
+      int brancheId = await SharedPrefsService().getSelectedBrancheId();
+      customer.brancheId = brancheId;
+      print(customer);
       final CustomerModel mycus = await repository.addCustomer(customer);
       final currentState = state;
       if (currentState is CustomerSupplierListLoaded) {

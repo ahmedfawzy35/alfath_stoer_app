@@ -87,7 +87,7 @@ class CustomerTypeRepository {
 
   //get All
   Future<List<CustomerTypeModel>> getAll() async {
-    final url = '$baseurl/$model/GetAllForDate';
+    final url = '$baseurl/$model/GetAll';
 
     var request = http.Request('GET', Uri.parse(url));
 

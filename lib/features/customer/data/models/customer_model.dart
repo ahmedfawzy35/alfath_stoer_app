@@ -1,15 +1,15 @@
 import 'package:alfath_stoer_app/features/customer/domain/customer_supplier.dart';
 
 class CustomerModel {
-  final int id;
-  final String name;
-  final String adress;
-  final double startAccount;
-  final int brancheId;
-  final int customertypeId;
-  final bool stopDealing;
-  final double customerAccount;
-  final int customerTypeId;
+  int id;
+  String name;
+  String adress;
+  double startAccount;
+  int brancheId;
+  int customertypeId;
+  bool stopDealing;
+  double customerAccount;
+  int customerTypeId;
 
   CustomerModel(
       {required this.id,

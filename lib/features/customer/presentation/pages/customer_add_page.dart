@@ -65,6 +65,11 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
       stopDealing: false,
       customerAccount: 0.0,
     );
+    print('id ' + customer.id.toString());
+    print('name ' + customer.name);
+    print('adress  ' + customer.adress);
+    print('startAccount ' + customer.startAccount.toString());
+    print('customerTypeId  ' + customer.customerTypeId.toString());
 
     try {
       setState(() {
