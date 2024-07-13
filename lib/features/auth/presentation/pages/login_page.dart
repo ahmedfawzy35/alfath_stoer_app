@@ -4,11 +4,16 @@ import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {

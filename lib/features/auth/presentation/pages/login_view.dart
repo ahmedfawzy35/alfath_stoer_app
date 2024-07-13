@@ -11,7 +11,7 @@ class LogindView extends StatelessWidget {
     return Scaffold(
       body: ResponsiveLayout(
           mobilLayout: (context) => LoginPage(),
-          tabletLayout: (context) => LoginPageDeskTop(),
+          tabletLayout: (context) => LoginPage(),
           diskTopLayout: (context) => LoginPageDeskTop()),
     );
   }
