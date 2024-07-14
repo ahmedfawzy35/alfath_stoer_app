@@ -21,6 +21,15 @@ class SellerListLoaded extends SellerListState {
   List<Object> get props => [items, filteredItems];
 }
 
+class SellerLoaded extends SellerListState {
+  final SellerModel seller;
+
+  const SellerLoaded({required this.seller});
+
+  @override
+  List<Object> get props => [seller];
+}
+
 class SellerListError extends SellerListState {
   final String message;
 

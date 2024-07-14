@@ -24,6 +24,12 @@ class SellerItemProcess extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Text(
+                    item.value.toString(),
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  const Spacer(),
                   PopupMenuButton<String>(
                     onSelected: (String result) {
                       switch (result) {
@@ -55,17 +61,16 @@ class SellerItemProcess extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Spacer(),
-                  Text(item.value.toString()),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(item.notes.toString()),
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text((item.date!).substring(0, 10)),
                   const SizedBox(width: 10),
@@ -86,7 +91,7 @@ class SellerItemProcess extends StatelessWidget {
           decoration: const BoxDecoration(color: Colors.black),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               (item.accountAfterElement!.round()).toString(),

@@ -1,11 +1,11 @@
 import 'package:alfath_stoer_app/features/customer/domain/customer_supplier.dart';
 
 class SellerModel {
-  final int id;
-  final String name;
-  final String adress;
-  final double startAccount;
-  final int brancheId;
+  int id;
+  String name;
+  String adress;
+  double startAccount;
+  int brancheId;
 
   SellerModel({
     required this.id,

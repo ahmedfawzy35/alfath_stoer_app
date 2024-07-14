@@ -8,6 +8,10 @@ import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_l
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_add_page.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_detail_page.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_detail_cubit.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_list_cubit.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_add_edit_page%20.dart';
+import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_detail_page.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/home/presentation/pages/home_page.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/manage_orders.dart';
@@ -40,6 +44,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<CustomerListCubit>(
           create: (context) => CustomerListCubit(),
         ),
+        BlocProvider<SellerListCubit>(
+          create: (context) => SellerListCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -55,6 +62,8 @@ class MyApp extends StatelessWidget {
           MyRouts.customerAddPage: (context) => CustomerAddPage(
                 customer: new CustomerModel(),
               ),
+          MyRouts.sellerAddPage: (context) => const SellerAddEditPage(),
+
           MyRouts.customerListPage: (context) {
             final Map<String, dynamic> args = ModalRoute.of(context)!
                 .settings
@@ -72,6 +81,15 @@ class MyApp extends StatelessWidget {
               create: (_) => CustomerDetailCubit()
                 ..fetchCustomerSupplierDetail(args['id'] as int),
               child: CustomerDetailPage(id: args['id'] as int),
+            );
+          },
+          MyRouts.sellerDetailPage: (context) {
+            final args = ModalRoute.of(context)!.settings.arguments
+                as Map<String, dynamic>;
+            return BlocProvider(
+              create: (_) =>
+                  SellerDetailCubit()..fetchSellerDetail(args['id'] as int),
+              child: SellrDetailPage(id: args['id'] as int),
             );
           },
           // إضافة المسارات الأخر

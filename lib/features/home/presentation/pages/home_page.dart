@@ -229,8 +229,8 @@ class _HomePageState extends State<HomePage> {
                               context, MyRouts.orderBackListPage);
                         }),
                   ]),
-              ListTile(
-                leading: const Icon(Icons.store),
+              ExpansionTile(
+                leading: const Icon(Icons.person_4),
                 title: const Text(
                   'الموردين',
                   style: TextStyle(
@@ -238,17 +238,45 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SellerListPage(
-                        edit: false,
-                        branche: selectedBranche,
-                      ),
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.add),
+                    title: const Text(
+                      'اضافة مورد',
+                      style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        MyRouts.sellerAddPage,
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.store),
+                    title: const Text(
+                      'ادارة الموردين',
+                      style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SellerListPage(
+                            edit: false,
+                            branche: selectedBranche,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
               ExpansionTile(
                   leading: const Icon(Icons.attach_money),
