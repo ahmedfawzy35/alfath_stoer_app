@@ -1,7 +1,11 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
-import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
-import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/customer/data/models/customer_model.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_add_page.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
+import 'package:alfath_stoer_app/features/orders/presentation/pages/manage_orders.dart';
+import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
+import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
@@ -9,35 +13,36 @@ import 'package:alfath_stoer_app/features/orders/presentation/pages/add_order.da
 import 'package:alfath_stoer_app/features/orders_back/data/models/order_back.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/cubit/cubit/order_back_cubit.dart';
 import 'package:alfath_stoer_app/features/orders_back/presentation/pages/add_order_back.dart';
-import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
 import 'package:alfath_stoer_app/features/purchases/presentation/cubit/cubit/purchase_cubit.dart';
 import 'package:alfath_stoer_app/features/purchases/presentation/pages/add_purchase.dart';
-import 'package:alfath_stoer_app/features/purchases_back/datat/models/purchase_back.dart';
 import 'package:alfath_stoer_app/features/purchases_back/presentation/cubit/cubit/purchase_back_cubit.dart';
 import 'package:alfath_stoer_app/features/purchases_back/presentation/pages/add_purchase_back.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-  });
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   String? userName;
   List<String>? allBranches;
   List<String>? userBranches;
   List<String>? climes;
   SharedPrefsService sharedPrefsService = SharedPrefsService();
   String selectedBranche = " ";
+  List<Tab> myTabs = [];
+  List<Widget> tabViews = [];
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _tabController = TabController(length: myTabs.length, vsync: this);
   }
 
   Future<void> _loadUserData() async {
@@ -58,11 +63,49 @@ class _HomePageState extends State<HomePage> {
   Future<void> _logout(BuildContext context) async {
     final prefsService = SharedPrefsService();
     await prefsService.clearUserData();
-    // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LogindView()),
     );
+  }
+
+  void _addTab(String title, Widget page) {
+    // Check if the tab with this page is already open
+    for (int i = 0; i < tabViews.length; i++) {
+      if (tabViews[i].toStringShort() == page.toStringShort()) {
+        // If the tab is already open, switch to it
+        _tabController.animateTo(i);
+        return;
+      }
+    }
+
+    // If tab is not open, add a new one
+    setState(() {
+      myTabs.add(Tab(
+        child: Row(
+          children: [
+            Text(title),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                _removeTab(myTabs.length - 1);
+              },
+            ),
+          ],
+        ),
+      ));
+      tabViews.add(page);
+      _tabController = TabController(length: myTabs.length, vsync: this);
+      _tabController.animateTo(myTabs.length - 1);
+    });
+  }
+
+  void _removeTab(int index) {
+    setState(() {
+      myTabs.removeAt(index);
+      tabViews.removeAt(index);
+      _tabController = TabController(length: myTabs.length, vsync: this);
+    });
   }
 
   @override
@@ -79,6 +122,13 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          bottom: myTabs.isNotEmpty
+              ? TabBar(
+                  controller: _tabController,
+                  tabs: myTabs,
+                  isScrollable: true,
+                )
+              : null,
         ),
         drawer: Drawer(
           child: ListView(
@@ -127,11 +177,9 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold),
                     ),
                     onTap: () {
-                      //selectedBranche
-                      Navigator.pushNamed(
-                        context,
-                        MyRouts.customerAddPage,
-                      );
+                      _addTab('اضافة عميل',
+                          CustomerAddPage(customer: CustomerModel()));
+                      Navigator.pop(context); // Close the drawer
                     },
                   ),
                   ListTile(
@@ -144,12 +192,11 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold),
                     ),
                     onTap: () {
-                      //selectedBranche
-                      Navigator.pushNamed(
-                        context,
-                        MyRouts.customerListPage,
-                        arguments: {'branche': selectedBranche},
+                      _addTab(
+                        'ادارة العملاء',
+                        CustomerListPage(), // استخدم الصفحة الفعلية هنا
                       );
+                      Navigator.pop(context); // Close the drawer
                     },
                   ),
                 ],
@@ -174,14 +221,14 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider<OrderCubit>(
-                                create: (context) => OrderCubit(),
-                                child: AddOrderPage(order: Order()),
-                              ),
+                          _addTab(
+                            'اضافة فاتورة بيع',
+                            BlocProvider<OrderCubit>(
+                              create: (context) => OrderCubit(),
+                              child: AddOrderPage(order: Order()),
                             ),
                           );
+                          Navigator.pop(context); // Close the drawer
                         }),
                     ListTile(
                         leading: const Icon(Icons.edit),
@@ -193,7 +240,8 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, MyRouts.orderListPage);
+                          _addTab('ادارة فواتير البيع', OrderManage());
+                          Navigator.pop(context); // Close the drawer
                         }),
                     ListTile(
                         leading: const Icon(Icons.add_card),
@@ -205,15 +253,14 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<OrderBackCubit>(
-                                create: (context) => OrderBackCubit(),
-                                child: AddOrderBackPage(orderBack: OrderBack()),
-                              ),
+                          _addTab(
+                            'اضافة مرتجع مبيعات',
+                            BlocProvider<OrderBackCubit>(
+                              create: (context) => OrderBackCubit(),
+                              child: AddOrderBackPage(orderBack: OrderBack()),
                             ),
                           );
+                          Navigator.pop(context); // Close the drawer
                         }),
                     ListTile(
                         leading: const Icon(Icons.edit),
@@ -225,8 +272,9 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, MyRouts.orderBackListPage);
+                          _addTab('ادارة مرتجعات المبيعات',
+                              Text('ادارة مرتجعات المبيعات Page'));
+                          Navigator.pop(context); // Close the drawer
                         }),
                   ]),
               ExpansionTile(
@@ -249,14 +297,12 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        MyRouts.sellerAddPage,
-                      );
+                      _addTab('اضافة مورد', Text('اضافة مورد Page'));
+                      Navigator.pop(context); // Close the drawer
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.store),
+                    leading: const Icon(Icons.person),
                     title: const Text(
                       'ادارة الموردين',
                       style: TextStyle(
@@ -265,15 +311,48 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold),
                     ),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SellerListPage(
-                            edit: false,
-                            branche: selectedBranche,
-                          ),
-                        ),
-                      );
+                      _addTab('ادارة الموردين', Text('ادارة الموردين Page'));
+                      Navigator.pop(context); // Close the drawer
+                    },
+                  ),
+                ],
+              ),
+              ExpansionTile(
+                leading: const Icon(Icons.person_4),
+                title: const Text(
+                  'البائعين',
+                  style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.add),
+                    title: const Text(
+                      'اضافة بائع',
+                      style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      _addTab('اضافة بائع', Text('اضافة بائع Page'));
+                      Navigator.pop(context); // Close the drawer
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: const Text(
+                      'ادارة البائعين',
+                      style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      _addTab('ادارة البائعين', SellerListPage());
+                      Navigator.pop(context); // Close the drawer
                     },
                   ),
                 ],
@@ -298,14 +377,14 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider<PurchaseCubit>(
-                                create: (context) => PurchaseCubit(),
-                                child: AddPurchasePage(purchase: Purchase()),
-                              ),
+                          _addTab(
+                            'اضافة فاتورة شراء',
+                            BlocProvider<PurchaseCubit>(
+                              create: (context) => PurchaseCubit(),
+                              child: AddPurchasePage(purchase: Purchase()),
                             ),
                           );
+                          Navigator.pop(context); // Close the drawer
                         }),
                     ListTile(
                         leading: const Icon(Icons.edit),
@@ -317,29 +396,29 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, MyRouts.purchaseListPage);
+                          _addTab('ادارة فواتير الشراء',
+                              Text('ادارة فواتير الشراء Page'));
+                          Navigator.pop(context); // Close the drawer
                         }),
                     ListTile(
                         leading: const Icon(Icons.add_card),
                         title: const Text(
-                          'اضافة مرتجع شراء',
+                          'اضافة مرتجع مشتريات',
                           style: TextStyle(
                               fontFamily: 'Cairo',
                               fontSize: 13,
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<PurchaseBackCubit>(
-                                create: (context) => PurchaseBackCubit(),
-                                child: AddPurchaseBackPage(
-                                    purchaseBack: PurchaseBack()),
-                              ),
+                          _addTab(
+                            'اضافة مرتجع مشتريات',
+                            BlocProvider<PurchaseBackCubit>(
+                              create: (context) => PurchaseBackCubit(),
+                              child: AddPurchaseBackPage(
+                                  purchaseBack: PurchaseBack()),
                             ),
                           );
+                          Navigator.pop(context); // Close the drawer
                         }),
                     ListTile(
                         leading: const Icon(Icons.edit),
@@ -351,8 +430,9 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, MyRouts.purchaseBackManage);
+                          _addTab('ادارة مرتجعات المشتريات',
+                              Text('ادارة مرتجعات المشتريات Page'));
+                          Navigator.pop(context); // Close the drawer
                         }),
                   ]),
               ListTile(
@@ -369,26 +449,14 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              /*
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/customerSupplierPage');
-                    },
-                    child: const Text('Customers'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/sellerListPage');
-                    },
-                    child: const Text('Suppliers'),
-                  ),*/
-            ],
-          ),
-        ),
+        body: myTabs.isNotEmpty
+            ? TabBarView(
+                controller: _tabController,
+                children: tabViews,
+              )
+            : Center(
+                child: Text('اختر تبويبًا من القائمة الجانبية'),
+              ),
       ),
     );
   }
