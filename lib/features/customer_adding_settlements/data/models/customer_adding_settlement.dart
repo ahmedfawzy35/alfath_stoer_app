@@ -1,7 +1,7 @@
 class CustomerAddingSettlement {
   int? id;
   String? date;
-  int? value;
+  double? value;
   String? notes;
   int? customerId;
   String? customerName;
@@ -21,7 +21,7 @@ class CustomerAddingSettlement {
   CustomerAddingSettlement.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     date = json['date'];
-    value = json['value'];
+    value = (json['value'] as num).toDouble();
     notes = json['notes'];
     customerId = json['customerId'];
     customerName = json['customerName'];

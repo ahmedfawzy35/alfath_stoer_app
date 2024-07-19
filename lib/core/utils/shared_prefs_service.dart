@@ -3,11 +3,16 @@ import 'package:alfath_stoer_app/features/auth/data/models/clime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefsService {
-  Future<void> saveUserData(String userName, List<Branche> allBranches,
-      List<Branche> userBranches, List<clime> climes) async {
+  Future<void> saveUserData(
+      int userId,
+      String userName,
+      List<Branche> allBranches,
+      List<Branche> userBranches,
+      List<clime> climes) async {
     final prefs = await SharedPreferences.getInstance();
 
     prefs.setString('userName', userName);
+    prefs.setInt('userId', userId);
     prefs.setStringList('allBranches', brancheTostring(allBranches));
     prefs.setStringList('userBranches', brancheTostring(userBranches));
     prefs.setString('climes', climes.join(','));
@@ -16,6 +21,7 @@ class SharedPrefsService {
   Future<Map<String, dynamic>?> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
     final userName = prefs.getString('userName');
+    final userId = prefs.getInt('userId');
     if (userName == null) {
       return null;
     }
@@ -27,6 +33,7 @@ class SharedPrefsService {
       'allBranches': allBranches,
       'userBranches': userBranches,
       'climes': climes,
+      'userId': userId,
     };
   }
 
@@ -44,6 +51,11 @@ class SharedPrefsService {
   Future<int> getSelectedBrancheId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt('brancheId') ?? 0;
+  }
+
+  Future<int> getSelectedUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userId') ?? 0;
   }
 
   Future<String> getSelectedBrancheName() async {

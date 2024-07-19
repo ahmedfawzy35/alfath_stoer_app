@@ -1,5 +1,8 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
 import 'package:alfath_stoer_app/features/customer/data/models/customer_detail_model.dart';
+import 'package:alfath_stoer_app/features/customer_adding_settlements/data/repositories/customer_a_s_repository.dart';
+import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/pages/customer_a_s_add_edit_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_page.dart';
@@ -102,6 +105,8 @@ class ItemProcess extends StatelessWidget {
     switch (processType) {
       case CustomerAccountElementTyps.Order:
         _editOrder(context, id);
+      case CustomerAccountElementTyps.CustomerAddingSettlement:
+        _editCustomerAddingSettlement(context, id);
     }
   }
 
@@ -129,6 +134,22 @@ class ItemProcess extends StatelessWidget {
         builder: (context) => BlocProvider<OrderCubit>(
           create: (context) => OrderCubit(),
           child: EditOrderPage(order: order),
+        ),
+      ),
+    );
+  }
+
+  void _editCustomerAddingSettlement(BuildContext context, int id) async {
+    final repo = CustomerAddingSettlementRepository();
+    final customerAddingSettlement = await repo.getById(id);
+
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<CustomerAddingSettlementCubit>(
+          create: (context) => CustomerAddingSettlementCubit(),
+          child: CustomerAddingSettlementAddEditPage(
+              customerAddingSettlement: customerAddingSettlement),
         ),
       ),
     );

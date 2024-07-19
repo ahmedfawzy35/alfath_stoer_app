@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                     user.isDeleted == false) {
                   final prefsService = SharedPrefsService();
                   await prefsService.saveUserData(
+                    user.id!,
                     user.fullName!,
                     state.loginResponse.allBranches!,
                     state.loginResponse.userBranches!,
