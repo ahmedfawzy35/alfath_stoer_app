@@ -19,13 +19,7 @@ class CustomerAddingSettlementCubit
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
       int userId = await SharedPrefsService().getSelectedUserId();
       customerAddingSettlement.userId = userId;
-      print(customerAddingSettlement.id);
-      print(customerAddingSettlement.value);
-      print(customerAddingSettlement.date);
-      print(customerAddingSettlement.customerId);
-      print(customerAddingSettlement.customerName);
-      print('userId  /  ${customerAddingSettlement.userId}');
-      print(customerAddingSettlement.notes);
+
       emit(CustomerAddingSettlementLoading());
       customerAddingSettlement.brancheId = brancheId;
 
@@ -46,13 +40,7 @@ class CustomerAddingSettlementCubit
       int userId = await SharedPrefsService().getSelectedUserId();
 
       customerAddingSettlement.userId = userId;
-      print(customerAddingSettlement.id);
-      print(customerAddingSettlement.value);
-      print(customerAddingSettlement.date);
-      print(customerAddingSettlement.customerId);
-      print(customerAddingSettlement.customerName);
-      print('userId  /  ${customerAddingSettlement.userId}');
-      print(customerAddingSettlement.notes);
+
       emit(CustomerAddingSettlementLoading());
       customerAddingSettlement = await repository
           .editcustomerAddingSettlement(customerAddingSettlement);

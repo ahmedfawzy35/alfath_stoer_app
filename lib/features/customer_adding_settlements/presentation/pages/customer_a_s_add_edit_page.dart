@@ -1,3 +1,4 @@
+import 'package:alfath_stoer_app/features/customer/data/models/customer_model.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/data/models/customer_adding_settlement.dart';
@@ -9,10 +10,11 @@ import 'package:intl/intl.dart' as date;
 
 class CustomerAddingSettlementAddEditPage extends StatelessWidget {
   final CustomerAddingSettlement? customerAddingSettlement;
-
+  final CustomerModel? customer;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  CustomerAddingSettlementAddEditPage({Key? key, this.customerAddingSettlement})
+  CustomerAddingSettlementAddEditPage(
+      {Key? key, this.customerAddingSettlement, this.customer})
       : super(key: key);
 
   @override
@@ -33,13 +35,17 @@ class CustomerAddingSettlementAddEditPage extends StatelessWidget {
             : customerAddingSettlement!.notes);
     final TextEditingController customerNameController = TextEditingController(
         text: customerAddingSettlement == null
-            ? ""
+            ? customer == null
+                ? ""
+                : customer!.name.toString()
             : customerAddingSettlement!.customerName);
 
     final TextEditingController customerNumberController =
         TextEditingController(
             text: customerAddingSettlement == null
-                ? ""
+                ? customer == null
+                    ? ""
+                    : customer!.id.toString()
                 : customerAddingSettlement!.customerId?.toString());
 
     DateTime selectedDate = customerAddingSettlement == null

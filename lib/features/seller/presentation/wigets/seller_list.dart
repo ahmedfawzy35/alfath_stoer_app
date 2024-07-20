@@ -1,10 +1,8 @@
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/seller/data/models/seller_model.dart';
-import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_list_cubit.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_list_state.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_add_edit_page%20.dart';
-import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

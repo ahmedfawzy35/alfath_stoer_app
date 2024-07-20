@@ -1,5 +1,6 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
 import 'package:alfath_stoer_app/features/customer/data/models/customer_detail_model.dart';
+import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/data/repositories/customer_a_s_repository.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/pages/customer_a_s_add_edit_page.dart';
@@ -25,8 +26,9 @@ class ItemProcess extends StatelessWidget {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Text(item.value.toString()),
+                  const Spacer(),
                   PopupMenuButton<String>(
                     onSelected: (String result) {
                       switch (result) {
@@ -36,9 +38,6 @@ class ItemProcess extends StatelessWidget {
                         case 'Delete':
                           _deleteItem(context, item.id!, item.type!);
 
-                          break;
-                        case 'Show':
-                          _showItem(context, item.id!, item.type!);
                           break;
                       }
                     },
@@ -52,30 +51,24 @@ class ItemProcess extends StatelessWidget {
                         value: 'Delete',
                         child: Text('حذف'),
                       ),
-                      const PopupMenuItem<String>(
-                        value: 'Show',
-                        child: Text('عرض'),
-                      ),
                     ],
                   ),
-                  const Spacer(),
-                  Text(item.value.toString()),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(item.notes.toString()),
                 ],
               ),
               Row(
                 children: [
-                  Text((item.date!).substring(0, 10)),
-                  const SizedBox(width: 10),
+                  Spacer(),
                   item.number! > 0
                       ? Text(
                           '[رقم الفاتورة ${item.number!.round().toString()}]')
                       : const SizedBox(),
+                  const SizedBox(width: 10),
+                  Text((item.date!).substring(0, 10)),
                 ],
               ),
             ],
@@ -89,7 +82,6 @@ class ItemProcess extends StatelessWidget {
           decoration: const BoxDecoration(color: Colors.black),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               (item.accountAfterElement!.round()).toString(),
@@ -114,6 +106,8 @@ class ItemProcess extends StatelessWidget {
     switch (processType) {
       case CustomerAccountElementTyps.Order:
         _deleteOrder(context, id);
+      case CustomerAccountElementTyps.CustomerAddingSettlement:
+        _deleteCustomerAddingSettlement(context, id);
     }
   }
 
@@ -129,14 +123,20 @@ class ItemProcess extends StatelessWidget {
     final order = await repo.getById(id);
 
     // ignore: use_build_context_synchronously
-    Navigator.of(context).push(
+    Navigator.of(context)
+        .push(
       MaterialPageRoute(
         builder: (context) => BlocProvider<OrderCubit>(
           create: (context) => OrderCubit(),
           child: EditOrderPage(order: order),
         ),
       ),
-    );
+    )
+        .then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(order.customerId!);
+    });
   }
 
   void _editCustomerAddingSettlement(BuildContext context, int id) async {
@@ -144,7 +144,8 @@ class ItemProcess extends StatelessWidget {
     final customerAddingSettlement = await repo.getById(id);
 
     // ignore: use_build_context_synchronously
-    Navigator.of(context).push(
+    Navigator.of(context)
+        .push(
       MaterialPageRoute(
         builder: (context) => BlocProvider<CustomerAddingSettlementCubit>(
           create: (context) => CustomerAddingSettlementCubit(),
@@ -152,13 +153,36 @@ class ItemProcess extends StatelessWidget {
               customerAddingSettlement: customerAddingSettlement),
         ),
       ),
-    );
+    )
+        .then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(customerAddingSettlement.customerId!);
+    });
   }
 
-  void _deleteOrder(BuildContext context, int id) {
+  void _deleteOrder(BuildContext context, int id) async {
     // هنا يمكنك إضافة منطق الحذف باستخدام OrderCubit
+    final repo = OrderRepository();
+    final order = await repo.getById(id);
     final orderCubit = context.read<OrderCubit>();
-    orderCubit.deleteOrder(id);
+    orderCubit.deleteOrder(id).then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(order.customerId!);
+    });
+  }
+
+  void _deleteCustomerAddingSettlement(BuildContext context, int id) async {
+    // هنا يمكنك إضافة منطق الحذف باستخدام OrderCubit
+    final repo = CustomerAddingSettlementRepository();
+    final customerAddingSettlement = await repo.getById(id);
+    final orderCubit = context.read<CustomerAddingSettlementCubit>();
+    orderCubit.deleteCustomerAddingSettlement(id).then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(customerAddingSettlement.customerId!);
+    });
   }
 
   void _showOrder(BuildContext context, int id) {

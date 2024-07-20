@@ -9,10 +9,22 @@ class CustomerDetailCubit extends Cubit<CustomerSupplierDetailState> {
   CustomerDetailCubit() : super(CustomerSupplierDetailInitial());
 
   void fetchCustomerSupplierDetail(int id) async {
-    emit(CustomerSupplierDetailLoading());
     try {
+      emit(CustomerSupplierDetailLoading());
       final detail = await repository.fetchCustomerSupplierDetail(id);
+
       emit(CustomerSupplierDetailLoaded(detail));
+    } catch (e) {
+      emit(const CustomerSupplierDetailError('Failed to load details'));
+    }
+  }
+
+  void refetchCustomerSupplierDetail(int id) async {
+    try {
+      emit(CustomerSupplierDetailLoading());
+      final detail = await repository.fetchCustomerSupplierDetail(id);
+
+      emit(ReCustomerSupplierDetailLoaded(detail));
     } catch (e) {
       emit(const CustomerSupplierDetailError('Failed to load details'));
     }
