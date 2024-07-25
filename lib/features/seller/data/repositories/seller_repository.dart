@@ -21,7 +21,7 @@ class SellerRepository {
   }
 
   // ===========================================================================
-  // addCustomer
+  // add Seller
   // ===========================================================================
 
   Future<SellerModel> addSeller(SellerModel seller) async {
@@ -51,12 +51,15 @@ class SellerRepository {
     }
   }
 
+// ===========================================================================
+  // EDIT Seller
+  // ===========================================================================
   Future<SellerModel> updateSeller(SellerModel seller) async {
     final url = '$baseUrl/$model/Edit';
 
     var headers = {'Content-Type': 'application/json'};
 
-    var request = http.Request('POST', Uri.parse(url));
+    var request = http.Request('PUT', Uri.parse(url));
     request.body = json.encode({
       "id": seller.id,
       "name": seller.name,
@@ -64,7 +67,6 @@ class SellerRepository {
       "startAccount": seller.startAccount,
       "brancheId": seller.brancheId,
     });
-
     request.headers.addAll(headers);
 
     final http.StreamedResponse streamedResponse = await request.send();
@@ -74,7 +76,7 @@ class SellerRepository {
 
       return SellerModel.fromJson(data);
     } else {
-      throw Exception('Failed to load details');
+      throw Exception('Failed to update details');
     }
   }
 }

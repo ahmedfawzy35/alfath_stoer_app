@@ -48,15 +48,15 @@ class AddPurchaseBackPage extends StatelessWidget {
       purchaseBack.date = dateController.text;
       purchaseBack.sellerrId = int.parse(sellerNumberController.text);
       purchaseBack.total = total;
-      purchaseBack.paid = paid;
-      purchaseBack.discount = discount;
+      purchaseBack.paid = paid ?? 0;
+      purchaseBack.discount = discount ?? 0;
       purchaseBack.remainingAmount = remaining;
       context.read<PurchaseBackCubit>().updatePurchaseField(purchaseBack);
     }
 
     void clearText() {
       totalController.clear();
-      paidController.clear();
+      paidController.text = '0';
       discountController.text = '0';
       final int? orderumber = int.tryParse(orderNumberController.text);
 
@@ -237,11 +237,12 @@ class AddPurchaseBackPage extends StatelessWidget {
                                     updateRemainingAmount();
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'يرجى إدخال المدفوع';
-                                    }
-                                    if (double.tryParse(value) == null) {
-                                      return 'يرجى إدخال رقم صالح';
+                                    if (value != null) {
+                                      if (value.isNotEmpty) {
+                                        if (double.tryParse(value) == null) {
+                                          return 'يرجى إدخال رقم صالح';
+                                        }
+                                      }
                                     }
                                     return null;
                                   },
@@ -265,11 +266,12 @@ class AddPurchaseBackPage extends StatelessWidget {
                                     updateRemainingAmount();
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'يرجى إدخال الخصم';
-                                    }
-                                    if (double.tryParse(value) == null) {
-                                      return 'يرجى إدخال رقم صالح';
+                                    if (value != null) {
+                                      if (value.isNotEmpty) {
+                                        if (double.tryParse(value) == null) {
+                                          return 'يرجى إدخال رقم صالح';
+                                        }
+                                      }
                                     }
                                     return null;
                                   },

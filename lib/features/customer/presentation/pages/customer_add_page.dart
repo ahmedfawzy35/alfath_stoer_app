@@ -139,45 +139,47 @@ class _CustomerAddPageState extends State<CustomerAddPage> {
             AppBar(title: Text(widget.isEdit ? 'تعديل عميل' : 'اضافة عميل')),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'الاسم'),
-                    ),
-                    TextField(
-                      controller: _addressController,
-                      decoration: const InputDecoration(labelText: 'العنوان'),
-                    ),
-                    TextField(
-                      controller: _startAccountController,
-                      decoration:
-                          const InputDecoration(labelText: 'الحساب المبدئي'),
-                      keyboardType: TextInputType.number,
-                    ),
-                    DropdownButton<int>(
-                      value: _selectedCustomerTypeId,
-                      hint: const Text('اختر نوع العميل'),
-                      items: _customerTypes.map((CustomerTypeModel type) {
-                        return DropdownMenuItem<int>(
-                          value: type.id,
-                          child: Text(type.name ?? ''),
-                        );
-                      }).toList(),
-                      onChanged: (int? newValue) {
-                        setState(() {
-                          _selectedCustomerTypeId = newValue;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _saveCustomer,
-                      child: Text(widget.isEdit ? 'تعديل' : 'اضافة'),
-                    ),
-                  ],
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(labelText: 'الاسم'),
+                      ),
+                      TextField(
+                        controller: _addressController,
+                        decoration: const InputDecoration(labelText: 'العنوان'),
+                      ),
+                      TextField(
+                        controller: _startAccountController,
+                        decoration:
+                            const InputDecoration(labelText: 'الحساب المبدئي'),
+                        keyboardType: TextInputType.number,
+                      ),
+                      DropdownButton<int>(
+                        value: _selectedCustomerTypeId,
+                        hint: const Text('اختر نوع العميل'),
+                        items: _customerTypes.map((CustomerTypeModel type) {
+                          return DropdownMenuItem<int>(
+                            value: type.id,
+                            child: Text(type.name ?? ''),
+                          );
+                        }).toList(),
+                        onChanged: (int? newValue) {
+                          setState(() {
+                            _selectedCustomerTypeId = newValue;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _saveCustomer,
+                        child: Text(widget.isEdit ? 'تعديل' : 'اضافة'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
       ),

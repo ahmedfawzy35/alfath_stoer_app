@@ -18,7 +18,7 @@ class PurchaseBackRepository {
     var request = http.Request('POST', Uri.parse(url));
     request.body = json.encode({
       "date": purchaseBack.date,
-      "sellerrId": purchaseBack.sellerrId,
+      "sellerId": purchaseBack.sellerrId,
       "total": purchaseBack.total,
       "paid": purchaseBack.paid,
       "discount": purchaseBack.discount,

@@ -41,22 +41,24 @@ class AddPurchasePage extends StatelessWidget {
     void updateRemainingAmount() {
       final double? total = double.tryParse(totalController.text);
       final double? paid = double.tryParse(paidController.text);
-      final double? discount = double.tryParse(discountController.text);
+      final double? discount = discountController.text.isEmpty
+          ? 0
+          : double.tryParse(discountController.text);
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
 
       remainingAmountController.text = remaining.toString();
       purchase.date = dateController.text;
       purchase.sellerrId = int.parse(sellerNumberController.text);
       purchase.total = total;
-      purchase.paid = paid;
-      purchase.discount = discount;
+      purchase.paid = paid ?? 0;
+      purchase.discount = discount ?? 0;
       purchase.remainingAmount = remaining;
       context.read<PurchaseCubit>().updatePurchaseField(purchase);
     }
 
     void clearText() {
       totalController.clear();
-      paidController.clear();
+      paidController.text = '0';
       discountController.text = '0';
       final int? orderumber = int.tryParse(orderNumberController.text);
 
@@ -236,11 +238,12 @@ class AddPurchasePage extends StatelessWidget {
                                     updateRemainingAmount();
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'يرجى إدخال المدفوع';
-                                    }
-                                    if (double.tryParse(value) == null) {
-                                      return 'يرجى إدخال رقم صالح';
+                                    if (value != null) {
+                                      if (value.isNotEmpty) {
+                                        if (double.tryParse(value) == null) {
+                                          return 'يرجى إدخال رقم صالح';
+                                        }
+                                      }
                                     }
                                     return null;
                                   },
@@ -264,11 +267,12 @@ class AddPurchasePage extends StatelessWidget {
                                     updateRemainingAmount();
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'يرجى إدخال الخصم';
-                                    }
-                                    if (double.tryParse(value) == null) {
-                                      return 'يرجى إدخال رقم صالح';
+                                    if (value != null) {
+                                      if (value.isNotEmpty) {
+                                        if (double.tryParse(value) == null) {
+                                          return 'يرجى إدخال رقم صالح';
+                                        }
+                                      }
                                     }
                                     return null;
                                   },

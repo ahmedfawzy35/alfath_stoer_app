@@ -184,11 +184,12 @@ class EditOrderPage extends StatelessWidget {
                               updateRemainingAmount();
                             },
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'يرجى إدخال المدفوع';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'يرجى إدخال رقم صالح';
+                              if (value != null) {
+                                if (value.isNotEmpty) {
+                                  if (double.tryParse(value) == null) {
+                                    return 'يرجى إدخال رقم صالح';
+                                  }
+                                }
                               }
                               return null;
                             },
@@ -206,11 +207,12 @@ class EditOrderPage extends StatelessWidget {
                               updateRemainingAmount();
                             },
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'يرجى إدخال الخصم';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'يرجى إدخال رقم صالح';
+                              if (value != null) {
+                                if (value.isNotEmpty) {
+                                  if (double.tryParse(value) == null) {
+                                    return 'يرجى إدخال رقم صالح';
+                                  }
+                                }
                               }
                               return null;
                             },

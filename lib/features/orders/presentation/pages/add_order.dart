@@ -38,6 +38,13 @@ class AddOrderPage extends StatelessWidget {
 
     DateTime selectedDate = DateTime.now();
 
+    final FocusNode _totalFocusNode = FocusNode();
+    final FocusNode _PaidFocusNode = FocusNode();
+    final FocusNode _discountFocusNode = FocusNode();
+    final FocusNode _orderNumberFocusNode = FocusNode();
+    final FocusNode _customerNameFocusNode = FocusNode();
+    final FocusNode _noteFocusNode = FocusNode();
+    final FocusNode _saverFocusNode = FocusNode();
     void updateRemainingAmount() {
       final double? total = double.tryParse(totalController.text);
       final double? paid = double.tryParse(paidController.text);
@@ -48,8 +55,8 @@ class AddOrderPage extends StatelessWidget {
       order.date = dateController.text;
       order.customerId = int.parse(customerNumberController.text);
       order.total = total;
-      order.paid = paid;
-      order.discount = discount;
+      order.paid = paid ?? 0;
+      order.discount = discount ?? 0;
       order.remainingAmount = remaining;
       order.orderProfit = 0;
       context.read<OrderCubit>().updateOrderField(order);
@@ -57,7 +64,7 @@ class AddOrderPage extends StatelessWidget {
 
     void clearText() {
       totalController.clear();
-      paidController.clear();
+      paidController.text = '0';
       discountController.text = '0';
       final int? orderumber = int.tryParse(orderNumberController.text);
 
@@ -101,6 +108,11 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: orderNumberController,
+                                  focusNode: _orderNumberFocusNode,
+                                  onFieldSubmitted: (_) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_customerNameFocusNode);
+                                  },
                                   decoration: const InputDecoration(
                                       labelText: 'رقم الفاتورة'),
                                   keyboardType: TextInputType.number,
@@ -204,6 +216,11 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: totalController,
+                                  focusNode: _totalFocusNode,
+                                  onFieldSubmitted: (_) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_PaidFocusNode);
+                                  },
                                   decoration: const InputDecoration(
                                       labelText: 'الإجمالي'),
                                   keyboardType: TextInputType.number,
@@ -228,6 +245,11 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: paidController,
+                                  focusNode: _PaidFocusNode,
+                                  onFieldSubmitted: (_) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_discountFocusNode);
+                                  },
                                   decoration: const InputDecoration(
                                       labelText: 'المدفوع'),
                                   keyboardType: TextInputType.number,
@@ -238,11 +260,12 @@ class AddOrderPage extends StatelessWidget {
                                     updateRemainingAmount();
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'يرجى إدخال المدفوع';
-                                    }
-                                    if (double.tryParse(value) == null) {
-                                      return 'يرجى إدخال رقم صالح';
+                                    if (value != null) {
+                                      if (value.isNotEmpty) {
+                                        if (double.tryParse(value) == null) {
+                                          return 'يرجى إدخال رقم صالح';
+                                        }
+                                      }
                                     }
                                     return null;
                                   },
@@ -256,6 +279,11 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: discountController,
+                                  focusNode: _discountFocusNode,
+                                  onFieldSubmitted: (_) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_noteFocusNode);
+                                  },
                                   decoration:
                                       const InputDecoration(labelText: 'الخصم'),
                                   keyboardType: TextInputType.number,
@@ -266,11 +294,12 @@ class AddOrderPage extends StatelessWidget {
                                     updateRemainingAmount();
                                   },
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'يرجى إدخال الخصم';
-                                    }
-                                    if (double.tryParse(value) == null) {
-                                      return 'يرجى إدخال رقم صالح';
+                                    if (value != null) {
+                                      if (value.isNotEmpty) {
+                                        if (double.tryParse(value) == null) {
+                                          return 'يرجى إدخال رقم صالح';
+                                        }
+                                      }
                                     }
                                     return null;
                                   },
@@ -290,8 +319,12 @@ class AddOrderPage extends StatelessWidget {
                           const SizedBox(height: 10),
                           const SizedBox(height: 10),
                           TextFormField(
-                            maxLines: 3,
                             controller: notesController,
+                            focusNode: _noteFocusNode,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context)
+                                  .requestFocus(_saverFocusNode);
+                            },
                             decoration:
                                 const InputDecoration(labelText: 'ملاحظات'),
                             onChanged: (value) {
@@ -306,6 +339,7 @@ class AddOrderPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               ElevatedButton(
+                                focusNode: _saverFocusNode,
                                 child: const Text('حفظ'),
                                 onPressed: () async {
                                   if (_formKey.currentState?.validate() ??
@@ -314,6 +348,8 @@ class AddOrderPage extends StatelessWidget {
                                         context.read<OrderCubit>();
                                     await orderCubit.addOrder(order);
                                     clearText();
+                                    FocusScope.of(context)
+                                        .requestFocus(_totalFocusNode);
                                   }
                                 },
                               ),

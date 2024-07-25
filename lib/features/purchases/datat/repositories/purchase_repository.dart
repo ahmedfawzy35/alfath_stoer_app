@@ -5,10 +5,13 @@ import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/purchases/datat/models/purchase.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' as dateformate;
+import 'package:intl/intl.dart';
 
 class PurchaseRepository {
   final String baseurl = MyStrings.baseurl;
   final String model = 'Purchase';
+  final DateFormat formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
   //add order
   Future<Purchase> addPurchase(Purchase purchase) async {
     final url = '$baseurl/$model/Add';
@@ -17,8 +20,8 @@ class PurchaseRepository {
 
     var request = http.Request('POST', Uri.parse(url));
     request.body = json.encode({
-      "date": purchase.date,
-      "sellerrId": purchase.sellerrId,
+      "date": formatter.format(DateTime.parse(purchase.date!)),
+      "sellerId": purchase.sellerrId,
       "total": purchase.total,
       "paid": purchase.paid,
       "discount": purchase.discount,
