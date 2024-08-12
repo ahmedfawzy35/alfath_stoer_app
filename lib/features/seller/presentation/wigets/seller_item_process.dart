@@ -1,4 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
+import 'package:alfath_stoer_app/features/cashout_to_seller/data/repositories/cashout_to_seller_repository.dart';
+import 'package:alfath_stoer_app/features/cashout_to_seller/presentation/cubit/cashout_to_seller_cubit.dart';
+import 'package:alfath_stoer_app/features/cashout_to_seller/presentation/pages/cashout_to_seller_edit_page.dart';
 import 'package:alfath_stoer_app/features/seller/data/models/seller_detail_model.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
@@ -107,6 +110,8 @@ class SellerItemProcess extends StatelessWidget {
     switch (processType) {
       case SellerAccountElementTyps.Purchase:
         _editPurchase(context, id);
+      case SellerAccountElementTyps.CashOutToSeller:
+        _editCashOutToSeller(context, id);
     }
   }
 
@@ -134,6 +139,21 @@ class SellerItemProcess extends StatelessWidget {
         builder: (context) => BlocProvider<OrderCubit>(
           create: (context) => OrderCubit(),
           child: EditOrderPage(order: order),
+        ),
+      ),
+    );
+  }
+
+  void _editCashOutToSeller(BuildContext context, int id) async {
+    final repo = CashOutToSellerRepository();
+    final cash = await repo.getByIdCashOutToSeller(id);
+
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<CashOutToSellerCubit>(
+          create: (context) => CashOutToSellerCubit(),
+          child: EditCashOutToSellerPage(cash: cash),
         ),
       ),
     );
