@@ -1,32 +1,38 @@
-class CustomerAddingSettlement {
+class CashInFromCustomer {
   int? id;
   String? date;
   double? value;
   String? notes;
   int? customerId;
-  String? customerName;
   int? userId;
   int? brancheId;
+  String? brancheName;
+  String? customerName;
+  String? userFullName;
 
-  CustomerAddingSettlement(
+  CashInFromCustomer(
       {this.id,
       this.date,
       this.value,
       this.notes,
       this.customerId,
-      this.customerName,
       this.userId,
-      this.brancheId});
+      this.brancheId,
+      this.brancheName,
+      this.customerName,
+      this.userFullName});
 
-  CustomerAddingSettlement.fromJson(Map<String, dynamic> json) {
+  CashInFromCustomer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     date = json['date'];
     value = (json['value'] as num).toDouble();
     notes = json['notes'];
     customerId = json['customerId'];
-    customerName = json['customerName'];
     userId = json['userId'];
     brancheId = json['brancheId'];
+    brancheName = json['brancheName'];
+    customerName = json['customerName'];
+    userFullName = json['userFullName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -36,9 +42,11 @@ class CustomerAddingSettlement {
     data['value'] = value;
     data['notes'] = notes;
     data['customerId'] = customerId;
-    data['customerName'] = customerName;
     data['userId'] = userId;
     data['brancheId'] = brancheId;
+    data['brancheName'] = brancheName;
+    data['customerName'] = customerName;
+    data['userFullName'] = userFullName;
     return data;
   }
 }

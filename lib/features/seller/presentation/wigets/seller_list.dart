@@ -88,7 +88,7 @@ class SellerListItem extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
                               child: Text(
-                                item.name!,
+                                item.name,
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                     fontSize: 15,
@@ -115,7 +115,7 @@ class SellerListItem extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 5, 10),
                             child: Text(
-                              item.name!,
+                              item.name,
                               textAlign: TextAlign.end,
                               style: const TextStyle(
                                   fontSize: 15,

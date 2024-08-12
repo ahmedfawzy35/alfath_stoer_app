@@ -1,12 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_list_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as date;
 
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
-import 'package:alfath_stoer_app/features/main_widgets/rosponsiv_layout.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_page.dart';
@@ -464,7 +462,7 @@ class OrderListItemRe extends StatelessWidget {
               ],
             ),
             _mySizeBox(),
-            Container(
+            SizedBox(
               width: width * .20,
               child: Column(
                 children: [

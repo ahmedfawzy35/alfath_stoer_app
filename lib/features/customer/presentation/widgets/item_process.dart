@@ -1,4 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/data/repositories/cashin_from_customer_repository.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/cubit/cashin_from_customer_cubit.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/pages/cashin_from_customer_edit_page.dart';
 import 'package:alfath_stoer_app/features/customer/data/models/customer_detail_model.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/data/repositories/customer_a_s_repository.dart';
@@ -99,6 +102,8 @@ class ItemProcess extends StatelessWidget {
         _editOrder(context, id);
       case CustomerAccountElementTyps.CustomerAddingSettlement:
         _editCustomerAddingSettlement(context, id);
+      case CustomerAccountElementTyps.CashInFromCustomer:
+        _editCashInFromCustomer(context, id);
     }
   }
 
@@ -136,6 +141,25 @@ class ItemProcess extends StatelessWidget {
       context
           .read<CustomerDetailCubit>()
           .fetchCustomerSupplierDetail(order.customerId!);
+    });
+  }
+
+  void _editCashInFromCustomer(BuildContext context, int id) async {
+    final repo = CashInFromCustomerRepository();
+    final cashin = await repo.getByIdCashInFromCustomer(id);
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<CashInFromCustomerCubit>(
+          create: (context) => CashInFromCustomerCubit(),
+          child: EditCashInFromCustomerPage(cash: cashin),
+        ),
+      ),
+    )
+        .then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(cashin.customerId!);
     });
   }
 

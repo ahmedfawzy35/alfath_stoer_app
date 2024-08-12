@@ -1,7 +1,9 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
-import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/data/models/cashin_from_customer_model.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/cubit/cashin_from_customer_cubit.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/pages/cashin_from_customer_add_page%20.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
@@ -287,6 +289,31 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           Navigator.pushNamed(
                               context, MyRouts.purchaseBackManage);
+                        }),
+                  ]),
+              ExpansionTile(
+                  leading: const Icon(Icons.attach_money),
+                  title: Text('استلام نقدية', style: firstTextStyle()),
+                  children: [
+                    ListTile(
+                        leading: const Icon(Icons.add_card),
+                        title: Text(
+                          'تحصيل من عميل',
+                          style: secondStyle(),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, MyRouts.addCashInFromCustomer);
+                          /*  Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlocProvider<CashInFromCustomerCubit>(
+                                create: (context) => CashInFromCustomerCubit(),
+                                child: AddCashInFromCustomerPage(
+                                    cash: CashInFromCustomer()),
+                              ),
+                            ),
+                          );*/
                         }),
                   ]),
               ListTile(

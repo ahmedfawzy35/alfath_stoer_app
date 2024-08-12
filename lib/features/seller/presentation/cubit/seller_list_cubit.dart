@@ -29,10 +29,6 @@ class SellerListCubit extends Cubit<SellerListState> {
       emit(SellerListLoading());
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
       seller.brancheId = brancheId;
-      print('id ' + seller.id.toString());
-      print('name ' + seller.name!);
-      print('adress  ' + seller.adress!);
-      print('startAccount ' + seller.startAccount.toString());
 
       final SellerModel mysel = await repository.addSeller(seller);
       final currentState = state;

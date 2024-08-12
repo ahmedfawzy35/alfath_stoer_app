@@ -1,7 +1,13 @@
+import 'package:alfath_stoer_app/core/utils/get_cash_page.dart';
+import 'package:alfath_stoer_app/core/utils/my_types.dart';
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/data/models/cashin_from_customer_model.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/cubit/cashin_from_customer_cubit.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/pages/cashin_from_customer_add_page%20.dart';
+import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/pages/cashin_from_customer_edit_page.dart';
 import 'package:alfath_stoer_app/features/customer/data/models/customer_model.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
@@ -59,6 +65,15 @@ class MyApp extends StatelessWidget {
           MyRouts.purchaseListPage: (context) => const PurchaseManage(),
           MyRouts.orderBackListPage: (context) => const OrderBackManage(),
           MyRouts.purchaseBackManage: (context) => const PurchaseBackManage(),
+          MyRouts.addCashInFromCustomer: (context) =>
+              GetCashBage().getAddPage(CashTypes.cashInFromCustomer),
+          MyRouts.addCashInFromIncome: (context) =>
+              GetCashBage().getAddPage(CashTypes.cashInFromIncome),
+          MyRouts.addcCashInFromBrancheMoneySafe: (context) =>
+              GetCashBage().getAddPage(CashTypes.cashInFromBrancheMoneySafe),
+          MyRouts.addCashInFromMasterMoneySafe: (context) =>
+              GetCashBage().getAddPage(CashTypes.cashInFromMasterMoneySafe),
+
           MyRouts.customerAddPage: (context) => CustomerAddPage(
                 customer: new CustomerModel(),
               ),

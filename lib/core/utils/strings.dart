@@ -16,4 +16,13 @@ class MyRouts {
   static const String orderBackListPage = '/orderBackListPage';
   static const String purchaseListPage = '/PurchaseListPage';
   static const String purchaseBackManage = '/purchaseBackManage';
+
+  static const String addCashInFromCustomer = '/AddCashInFromCustomerPage';
+  static const String addCashInFromIncome = '/AddCashInFromIncome';
+  static const String addcCashInFromBrancheMoneySafe =
+      '/AddcCashInFromBrancheMoneySafe';
+  static const String addCashInFromMasterMoneySafe =
+      '/AddCashInFromMasterMoneySafe';
+
+  static const String editCashInFromCustomer = '/EditCashInFromCustomerPage';
 }

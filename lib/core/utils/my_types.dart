@@ -2,6 +2,21 @@
 
 enum OrdersTyps { Order, OrderBack, Purchase, PurchaseBack }
 
+enum CashTypes {
+  cashInFromBankAccount,
+  cashInFromCustomer,
+  cashInFromIncome,
+  cashInFromMasterMoneySafe,
+  cashInFromBrancheMoneySafe,
+  cashOutToAdvancepaymentOfSalary,
+  cashOutToBankAccount,
+  cashOutToMasterMoneySafe,
+  cashOutToOutGoing,
+  cashOutToSalary,
+  cashOutToSeller,
+  cashOutToBrancheMoneySafe,
+}
+
 class CustomerAccountElementTyps {
   static const String Order = 'Order';
   static const String OrderBack = 'OrderBack';
