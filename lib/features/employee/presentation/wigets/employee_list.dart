@@ -2,10 +2,7 @@ import 'package:alfath_stoer_app/features/employee/data/models/employee_model.da
 import 'package:alfath_stoer_app/features/employee/presentation/cubit/Employee_list_state.dart';
 import 'package:alfath_stoer_app/features/employee/presentation/cubit/employee_list_cubit.dart';
 import 'package:alfath_stoer_app/features/employee/presentation/pages/employee_add_edit_page%20.dart';
-import 'package:alfath_stoer_app/features/outgoing/data/models/outgoing_model.dart';
 import 'package:alfath_stoer_app/features/outgoing/presentation/cubit/outgoing_list_cubit.dart';
-import 'package:alfath_stoer_app/features/outgoing/presentation/cubit/outgoing_list_state.dart';
-import 'package:alfath_stoer_app/features/outgoing/presentation/pages/outgoing_add_edit_page%20.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -92,13 +89,6 @@ class EmployeeListItem extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            CheckboxListTile(
-                              title: Text(item.enabled!
-                                  ? 'حلة الموظف يعمل'
-                                  : 'حلة الموظف مفصول'),
-                              value: item.enabled,
-                              onChanged: (value) {},
-                            )
                           ],
                         )
                       ],
@@ -109,6 +99,7 @@ class EmployeeListItem extends StatelessWidget {
             : Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
+                  color: item.enabled! ? Colors.white : Colors.red,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -162,6 +153,23 @@ class EmployeeListItem extends StatelessWidget {
                                 ),
                               ),
                               child: const Text('تعديل'),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                item.enabled!
+                                    ? 'حالة الموظف يعمل'
+                                    : 'حالة الموظف مفصول',
+                                style: TextStyle(
+                                    color: item.enabled!
+                                        ? Colors.black
+                                        : Colors.white),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
                             ),
                           ),
                         ],

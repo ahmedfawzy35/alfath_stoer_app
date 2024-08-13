@@ -1,5 +1,5 @@
 import 'package:alfath_stoer_app/features/employee/presentation/cubit/employee_list_cubit.dart';
-import 'package:alfath_stoer_app/features/employee/presentation/wigets/outgoing_list.dart';
+import 'package:alfath_stoer_app/features/employee/presentation/wigets/employee_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
