@@ -10,6 +10,8 @@ import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_l
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_add_page.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_detail_page.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
+import 'package:alfath_stoer_app/features/outgoing/presentation/cubit/outgoing_list_cubit.dart';
+import 'package:alfath_stoer_app/features/outgoing/presentation/pages/outgoing_add_edit_page%20.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/cubit/seller_list_cubit.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_add_edit_page%20.dart';
@@ -49,6 +51,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<SellerListCubit>(
           create: (context) => SellerListCubit(),
         ),
+        BlocProvider<OutGoigListCubit>(
+          create: (context) => OutGoigListCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -75,6 +80,7 @@ class MyApp extends StatelessWidget {
           MyRouts.customerAddPage: (context) => CustomerAddPage(
                 customer: CustomerModel(),
               ),
+          MyRouts.outGoingAddPage: (context) => const OutGoingAddEditPage(),
           MyRouts.sellerAddPage: (context) => const SellerAddEditPage(),
 
           MyRouts.customerListPage: (context) {

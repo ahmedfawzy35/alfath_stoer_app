@@ -1,6 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
+import 'package:alfath_stoer_app/features/outgoing/presentation/pages/outgoing_list_page.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
@@ -317,6 +318,38 @@ class _HomePageState extends State<HomePage> {
                           Navigator.pushNamed(
                               context, MyRouts.addCashOutToSeller);
                         }),
+                    ExpansionTile(
+                        leading: const Icon(Icons.attach_money),
+                        title: Text('بنود المصروفات', style: firstTextStyle()),
+                        children: [
+                          ListTile(
+                              leading: const Icon(Icons.add_card),
+                              title: Text(
+                                'اضافة بند مصروفات ',
+                                style: secondStyle(),
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, MyRouts.outGoingAddPage);
+                              }),
+                          ListTile(
+                              leading: const Icon(Icons.add_card),
+                              title: Text(
+                                'ادارة بنود مصروفات ',
+                                style: secondStyle(),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OutGoingListPage(
+                                      edit: false,
+                                      branche: selectedBranche,
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ])
                   ]),
               ListTile(
                 leading: const Icon(Icons.logout),

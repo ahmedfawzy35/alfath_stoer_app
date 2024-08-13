@@ -28,4 +28,6 @@ class MyRouts {
 
   static const String editCashInFromCustomer = '/EditCashInFromCustomerPage';
   static const String editCashOutToSeller = '/EditCashOutToSeller';
+
+  static const String outGoingAddPage = '/OutGoingAddPage';
 }
