@@ -7,6 +7,9 @@ import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_d
 import 'package:alfath_stoer_app/features/customer_adding_settlements/data/repositories/customer_a_s_repository.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/pages/customer_a_s_add_edit_page.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/data/repositories/customer_d_s_repository.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/presentation/pages/customer_a_s_add_edit_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/repositories/order_repository.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/pages/edit_order_page.dart';
@@ -102,6 +105,8 @@ class ItemProcess extends StatelessWidget {
         _editOrder(context, id);
       case CustomerAccountElementTyps.CustomerAddingSettlement:
         _editCustomerAddingSettlement(context, id);
+      case CustomerAccountElementTyps.CustomerDiscountSettlement:
+        _editCustomerDiscountSettlement(context, id);
       case CustomerAccountElementTyps.CashInFromCustomer:
         _editCashInFromCustomer(context, id);
     }
@@ -113,6 +118,8 @@ class ItemProcess extends StatelessWidget {
         _deleteOrder(context, id);
       case CustomerAccountElementTyps.CustomerAddingSettlement:
         _deleteCustomerAddingSettlement(context, id);
+      case CustomerAccountElementTyps.CustomerDiscountSettlement:
+        _deleteCustomerDiscountSettlement(context, id);
     }
   }
 
@@ -185,6 +192,28 @@ class ItemProcess extends StatelessWidget {
     });
   }
 
+  void _editCustomerDiscountSettlement(BuildContext context, int id) async {
+    final repo = CustomerDiscountSettlementRepository();
+    final customerDiscountSettlement = await repo.getById(id);
+
+    // ignore: use_build_context_synchronously
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<CustomerDiscountSettlementCubit>(
+          create: (context) => CustomerDiscountSettlementCubit(),
+          child: CustomerDiscountSettlementAddEditPage(
+              customerDiscountSettlement: customerDiscountSettlement),
+        ),
+      ),
+    )
+        .then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(customerDiscountSettlement.customerId!);
+    });
+  }
+
   void _deleteOrder(BuildContext context, int id) async {
     // هنا يمكنك إضافة منطق الحذف باستخدام OrderCubit
     final repo = OrderRepository();
@@ -206,6 +235,17 @@ class ItemProcess extends StatelessWidget {
       context
           .read<CustomerDetailCubit>()
           .fetchCustomerSupplierDetail(customerAddingSettlement.customerId!);
+    });
+  }
+
+  void _deleteCustomerDiscountSettlement(BuildContext context, int id) async {
+    final repo = CustomerDiscountSettlementRepository();
+    final customerDiscountSettlement = await repo.getById(id);
+    final orderCubit = context.read<CustomerDiscountSettlementCubit>();
+    orderCubit.deleteCustomerDiscountSettlement(id).then((_) {
+      context
+          .read<CustomerDetailCubit>()
+          .fetchCustomerSupplierDetail(customerDiscountSettlement.customerId!);
     });
   }
 

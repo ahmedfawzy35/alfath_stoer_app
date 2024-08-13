@@ -4,6 +4,8 @@ import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_d
 import 'package:alfath_stoer_app/features/customer/presentation/widgets/item_process.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
 import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/pages/customer_a_s_add_edit_page.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/presentation/pages/customer_a_s_add_edit_page.dart';
 import 'package:alfath_stoer_app/features/orders/presentation/cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +33,9 @@ class CustomerDetailPage extends StatelessWidget {
         ),
         BlocProvider<CustomerAddingSettlementCubit>(
           create: (context) => CustomerAddingSettlementCubit(),
+        ),
+        BlocProvider<CustomerDiscountSettlementCubit>(
+          create: (context) => CustomerDiscountSettlementCubit(),
         )
       ],
       child: Directionality(
@@ -140,10 +145,31 @@ class CustomerDetailPage extends StatelessWidget {
                                           .fetchCustomerSupplierDetail(id);
                                     });
                                   },
-                                  child: Text('اضافة تسوية اضافة')),
+                                  child: const Text('اضافة تسوية اضافة')),
                               TextButton(
-                                  onPressed: () {},
-                                  child: Text('اضافة تسوية خصم')),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider<
+                                            CustomerDiscountSettlementCubit>(
+                                          create: (context) =>
+                                              CustomerDiscountSettlementCubit(),
+                                          child:
+                                              CustomerDiscountSettlementAddEditPage(
+                                                  customer: CustomerModel(
+                                                      id: detail.customerId,
+                                                      name: detail.name)),
+                                        ),
+                                      ),
+                                    )
+                                        .then((_) {
+                                      context
+                                          .read<CustomerDetailCubit>()
+                                          .fetchCustomerSupplierDetail(id);
+                                    });
+                                  },
+                                  child: const Text('اضافة تسوية خصم')),
                             ],
                           ),
                           const SizedBox(

@@ -1,56 +1,56 @@
 import 'package:alfath_stoer_app/features/customer/data/models/customer_model.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
-import 'package:alfath_stoer_app/features/customer_adding_settlements/data/models/customer_adding_settlement.dart';
-import 'package:alfath_stoer_app/features/customer_adding_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/data/models/customer_discount_settlement.dart';
+import 'package:alfath_stoer_app/features/customer_discount_settlements/presentation/cubit/cubit/customer_a_s_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as date;
 
-class CustomerAddingSettlementAddEditPage extends StatelessWidget {
-  final CustomerAddingSettlement? customerAddingSettlement;
+class CustomerDiscountSettlementAddEditPage extends StatelessWidget {
+  final CustomerDiscountSettlement? customerDiscountSettlement;
   final CustomerModel? customer;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  CustomerAddingSettlementAddEditPage(
-      {Key? key, this.customerAddingSettlement, this.customer})
+  CustomerDiscountSettlementAddEditPage(
+      {Key? key, this.customerDiscountSettlement, this.customer})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController dateController = TextEditingController(
-        text: customerAddingSettlement == null
+        text: customerDiscountSettlement == null
             ? date.DateFormat('yyyy-MM-dd').format(DateTime.now())
             : date.DateFormat('yyyy-MM-dd')
-                .format(DateTime.parse(customerAddingSettlement!.date!)));
+                .format(DateTime.parse(customerDiscountSettlement!.date!)));
     final TextEditingController valueController = TextEditingController(
-        text: customerAddingSettlement == null
+        text: customerDiscountSettlement == null
             ? ""
-            : customerAddingSettlement!.value?.toString());
+            : customerDiscountSettlement!.value?.toString());
 
     final TextEditingController notesController = TextEditingController(
-        text: customerAddingSettlement == null
+        text: customerDiscountSettlement == null
             ? ""
-            : customerAddingSettlement!.notes);
+            : customerDiscountSettlement!.notes);
     final TextEditingController customerNameController = TextEditingController(
-        text: customerAddingSettlement == null
+        text: customerDiscountSettlement == null
             ? customer == null
                 ? ""
                 : customer!.name.toString()
-            : customerAddingSettlement!.customerName);
+            : customerDiscountSettlement!.customerName);
 
     final TextEditingController customerNumberController =
         TextEditingController(
-            text: customerAddingSettlement == null
+            text: customerDiscountSettlement == null
                 ? customer == null
                     ? ""
                     : customer!.id.toString()
-                : customerAddingSettlement!.customerId?.toString());
+                : customerDiscountSettlement!.customerId?.toString());
 
-    DateTime selectedDate = customerAddingSettlement == null
+    DateTime selectedDate = customerDiscountSettlement == null
         ? DateTime.now()
-        : DateTime.parse(customerAddingSettlement!.date!);
+        : DateTime.parse(customerDiscountSettlement!.date!);
 
     void showSuccessSnackbar(String message) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -67,29 +67,31 @@ class CustomerAddingSettlementAddEditPage extends StatelessWidget {
     }
 
     void submit() {
-      CustomerAddingSettlement myCustomerAddingSettlement =
-          CustomerAddingSettlement(
+      CustomerDiscountSettlement myCustomerDiscountSettlement =
+          CustomerDiscountSettlement(
         value: double.parse(valueController.text),
         brancheId: 1,
         customerId: int.parse(customerNumberController.text),
         customerName: customerNameController.text,
         date: dateController.text,
         notes: notesController.text,
-        id: customerAddingSettlement == null ? 1 : customerAddingSettlement!.id,
+        id: customerDiscountSettlement == null
+            ? 1
+            : customerDiscountSettlement!.id,
       );
-      final customerAddingSettlementCubit =
-          context.read<CustomerAddingSettlementCubit>();
+      final customerDiscountSettlementCubit =
+          context.read<CustomerDiscountSettlementCubit>();
 
-      if (customerAddingSettlement == null) {
-        customerAddingSettlementCubit
-            .addCustomerAddingSettlement(myCustomerAddingSettlement)
+      if (customerDiscountSettlement == null) {
+        customerDiscountSettlementCubit
+            .addCustomerDiscountSettlement(myCustomerDiscountSettlement)
             .then((_) {
           showSuccessSnackbar('تمت إضافة الخصم بنجاح');
           ClearText();
         });
       } else {
-        customerAddingSettlementCubit
-            .editCustomerAddingSettlement(myCustomerAddingSettlement)
+        customerDiscountSettlementCubit
+            .editCustomerDiscountSettlement(myCustomerDiscountSettlement)
             .then((_) {
           showSuccessSnackbar('تم تعديل الخصم بنجاح');
           Navigator.of(context).pop();
@@ -99,8 +101,8 @@ class CustomerAddingSettlementAddEditPage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<CustomerAddingSettlementCubit>(
-          create: (_) => context.read<CustomerAddingSettlementCubit>(),
+        BlocProvider<CustomerDiscountSettlementCubit>(
+          create: (_) => context.read<CustomerDiscountSettlementCubit>(),
         ),
         BlocProvider<CustomerListCubit>(
           create: (context) => CustomerListCubit()..fetchData(),
@@ -110,13 +112,13 @@ class CustomerAddingSettlementAddEditPage extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           appBar: AppBar(
-            title: customerAddingSettlement == null
-                ? const Text('اضافة تسوية اضافة لعميل')
+            title: customerDiscountSettlement == null
+                ? const Text('اضافة تسوية خصم لعميل')
                 : Text(
-                    'تعديل تسوية اضافة لعميل رقم ${customerAddingSettlement!.id}'),
+                    'تعديل التسوية خصم لعميل رقم ${customerDiscountSettlement!.id}'),
           ),
-          body: BlocBuilder<CustomerAddingSettlementCubit,
-              CustomerAddingSettlementState>(
+          body: BlocBuilder<CustomerDiscountSettlementCubit,
+              CustomerDiscountSettlementState>(
             builder: (context, state) {
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
@@ -201,7 +203,7 @@ class CustomerAddingSettlementAddEditPage extends StatelessWidget {
                             onChanged: (value) {},
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'يرجى إدخال الإجمالي';
+                                return 'يرجى إدخال المبلغ';
                               }
                               if (double.tryParse(value) == null) {
                                 return 'يرجى إدخال رقم صالح';
@@ -221,13 +223,14 @@ class CustomerAddingSettlementAddEditPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               ElevatedButton(
-                                child: customerAddingSettlement == null
+                                child: customerDiscountSettlement == null
                                     ? const Text('انشاء')
                                     : const Text('تعديل'),
                                 onPressed: () {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
                                     submit();
+                                    ClearText();
                                   }
                                 },
                               ),
