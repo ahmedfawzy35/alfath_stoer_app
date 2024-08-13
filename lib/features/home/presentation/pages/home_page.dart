@@ -318,6 +318,16 @@ class _HomePageState extends State<HomePage> {
                           Navigator.pushNamed(
                               context, MyRouts.addCashOutToSeller);
                         }),
+                    ListTile(
+                        leading: const Icon(Icons.add_card),
+                        title: Text(
+                          'صرف الى بند مصروفات',
+                          style: secondStyle(),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, MyRouts.addCashOutToOutGoing);
+                        }),
                     ExpansionTile(
                         leading: const Icon(Icons.attach_money),
                         title: Text('بنود المصروفات', style: firstTextStyle()),

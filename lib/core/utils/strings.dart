@@ -25,6 +25,8 @@ class MyRouts {
       '/AddCashInFromMasterMoneySafe';
 
   static const String addCashOutToSeller = '/AddCashOutToSeller';
+  static const String addCashOutToOutGoing = '/AddCashOutToOutGoing';
+  static const String editCashOutToOutGoing = '/EditCashOutToOutGoing';
 
   static const String editCashInFromCustomer = '/EditCashInFromCustomerPage';
   static const String editCashOutToSeller = '/EditCashOutToSeller';

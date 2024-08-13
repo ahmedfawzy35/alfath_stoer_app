@@ -1,6 +1,8 @@
 import 'package:alfath_stoer_app/core/utils/my_types.dart';
 import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/cubit/cashin_from_customer_cubit.dart';
 import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/pages/cashin_from_customer_add_page%20.dart';
+import 'package:alfath_stoer_app/features/cashout_to_outgoing/presentation/cubit/cashout_to_outgoing_cubit.dart';
+import 'package:alfath_stoer_app/features/cashout_to_outgoing/presentation/pages/cashout_to_outgoing_add_page%20.dart';
 import 'package:alfath_stoer_app/features/cashout_to_seller/presentation/cubit/cashout_to_seller_cubit.dart';
 import 'package:alfath_stoer_app/features/cashout_to_seller/presentation/pages/cashout_to_seller_add_page%20.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,11 @@ class GetCashBage {
           create: (context) => CashOutToSellerCubit(),
           child: AddCashOutToSellerPage(),
         );
+      case CashTypes.cashOutToOutGoing:
+        return BlocProvider<CashOutToOutGoingCubit>(
+          create: (context) => CashOutToOutGoingCubit(),
+          child: AddCashOutToOutGoingPage(),
+        );
 
       default:
         return Container();
@@ -35,6 +42,11 @@ class GetCashBage {
       case CashTypes.cashOutToSeller:
         return BlocProvider<CashOutToSellerCubit>(
           create: (context) => CashOutToSellerCubit(),
+          child: page,
+        );
+      case CashTypes.cashOutToOutGoing:
+        return BlocProvider<CashOutToOutGoingCubit>(
+          create: (context) => CashOutToOutGoingCubit(),
           child: page,
         );
 

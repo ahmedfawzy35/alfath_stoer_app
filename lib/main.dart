@@ -4,6 +4,7 @@ import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
+import 'package:alfath_stoer_app/features/cashout_to_outgoing/presentation/pages/cashout_to_outgoing_edit_page.dart';
 import 'package:alfath_stoer_app/features/customer/data/models/customer_model.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_detail_cubit.dart';
 import 'package:alfath_stoer_app/features/customer/presentation/cubit/customer_list_cubit.dart';
@@ -76,6 +77,8 @@ class MyApp extends StatelessWidget {
               GetCashBage().getAddPage(CashTypes.cashInFromMasterMoneySafe),
           MyRouts.addCashOutToSeller: (context) =>
               GetCashBage().getAddPage(CashTypes.cashOutToSeller),
+          MyRouts.addCashOutToOutGoing: (context) =>
+              GetCashBage().getAddPage(CashTypes.cashOutToOutGoing),
 
           MyRouts.customerAddPage: (context) => CustomerAddPage(
                 customer: CustomerModel(),

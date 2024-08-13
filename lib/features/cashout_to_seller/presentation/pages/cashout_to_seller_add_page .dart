@@ -34,6 +34,15 @@ class AddCashOutToSellerPage extends StatelessWidget {
     final FocusNode noteFocusNode = FocusNode();
     final FocusNode saverFocusNode = FocusNode();
 
+    void showSuccessSnackbar(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+
     void updateValues() {
       final double? value = double.tryParse(valueController.text);
 
@@ -202,10 +211,15 @@ class AddCashOutToSellerPage extends StatelessWidget {
                                     false) {
                                   final cashCubit =
                                       context.read<CashOutToSellerCubit>();
-                                  await cashCubit.addCashOutToSeller(cash);
-                                  clearText();
-                                  FocusScope.of(context)
-                                      .requestFocus(valueFocusNode);
+                                  await cashCubit
+                                      .addCashOutToSeller(cash)
+                                      .then((_) {
+                                    showSuccessSnackbar(
+                                        'تمت إضافة الصرفية بنجاح');
+                                    clearText();
+                                    FocusScope.of(context)
+                                        .requestFocus(valueFocusNode);
+                                  });
                                 }
                               },
                             ),

@@ -1,16 +1,16 @@
-import 'package:alfath_stoer_app/features/cashin_from_customer/data/models/cashin_from_customer_model.dart';
-import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/cubit/cashin_from_customer_cubit.dart';
-import 'package:alfath_stoer_app/features/cashin_from_customer/presentation/cubit/cashin_from_customer_state.dart';
-import 'package:alfath_stoer_app/features/customer/presentation/pages/customer_list_page.dart';
+import 'package:alfath_stoer_app/features/cashout_to_OutGoing/data/models/cashout_to_OutGoing_model.dart';
+import 'package:alfath_stoer_app/features/cashout_to_OutGoing/presentation/cubit/cashout_to_OutGoing_state.dart';
+import 'package:alfath_stoer_app/features/OutGoing/presentation/pages/OutGoing_list_page.dart';
+import 'package:alfath_stoer_app/features/cashout_to_outgoing/presentation/cubit/cashout_to_outgoing_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as date;
 
-class AddCashInFromCustomerPage extends StatelessWidget {
+class AddCashOutToOutGoingPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final CashInFromCustomer cash = CashInFromCustomer();
-  AddCashInFromCustomerPage({
+  final CashOutToOutGoing cash = CashOutToOutGoing();
+  AddCashOutToOutGoingPage({
     Key? key,
   }) : super(key: key);
 
@@ -21,17 +21,17 @@ class AddCashInFromCustomerPage extends StatelessWidget {
     final TextEditingController valueController = TextEditingController();
 
     final TextEditingController notesController = TextEditingController();
-    final TextEditingController customerNameController =
+    final TextEditingController outGoingNameController =
         TextEditingController();
 
-    final TextEditingController customerNumberController =
+    final TextEditingController outGoingNumberController =
         TextEditingController();
 
     DateTime selectedDate = DateTime.now();
 
     final FocusNode dateFocusNode = FocusNode();
     final FocusNode valueFocusNode = FocusNode();
-    final FocusNode customerNameFocusNode = FocusNode();
+    final FocusNode outGoingNameFocusNode = FocusNode();
     final FocusNode noteFocusNode = FocusNode();
     final FocusNode saverFocusNode = FocusNode();
 
@@ -48,10 +48,10 @@ class AddCashInFromCustomerPage extends StatelessWidget {
       final double? value = double.tryParse(valueController.text);
 
       cash.date = dateController.text;
-      cash.customerId = int.parse(customerNumberController.text);
+      cash.outGoingId = int.parse(outGoingNumberController.text);
       cash.value = value;
 
-      context.read<CashInFromCustomerCubit>().updateCashField(cash);
+      context.read<CashOutToOutGoingCubit>().updateCashField(cash);
     }
 
     void clearText() {
@@ -65,9 +65,9 @@ class AddCashInFromCustomerPage extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('اضافة تحصيل من عميل '),
+          title: const Text('اضافة صرف لبند مصروفات '),
         ),
-        body: BlocBuilder<CashInFromCustomerCubit, CashInFromCustomerState>(
+        body: BlocBuilder<CashOutToOutGoingCubit, CashOutToOutGoingState>(
           builder: (context, state) {
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -83,49 +83,49 @@ class AddCashInFromCustomerPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFormField(
-                          controller: customerNumberController,
-                          decoration:
-                              const InputDecoration(labelText: 'رقم العميل'),
+                          controller: outGoingNumberController,
+                          decoration: const InputDecoration(
+                              labelText: 'رقم بند المصروفات'),
                           readOnly: true,
                         ),
                         const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () async {
-                            final selectedCustomer =
+                            final selectedOutGoing =
                                 await Navigator.of(context).push(
                               MaterialPageRoute(
                                 // ignore: prefer_const_constructors
-                                builder: (context) => CustomerListPage(
+                                builder: (context) => OutGoingListPage(
                                   edit: true,
                                   branche: '',
                                 ),
                               ),
                             );
 
-                            if (selectedCustomer != null) {
+                            if (selectedOutGoing != null) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                customerNameController.text =
-                                    selectedCustomer.name;
-                                customerNumberController.text =
-                                    selectedCustomer.id.toString();
-                                cash.customerName = selectedCustomer.name;
-                                cash.customerId = selectedCustomer.id;
+                                outGoingNameController.text =
+                                    selectedOutGoing.name;
+                                outGoingNumberController.text =
+                                    selectedOutGoing.id.toString();
+                                cash.outGoingName = selectedOutGoing.name;
+                                cash.outGoingId = selectedOutGoing.id;
                                 context
-                                    .read<CashInFromCustomerCubit>()
+                                    .read<CashOutToOutGoingCubit>()
                                     .updateCashField(cash);
                               });
                             }
                           },
                           child: AbsorbPointer(
                             child: TextFormField(
-                              focusNode: customerNameFocusNode,
+                              focusNode: outGoingNameFocusNode,
                               onFieldSubmitted: (_) {
                                 FocusScope.of(context)
                                     .requestFocus(dateFocusNode);
                               },
-                              controller: customerNameController,
+                              controller: outGoingNameController,
                               decoration: const InputDecoration(
-                                  labelText: 'اسم العميل'),
+                                  labelText: 'اسم بند المصروفات'),
                               readOnly: true,
                             ),
                           ),
@@ -177,7 +177,7 @@ class AddCashInFromCustomerPage extends StatelessWidget {
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'يرجى إدخال الإجمالي';
+                              return 'يرجى إدخال المبلغ';
                             }
                             if (double.tryParse(value) == null) {
                               return 'يرجى إدخال رقم صالح';
@@ -197,7 +197,7 @@ class AddCashInFromCustomerPage extends StatelessWidget {
                           onChanged: (value) {
                             cash.notes = value;
                             context
-                                .read<CashInFromCustomerCubit>()
+                                .read<CashOutToOutGoingCubit>()
                                 .updateCashField(cash);
                           },
                         ),
@@ -212,16 +212,17 @@ class AddCashInFromCustomerPage extends StatelessWidget {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   final cashCubit =
-                                      context.read<CashInFromCustomerCubit>();
+                                      context.read<CashOutToOutGoingCubit>();
                                   await cashCubit
-                                      .addCashInFromCustomer(cash)
+                                      .addCashOutToOutGoing(cash)
                                       .then((_) {
                                     showSuccessSnackbar(
-                                        'تمت إضافة التحصيل بنجاح');
+                                        'تمت إضافة الصرفية بنجاح');
                                     clearText();
-                                    FocusScope.of(context)
-                                        .requestFocus(valueFocusNode);
                                   });
+
+                                  FocusScope.of(context)
+                                      .requestFocus(valueFocusNode);
                                 }
                               },
                             ),
