@@ -1,6 +1,7 @@
 import 'package:alfath_stoer_app/core/utils/shared_prefs_service.dart';
 import 'package:alfath_stoer_app/core/utils/strings.dart';
 import 'package:alfath_stoer_app/features/auth/presentation/pages/login_view.dart';
+import 'package:alfath_stoer_app/features/employee/presentation/pages/employee_list_page.dart';
 import 'package:alfath_stoer_app/features/outgoing/presentation/pages/outgoing_list_page.dart';
 import 'package:alfath_stoer_app/features/seller/presentation/pages/seller_list_page.dart';
 import 'package:alfath_stoer_app/features/orders/data/models/order.dart';
@@ -361,6 +362,45 @@ class _HomePageState extends State<HomePage> {
                               }),
                         ])
                   ]),
+              ExpansionTile(
+                leading: const Icon(Icons.person_4),
+                title: Text(
+                  'الموظفين',
+                  style: firstTextStyle(),
+                ),
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.add),
+                    title: Text(
+                      'اضافة موظف',
+                      style: secondStyle(),
+                    ),
+                    onTap: () {
+                      //selectedBranche
+                      Navigator.pushNamed(
+                        context,
+                        MyRouts.employeeAddPage,
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.person),
+                    title: Text('ادارة الموظفين', style: secondStyle()),
+                    onTap: () {
+                      //selectedBranche
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EmployeeListPage(
+                            edit: false,
+                            branche: selectedBranche,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: Text(

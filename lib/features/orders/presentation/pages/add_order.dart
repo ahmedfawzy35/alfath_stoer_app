@@ -38,13 +38,13 @@ class AddOrderPage extends StatelessWidget {
 
     DateTime selectedDate = DateTime.now();
 
-    final FocusNode _totalFocusNode = FocusNode();
-    final FocusNode _PaidFocusNode = FocusNode();
-    final FocusNode _discountFocusNode = FocusNode();
-    final FocusNode _orderNumberFocusNode = FocusNode();
-    final FocusNode _customerNameFocusNode = FocusNode();
-    final FocusNode _noteFocusNode = FocusNode();
-    final FocusNode _saverFocusNode = FocusNode();
+    final FocusNode totalFocusNode = FocusNode();
+    final FocusNode paidFocusNode = FocusNode();
+    final FocusNode discountFocusNode = FocusNode();
+    final FocusNode orderNumberFocusNode = FocusNode();
+    final FocusNode customerNameFocusNode = FocusNode();
+    final FocusNode noteFocusNode = FocusNode();
+    final FocusNode saverFocusNode = FocusNode();
     void updateRemainingAmount() {
       final double? total = double.tryParse(totalController.text);
       final double? paid = double.tryParse(paidController.text);
@@ -108,10 +108,10 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: orderNumberController,
-                                  focusNode: _orderNumberFocusNode,
+                                  focusNode: orderNumberFocusNode,
                                   onFieldSubmitted: (_) {
                                     FocusScope.of(context)
-                                        .requestFocus(_customerNameFocusNode);
+                                        .requestFocus(customerNameFocusNode);
                                   },
                                   decoration: const InputDecoration(
                                       labelText: 'رقم الفاتورة'),
@@ -216,10 +216,10 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: totalController,
-                                  focusNode: _totalFocusNode,
+                                  focusNode: totalFocusNode,
                                   onFieldSubmitted: (_) {
                                     FocusScope.of(context)
-                                        .requestFocus(_PaidFocusNode);
+                                        .requestFocus(paidFocusNode);
                                   },
                                   decoration: const InputDecoration(
                                       labelText: 'الإجمالي'),
@@ -245,10 +245,10 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: paidController,
-                                  focusNode: _PaidFocusNode,
+                                  focusNode: paidFocusNode,
                                   onFieldSubmitted: (_) {
                                     FocusScope.of(context)
-                                        .requestFocus(_discountFocusNode);
+                                        .requestFocus(discountFocusNode);
                                   },
                                   decoration: const InputDecoration(
                                       labelText: 'المدفوع'),
@@ -279,10 +279,10 @@ class AddOrderPage extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: discountController,
-                                  focusNode: _discountFocusNode,
+                                  focusNode: discountFocusNode,
                                   onFieldSubmitted: (_) {
                                     FocusScope.of(context)
-                                        .requestFocus(_noteFocusNode);
+                                        .requestFocus(noteFocusNode);
                                   },
                                   decoration:
                                       const InputDecoration(labelText: 'الخصم'),
@@ -320,10 +320,10 @@ class AddOrderPage extends StatelessWidget {
                           const SizedBox(height: 10),
                           TextFormField(
                             controller: notesController,
-                            focusNode: _noteFocusNode,
+                            focusNode: noteFocusNode,
                             onFieldSubmitted: (_) {
                               FocusScope.of(context)
-                                  .requestFocus(_saverFocusNode);
+                                  .requestFocus(saverFocusNode);
                             },
                             decoration:
                                 const InputDecoration(labelText: 'ملاحظات'),
@@ -339,7 +339,7 @@ class AddOrderPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               ElevatedButton(
-                                focusNode: _saverFocusNode,
+                                focusNode: saverFocusNode,
                                 child: const Text('حفظ'),
                                 onPressed: () async {
                                   if (_formKey.currentState?.validate() ??
@@ -349,7 +349,7 @@ class AddOrderPage extends StatelessWidget {
                                     await orderCubit.addOrder(order);
                                     clearText();
                                     FocusScope.of(context)
-                                        .requestFocus(_totalFocusNode);
+                                        .requestFocus(totalFocusNode);
                                   }
                                 },
                               ),

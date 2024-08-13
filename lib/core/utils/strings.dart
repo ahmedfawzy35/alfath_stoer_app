@@ -32,4 +32,5 @@ class MyRouts {
   static const String editCashOutToSeller = '/EditCashOutToSeller';
 
   static const String outGoingAddPage = '/OutGoingAddPage';
+  static const String employeeAddPage = '/EmployeeAddPage';
 }
