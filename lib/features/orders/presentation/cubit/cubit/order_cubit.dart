@@ -16,6 +16,7 @@ class OrderCubit extends Cubit<OrderState> {
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
       emit(OrderLoading());
       order.brancheId = brancheId;
+
       order = await repository.addOrder(order);
       emit(OrderLoaded(order: order));
     } catch (e) {

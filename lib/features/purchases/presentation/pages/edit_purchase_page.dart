@@ -49,6 +49,8 @@ class EditPurchasePage extends StatelessWidget {
       final double? discount = double.tryParse(discountController.text);
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
       remainingAmountController.text = remaining.toString();
+      purchase.orderNumber = int.parse(orderNumberController.text);
+      purchase.notes = notesController.text;
       purchase.total = total;
       purchase.paid = paid;
       purchase.discount = discount;

@@ -50,6 +50,8 @@ class EditPurchaseBackPage extends StatelessWidget {
       final double? discount = double.tryParse(discountController.text);
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
       remainingAmountController.text = remaining.toString();
+      purchaseBack.orderNumber = int.parse(orderNumberController.text);
+      purchaseBack.notes = notesController.text;
       purchaseBack.total = total;
       purchaseBack.paid = paid;
       purchaseBack.discount = discount;

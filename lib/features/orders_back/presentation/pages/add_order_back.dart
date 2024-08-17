@@ -46,6 +46,8 @@ class AddOrderBackPage extends StatelessWidget {
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
 
       remainingAmountController.text = remaining.toString();
+      orderBack.orderNumber = int.parse(orderNumberController.text);
+      orderBack.notes = notesController.text;
       orderBack.date = dateController.text;
       orderBack.customerId = int.parse(customerNumberController.text);
       orderBack.total = total;

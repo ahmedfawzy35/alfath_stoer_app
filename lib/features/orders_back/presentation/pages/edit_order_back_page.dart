@@ -49,6 +49,8 @@ class EditOrderBackPage extends StatelessWidget {
       final double? discount = double.tryParse(discountController.text);
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
       remainingAmountController.text = remaining.toString();
+      orderBack.orderNumber = int.parse(orderNumberController.text);
+      orderBack.notes = notesController.text;
       orderBack.total = total;
       orderBack.paid = paid ?? 0;
       orderBack.discount = discount ?? 0;

@@ -47,11 +47,15 @@ class AddOrderPage extends StatelessWidget {
     final FocusNode saverFocusNode = FocusNode();
     void updateRemainingAmount() {
       final double? total = double.tryParse(totalController.text);
-      final double? paid = double.tryParse(paidController.text);
+      final double? paid = paidController.text == ""
+          ? total
+          : double.tryParse(paidController.text);
       final double? discount = double.tryParse(discountController.text);
       final double remaining = (total ?? 0) - (paid ?? 0) - (discount ?? 0);
 
       remainingAmountController.text = remaining.toString();
+      order.orderNumber = int.parse(orderNumberController.text);
+      order.notes = notesController.text;
       order.date = dateController.text;
       order.customerId = int.parse(customerNumberController.text);
       order.total = total;
@@ -59,6 +63,7 @@ class AddOrderPage extends StatelessWidget {
       order.discount = discount ?? 0;
       order.remainingAmount = remaining;
       order.orderProfit = 0;
+
       context.read<OrderCubit>().updateOrderField(order);
     }
 
@@ -120,6 +125,7 @@ class AddOrderPage extends StatelessWidget {
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
                                   onChanged: (value) {
+                                    updateRemainingAmount();
                                     order.orderNumber = int.tryParse(value);
                                     context
                                         .read<OrderCubit>()
@@ -328,6 +334,7 @@ class AddOrderPage extends StatelessWidget {
                             decoration:
                                 const InputDecoration(labelText: 'ملاحظات'),
                             onChanged: (value) {
+                              updateRemainingAmount();
                               order.notes = value;
                               context
                                   .read<OrderCubit>()
