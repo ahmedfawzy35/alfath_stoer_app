@@ -17,8 +17,9 @@ class CustomerListCubit extends Cubit<CustomerSupplierListState> {
   Future<void> fetchData() async {
     try {
       int brancheId = await SharedPrefsService().getSelectedBrancheId();
+      int userId = await SharedPrefsService().getSelectedUserId();
       emit(CustomerSupplierListLoading());
-      final items = await repository.fetchData();
+      final items = await repository.fetchData(brancheId, userId);
       var item2 = items.where((x) {
         return x.brancheId == brancheId;
       }).toList();

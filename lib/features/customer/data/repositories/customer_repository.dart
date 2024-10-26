@@ -8,11 +8,19 @@ class CustomerListRepository {
 
   CustomerListRepository(this.baseUrl);
 
-  Future<List<CustomerModel>> fetchData() async {
-    final response = await http.get(Uri.parse('$baseUrl/$model/GetAll'));
+  Future<List<CustomerModel>> fetchData(int brancheId, int userId) async {
+    //  final response = await http.get(Uri.parse('$baseUrl/$model/GetAll'));
+
+    var request = http.Request('GET', Uri.parse('$baseUrl/$model/GetAll'));
+    request.body = json.encode({"BrancheId": brancheId, "UserId": userId});
+    var headers = {'Content-Type': 'application/json'};
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final data1 = await response.stream.bytesToString();
+      final List<dynamic> data = json.decode(data1);
 
       return data.map((item) => CustomerModel.fromJson(item)).toList();
     } else {
